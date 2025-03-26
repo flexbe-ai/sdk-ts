@@ -2,10 +2,22 @@
     "name": "@flexbe/sdk-ts",
     "version": "0.1.1",
     "description": "TypeScript SDK for Flexbe API",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/types/index.d.ts",
+    "browser": "dist/browser/index.js",
+    "exports": {
+        ".": {
+            "import": "./dist/esm/index.js",
+            "require": "./dist/cjs/index.js",
+            "types": "./dist/types/index.d.ts"
+        }
+    },
     "scripts": {
-        "build": "tsc",
+        "build": "npm run build:esm && npm run build:cjs && npm run build:browser",
+        "build:esm": "tsc -p tsconfig.esm.json",
+        "build:cjs": "tsc -p tsconfig.cjs.json",
+        "build:browser": "tsc -p tsconfig.browser.json",
         "test": "dotenv -e test/.env.test jest",
         "lint": "eslint src --ext .ts",
         "format": "prettier --write \"src/**/*.ts\"",
@@ -29,9 +41,7 @@
         "url": "https://github.com/flexbe/sdk-ts/issues"
     },
     "homepage": "https://github.com/flexbe/sdk-ts#readme",
-    "dependencies": {
-        "axios": "^1.6.7"
-    },
+    "dependencies": {},
     "devDependencies": {
         "@types/jest": "^29.5.12",
         "@types/node": "^20.11.19",

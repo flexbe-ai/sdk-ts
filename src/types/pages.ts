@@ -26,7 +26,7 @@ export interface Page {
     sortIndex: number;
 }
 
-export interface GetPagesParams {
+export interface GetPagesParams extends Record<string, unknown> {
     offset?: number;
     limit?: number;
     type?: PageType;

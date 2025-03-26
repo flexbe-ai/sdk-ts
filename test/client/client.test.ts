@@ -1,6 +1,5 @@
-import { FlexbeClient } from '../../src/client/flexbe-client';
-import { FlexbeError } from '../../src/types';
-import { AxiosInstance, AxiosResponse } from 'axios';
+import { FlexbeClient } from '../../src/client/client';
+import { FlexbeError, FlexbeResponse } from '../../src/types';
 
 describe('FlexbeClient', () => {
     let client: FlexbeClient;
@@ -15,23 +14,25 @@ describe('FlexbeClient', () => {
 
     it('should initialize with correct configuration', () => {
         expect(client).toBeDefined();
-        const axiosInstance = (client as unknown as { client: AxiosInstance }).client;
-        expect(axiosInstance.defaults.baseURL).toBe(testConfig.baseUrl);
-        expect(axiosInstance.defaults.headers.Authorization).toBe(`Bearer ${testConfig.apiKey}`);
+        // Access protected config for testing
+        const config = (client as unknown as { config: { baseUrl: string; apiKey: string } }).config;
+        expect(config.baseUrl).toBe(testConfig.baseUrl);
+        expect(config.apiKey).toBe(testConfig.apiKey);
     });
 
     it('should handle successful GET request', async () => {
         // Access protected method for testing
-        const response = await (client as unknown as { get: (url: string) => Promise<AxiosResponse> }).get('/');
+        const response = await (client as unknown as { get: (url: string) => Promise<FlexbeResponse<{ status: string }>> }).get('/ping');
         expect(response).toBeDefined();
         expect(response.status).toBe(200);
         expect(response.data).toBeDefined();
+        expect(response.data.status).toBe('ok');
     });
 
     it('should handle error response', async () => {
         try {
             // Access protected method for testing
-            await (client as unknown as { get: (url: string) => Promise<AxiosResponse> }).get('/non-existent-endpoint');
+            await (client as unknown as { get: (url: string) => Promise<FlexbeResponse<unknown>> }).get('/non-existent-endpoint');
             fail('Should have thrown an error');
         } catch (error) {
             const flexbeError = error as FlexbeError;

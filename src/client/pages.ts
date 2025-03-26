@@ -1,7 +1,7 @@
 import { Page, GetPagesParams, PageListResponse } from '../types/pages';
-import { FlexbeClient } from './flexbe-client';
+import { FlexbeClient } from './client';
 
-export class PagesClient {
+export class Pages {
     constructor(
         private readonly client: FlexbeClient,
     ) {}

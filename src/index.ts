@@ -1,4 +1,4 @@
-export * from './client/flexbe-client';
-export * from './client/pages-client';
+export * from './client/client';
+export * from './client/pages';
 export * from './types';
 export * from './types/pages';

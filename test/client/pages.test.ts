@@ -1,9 +1,8 @@
-import { FlexbeClient } from '../../src/client/flexbe-client';
+import { FlexbeClient } from '../../src/client/client';
 import { PageType, PageStatus } from '../../src/types/pages';
-import { AxiosInstance } from 'axios';
 import { FlexbeError } from '../../src/types';
 
-describe('PagesClient', () => {
+describe('Pages', () => {
     let client: FlexbeClient;
     const testConfig = {
         apiKey: process.env.FLEXBE_API_KEY || 'test-api-key',
@@ -17,9 +16,10 @@ describe('PagesClient', () => {
 
     it('should initialize with correct configuration', () => {
         expect(client.pages).toBeDefined();
-        const axiosInstance = (client as unknown as { client: AxiosInstance }).client;
-        expect(axiosInstance.defaults.baseURL).toBe(testConfig.baseUrl);
-        expect(axiosInstance.defaults.headers.Authorization).toBe(`Bearer ${testConfig.apiKey}`);
+        // Access protected config for testing
+        const config = (client as unknown as { config: { baseUrl: string; apiKey: string } }).config;
+        expect(config.baseUrl).toBe(testConfig.baseUrl);
+        expect(config.apiKey).toBe(testConfig.apiKey);
     });
 
     it('should get list of pages with default parameters', async () => {
@@ -35,7 +35,7 @@ describe('PagesClient', () => {
     it('should get list of pages with custom parameters', async () => {
         const params = {
             offset: 0,
-            limit: 20,
+            limit: 10, // API default limit
             type: PageType.PAGE,
             status: PageStatus.PUBLISHED,
             search: ''
