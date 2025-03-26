@@ -1,6 +1,6 @@
 {
-    "name": "@flexbe/sdk-ts",
-    "version": "0.1.1",
+    "name": "@flexbe/sdk",
+    "version": "0.1.0",
     "description": "TypeScript SDK for Flexbe API",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
@@ -23,6 +23,7 @@
         "format": "prettier --write \"src/**/*.ts\"",
         "prepare": "npm run build",
         "prepublishOnly": "npm test && npm run lint",
+        "version": "npm version",
         "publish": "npm publish --access public"
     },
     "keywords": [
