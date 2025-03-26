@@ -1,5 +1,6 @@
 import { FlexbeClient } from '../../src/client/flexbe-client';
 import { FlexbeError } from '../../src/types';
+import { AxiosInstance, AxiosResponse } from 'axios';
 
 describe('FlexbeClient', () => {
     let client: FlexbeClient;
@@ -14,14 +15,14 @@ describe('FlexbeClient', () => {
 
     it('should initialize with correct configuration', () => {
         expect(client).toBeDefined();
-        const axiosInstance = (client as any).client;
+        const axiosInstance = (client as unknown as { client: AxiosInstance }).client;
         expect(axiosInstance.defaults.baseURL).toBe(testConfig.baseUrl);
         expect(axiosInstance.defaults.headers.Authorization).toBe(`Bearer ${testConfig.apiKey}`);
     });
 
     it('should handle successful GET request', async () => {
         // Access protected method for testing
-        const response = await (client as any).get('/');
+        const response = await (client as unknown as { get: (url: string) => Promise<AxiosResponse> }).get('/');
         expect(response).toBeDefined();
         expect(response.status).toBe(200);
         expect(response.data).toBeDefined();
@@ -30,7 +31,7 @@ describe('FlexbeClient', () => {
     it('should handle error response', async () => {
         try {
             // Access protected method for testing
-            await (client as any).get('/non-existent-endpoint');
+            await (client as unknown as { get: (url: string) => Promise<AxiosResponse> }).get('/non-existent-endpoint');
             fail('Should have thrown an error');
         } catch (error) {
             const flexbeError = error as FlexbeError;
