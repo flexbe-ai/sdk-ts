@@ -18,6 +18,7 @@
         "build:esm": "tsc -p tsconfig.esm.json",
         "build:cjs": "tsc -p tsconfig.cjs.json",
         "build:browser": "tsc -p tsconfig.browser.json",
+        "dev": "tsc -p tsconfig.esm.json --watch",
         "test": "dotenv -e test/.env.test jest",
         "lint": "eslint src --ext .ts",
         "format": "prettier --write \"src/**/*.ts\"",
