@@ -5,12 +5,16 @@ export class FlexbeClient {
     private readonly client: AxiosInstance;
     private readonly config: FlexbeConfig;
 
-    constructor(config: FlexbeConfig) {
+    constructor(config?: Partial<FlexbeConfig>) {
         this.config = {
-            baseUrl: config.baseUrl || 'https://api.flexbe.com',
-            timeout: config.timeout || 30000,
-            ...config,
+            baseUrl: config?.baseUrl || process.env.FLEXBE_API_URL || 'https://api.flexbe.com',
+            timeout: config?.timeout || 30000,
+            apiKey: config?.apiKey || process.env.FLEXBE_API_KEY || '',
         };
+
+        if (!this.config.apiKey) {
+            throw new Error('API key is required. Please provide it either through config or FLEXBE_API_KEY environment variable.');
+        }
 
         this.client = axios.create({
             baseURL: this.config.baseUrl,

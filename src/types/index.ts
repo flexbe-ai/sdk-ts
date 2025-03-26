@@ -1,5 +1,5 @@
 export interface FlexbeConfig {
-    apiKey: string;
+    apiKey?: string;
     baseUrl?: string;
     timeout?: number;
 }
