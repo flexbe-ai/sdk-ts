@@ -2,6 +2,7 @@ export interface FlexbeConfig {
     apiKey?: string;
     baseUrl?: string;
     timeout?: number;
+    siteId?: string;
 }
 
 export interface FlexbeResponse<T> {
