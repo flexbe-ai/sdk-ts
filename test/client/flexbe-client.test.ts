@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { FlexbeClient } from '../flexbe-client';
-import { FlexbeError } from '../../types';
+import { FlexbeClient } from '../../src/client/flexbe-client';
+import { FlexbeError } from '../../src/types';
 
 describe('FlexbeClient', () => {
     let client: FlexbeClient;
