@@ -10,6 +10,12 @@ export interface FlexbeResponse<T> {
     statusText: string;
 }
 
+export interface FlexbeErrorResponse {
+    message: string;
+    code?: string;
+    details?: unknown;
+}
+
 export interface FlexbeError {
     message: string;
     code?: string;

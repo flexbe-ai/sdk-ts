@@ -1,12 +1,11 @@
-import axios from 'axios';
 import { FlexbeClient } from '../../src/client/flexbe-client';
 import { FlexbeError } from '../../src/types';
 
 describe('FlexbeClient', () => {
     let client: FlexbeClient;
     const testConfig = {
-        apiKey: 'test-api-key',
-        baseUrl: 'https://api.flexbe.com',
+        apiKey: process.env.FLEXBE_API_KEY || 'test-api-key',
+        baseUrl: process.env.FLEXBE_API_URL || 'https://api.flexbe.com',
     };
 
     beforeEach(() => {
@@ -24,8 +23,8 @@ describe('FlexbeClient', () => {
         // Access protected method for testing
         const response = await (client as any).get('/');
         expect(response).toBeDefined();
-        expect(response.status).toBeDefined();
-        expect(response.statusText).toBeDefined();
+        expect(response.status).toBe(200);
+        expect(response.data).toBeDefined();
     });
 
     it('should handle error response', async () => {

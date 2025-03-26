@@ -1,5 +1,5 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { FlexbeConfig, FlexbeResponse, FlexbeError } from '../types';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
+import { FlexbeConfig, FlexbeResponse, FlexbeError, FlexbeErrorResponse } from '../types';
 
 export class FlexbeClient {
     private readonly client: AxiosInstance;
@@ -27,7 +27,7 @@ export class FlexbeClient {
     private setupInterceptors(): void {
         this.client.interceptors.response.use(
             (response) => response,
-            (error) => {
+            (error: AxiosError<FlexbeErrorResponse>) => {
                 const flexbeError: FlexbeError = {
                     message: error.response?.data?.message || error.message,
                     code: error.response?.data?.code,
