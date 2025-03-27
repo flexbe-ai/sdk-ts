@@ -1,4 +1,4 @@
-import { FlexbeConfig } from '../types';
+import { FlexbeAuthType, FlexbeConfig } from '../types';
 import { Pages } from './pages';
 import { ApiClient } from './api-client';
 
@@ -20,7 +20,7 @@ export class FlexbeClient {
             timeout: config?.timeout || 30000,
             apiKey: config?.apiKey || getEnvVar('FLEXBE_API_KEY') || '',
             siteId: config?.siteId || getEnvVar('FLEXBE_SITE_ID'),
-            authType: config?.authType || 'apiKey',
+            authType: config?.authType || FlexbeAuthType.API_KEY,
         };
 
         if (this.config.authType === 'apiKey' && !this.config.apiKey) {

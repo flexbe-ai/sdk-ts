@@ -1,3 +1,8 @@
+export enum FlexbeAuthType {
+    API_KEY = 'apiKey',
+    BEARER = 'bearer'
+}
+
 export interface FlexbeConfig {
     apiKey?: string;
     baseUrl?: string;
@@ -24,8 +29,6 @@ export interface FlexbeError {
     status?: number;
     details?: unknown;
 }
-
-export type FlexbeAuthType = 'apiKey' | 'bearer';
 
 export interface JwtToken {
     accessToken: string;
