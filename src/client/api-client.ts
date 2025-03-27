@@ -39,7 +39,7 @@ export class ApiClient {
 
             const url = this.buildUrl(config.url, config.params);
             const headers = {
-                ...this.auth.getAuthHeaders(),
+                ...(await this.auth.getAuthHeaders()),
                 ...config.headers,
             };
 

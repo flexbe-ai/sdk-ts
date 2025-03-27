@@ -16,9 +16,8 @@ export class FlexbeAuth {
             const existingToken = this.tokenManager.getToken();
             if (existingToken) {
                 this.initialized = true;
-            } else {
-                void this.initializeBearerAuth();
             }
+            // Don't start initialization here, let ensureInitialized handle it
         } else {
             this.initialized = true;
         }
@@ -26,6 +25,10 @@ export class FlexbeAuth {
 
     private async initializeBearerAuth(): Promise<void> {
         if (this.initializing) {
+            // Wait for the ongoing initialization to complete
+            while (this.initializing) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
             return;
         }
 
@@ -65,6 +68,7 @@ export class FlexbeAuth {
             this.initialized = true;
         } catch (error) {
             console.error('Failed to initialize bearer authentication:', error);
+            this.initialized = false; // Reset initialized state on error
             throw error;
         } finally {
             this.initializing = false;
@@ -72,12 +76,16 @@ export class FlexbeAuth {
     }
 
     public async ensureInitialized(): Promise<void> {
-        if (!this.initialized && this.config.authType === 'bearer') {
-            await this.initializeBearerAuth();
+        if (this.config.authType !== 'bearer' || this.initialized) {
+            return;
         }
+
+        await this.initializeBearerAuth();
     }
 
-    public getAuthHeaders(): Record<string, string> {
+    public async getAuthHeaders(): Promise<Record<string, string>> {
+        await this.ensureInitialized();
+
         const headers: Record<string, string> = {
             'Content-Type': 'application/json',
         };
@@ -87,9 +95,17 @@ export class FlexbeAuth {
         } else if (this.config.authType === 'bearer') {
             const token = this.tokenManager.getToken();
             if (!token) {
-                throw new Error('No valid bearer token available');
+                // If no token is available, try to initialize again
+                this.initialized = false;
+                await this.ensureInitialized();
+                const newToken = this.tokenManager.getToken();
+                if (!newToken) {
+                    throw new Error('No valid bearer token available');
+                }
+                headers['Authorization'] = `Bearer ${newToken}`;
+            } else {
+                headers['Authorization'] = `Bearer ${token}`;
             }
-            headers['Authorization'] = `Bearer ${token}`;
         }
 
         return headers;

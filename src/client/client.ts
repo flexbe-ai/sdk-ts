@@ -28,6 +28,6 @@ export class FlexbeClient {
         }
 
         this.api = new ApiClient(this.config);
-        this.pages = new Pages(this);
+        this.pages = new Pages(this.api);
     }
 }

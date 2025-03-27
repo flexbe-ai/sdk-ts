@@ -1,5 +1,5 @@
 import { FlexbeClient } from '../../src/client/client';
-import { FlexbeError, FlexbeResponse } from '../../src/types';
+import { FlexbeError } from '../../src/types';
 
 describe('FlexbeClient', () => {
     let client: FlexbeClient;
@@ -21,8 +21,7 @@ describe('FlexbeClient', () => {
     });
 
     it('should handle successful GET request', async () => {
-        // Access protected method for testing
-        const response = await (client as unknown as { get: (url: string) => Promise<FlexbeResponse<{ status: string }>> }).get('/ping');
+        const response = await client.api.get<{ status: string }>('/ping');
         expect(response).toBeDefined();
         expect(response.status).toBe(200);
         expect(response.data).toBeDefined();
@@ -31,8 +30,7 @@ describe('FlexbeClient', () => {
 
     it('should handle error response', async () => {
         try {
-            // Access protected method for testing
-            await (client as unknown as { get: (url: string) => Promise<FlexbeResponse<unknown>> }).get('/non-existent-endpoint');
+            await client.api.get('/non-existent-endpoint');
             fail('Should have thrown an error');
         } catch (error) {
             const flexbeError = error as FlexbeError;
