@@ -13,9 +13,17 @@ npm install @flexbe/sdk
 ```typescript
 import { FlexbeClient } from '@flexbe/sdk';
 
-// Initialize the client
+// Initialize the client with API Key authentication
 const client = new FlexbeClient({
     apiKey: 'your-api-key',
+    siteId: 'your-site-id', // optional, required for site-specific endpoints
+    baseUrl: 'https://api.flexbe.com', // optional
+    timeout: 30000, // optional, defaults to 30 seconds
+});
+
+// Or initialize with JWT Bearer token authentication
+const client = new FlexbeClient({
+    authType: 'bearer',
     siteId: 'your-site-id', // optional, required for site-specific endpoints
     baseUrl: 'https://api.flexbe.com', // optional
     timeout: 30000, // optional, defaults to 30 seconds
@@ -44,18 +52,21 @@ try {
 ## Features
 
 - TypeScript support with full type definitions
-- API Key authentication
+- Multiple authentication methods:
+  - API Key authentication
+  - JWT Bearer token authentication with automatic token refresh (uses cookie-based authentication)
 - Automatic error handling
 - Configurable timeout and base URL
 - Native fetch API support (works in both Node.js and browser)
 - Site-specific endpoints support
 - Query parameter handling
 - Request timeout handling
+- Token sharing between browser tabs (for JWT authentication)
 
 ## Environment Variables
 
 The SDK supports the following environment variables:
-- `FLEXBE_API_KEY`: Your API key
+- `FLEXBE_API_KEY`: Your API key (required for API Key authentication)
 - `FLEXBE_API_URL`: Base URL (defaults to 'https://api.flexbe.com')
 - `FLEXBE_SITE_ID`: Your site ID
 

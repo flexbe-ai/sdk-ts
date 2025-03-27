@@ -3,6 +3,7 @@ export interface FlexbeConfig {
     baseUrl?: string;
     timeout?: number;
     siteId?: string;
+    authType?: FlexbeAuthType;
 }
 
 export interface FlexbeResponse<T> {
@@ -24,4 +25,13 @@ export interface FlexbeError {
     details?: unknown;
 }
 
-export type FlexbeAuthType = 'apiKey' | 'bearer' | 'oauth2';
+export type FlexbeAuthType = 'apiKey' | 'bearer';
+
+export interface JwtToken {
+    accessToken: string;
+    expiresAt: number;
+}
+
+export interface TokenResponse {
+    accessToken: string;
+}
