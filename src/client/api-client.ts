@@ -93,6 +93,10 @@ export class ApiClient {
         return this.request<T>({ ...config, url, method: 'PUT', body: JSON.stringify(data) });
     }
 
+    public patch<T>(url: string, data?: unknown, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
+        return this.request<T>({ ...config, url, method: 'PATCH', body: JSON.stringify(data) });
+    }
+
     public delete<T>(url: string, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
         return this.request<T>({ ...config, url, method: 'DELETE' });
     }

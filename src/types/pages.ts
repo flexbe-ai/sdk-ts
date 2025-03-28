@@ -51,3 +51,13 @@ export interface PageFolder {
 export interface PageFolderListResponse {
     folders: PageFolder[];
 }
+
+export interface UpdateFolderParams {
+    title?: string;
+    sortIndex?: number;
+}
+
+export interface CreateFolderParams {
+    title: string;
+    sortIndex?: number;
+}

@@ -1,4 +1,4 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse } from '../types/pages';
+import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams } from '../types/pages';
 import { ApiClient } from './api-client';
 
 export class Pages {
@@ -36,5 +36,30 @@ export class Pages {
     async getFolder(folderId: number): Promise<PageFolder> {
         const response = await this.api.get<PageFolder>(`/sites/:siteId:/pages-folders/${folderId}`);
         return response.data;
+    }
+
+    /**
+     * Update a folder's properties
+     */
+    async updateFolder(folderId: number, data: UpdateFolderParams): Promise<PageFolder> {
+        const response = await this.api.patch<PageFolder>(`/sites/:siteId:/pages-folders/${folderId}`, data);
+        return response.data;
+    }
+
+    /**
+     * Create a new folder
+     */
+    async createFolder(data: CreateFolderParams): Promise<PageFolder> {
+        const response = await this.api.post<PageFolder>('/sites/:siteId:/pages-folders', data);
+        return response.data;
+    }
+
+    /**
+     * Delete a folder and its items
+     * @throws {NotFoundException} When the folder is not found
+     * @throws {ForbiddenException} When the folder does not belong to the site
+     */
+    async deleteFolder(folderId: number): Promise<void> {
+        await this.api.delete(`/sites/:siteId:/pages-folders/${folderId}`);
     }
 }
