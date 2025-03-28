@@ -33,7 +33,8 @@ export interface GetPagesParams {
     limit?: number;
     type?: PageType;
     status?: PageStatus;
-    search?: string;
+    uri?: string;
+    title?: string;
     folderId?: number;
 }
 

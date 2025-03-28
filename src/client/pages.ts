@@ -8,6 +8,14 @@ export class Pages {
 
     /**
      * Get list of pages for a site
+     * @param params - Query parameters including:
+     * - offset: Number of items to skip (default: 0)
+     * - limit: Maximum number of items to return (default: 100)
+     * - type: Filter by page type
+     * - status: Filter by page status
+     * - uri: Search by URI (exact match with '/' or partial match with '%word%')
+     * - title: Search by title
+     * - folderId: Filter by folder ID
      */
     async getPages(params?: GetPagesParams): Promise<PageListResponse> {
         const response = await this.api.get<PageListResponse>('/sites/:siteId:/pages', { params });
@@ -40,6 +48,10 @@ export class Pages {
 
     /**
      * Update a folder's properties
+     * @param folderId - ID of the folder to update
+     * @param data - Update parameters:
+     * - title: New title for the folder
+     * - sortIndex: New position in the folder list
      */
     async updateFolder(folderId: number, data: UpdateFolderParams): Promise<PageFolder> {
         const response = await this.api.patch<PageFolder>(`/sites/:siteId:/pages-folders/${folderId}`, data);
@@ -48,6 +60,9 @@ export class Pages {
 
     /**
      * Create a new folder
+     * @param data - Create parameters:
+     * - title: Title of the new folder (required)
+     * - sortIndex: Position in the folder list (optional)
      */
     async createFolder(data: CreateFolderParams): Promise<PageFolder> {
         const response = await this.api.post<PageFolder>('/sites/:siteId:/pages-folders', data);
