@@ -38,3 +38,9 @@ export interface JwtToken {
 export interface TokenResponse {
     accessToken: string;
 }
+
+export interface Pagination {
+    limit: number;
+    offset: number;
+    total: number;
+}

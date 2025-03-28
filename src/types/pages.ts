@@ -1,3 +1,5 @@
+import { Pagination } from './index';
+
 export enum PageType {
     PAGE = 'page',
     FILE = 'file',
@@ -16,31 +18,36 @@ export enum PageStatus {
 
 export interface Page {
     id: number;
-    siteId: number;
     type: PageType;
     uri: string;
     title: string | null;
     status: PageStatus;
     updatedAt?: Date;
     imgId: number | null;
+    folderId: number | null;
     sortIndex: number;
 }
 
-export interface GetPagesParams extends Record<string, unknown> {
+export interface GetPagesParams {
     offset?: number;
     limit?: number;
     type?: PageType;
     status?: PageStatus;
     search?: string;
-}
-
-export interface Pagination {
-    limit: number;
-    offset: number;
-    total: number;
+    folderId?: number;
 }
 
 export interface PageListResponse {
     pages: Page[];
     pagination: Pagination;
+}
+
+export interface PageFolder {
+    id: number;
+    title: string;
+    sortIndex: number;
+}
+
+export interface PageFolderListResponse {
+    folders: PageFolder[];
 }

@@ -17,7 +17,7 @@ export class ApiClient {
         return url.replace(/:siteId:/g, this.config.siteId);
     }
 
-    private buildUrl(path: string, params?: Record<string, unknown>): string {
+    private buildUrl(path: string, params?: object): string {
         const processedPath = this.replaceSiteId(path);
         const searchParams = new URLSearchParams();
         if (params) {
@@ -30,7 +30,7 @@ export class ApiClient {
         return `${processedPath}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
     }
 
-    private async request<T>(config: RequestInit & { url: string; params?: Record<string, unknown> }): Promise<FlexbeResponse<T>> {
+    private async request<T>(config: RequestInit & { url: string; params?: object }): Promise<FlexbeResponse<T>> {
         try {
             await this.auth.ensureInitialized();
 
@@ -81,19 +81,19 @@ export class ApiClient {
         }
     }
 
-    public get<T>(url: string, config?: RequestInit & { params?: Record<string, unknown> }): Promise<FlexbeResponse<T>> {
-        return this.request<T>({ ...config, method: 'GET', url });
+    public get<T>(url: string, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
+        return this.request<T>({ ...config, url, method: 'GET' });
     }
 
-    public post<T>(url: string, data?: unknown, config?: RequestInit & { params?: Record<string, unknown> }): Promise<FlexbeResponse<T>> {
-        return this.request<T>({ ...config, method: 'POST', url, body: JSON.stringify(data) });
+    public post<T>(url: string, data?: unknown, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
+        return this.request<T>({ ...config, url, method: 'POST', body: JSON.stringify(data) });
     }
 
-    public put<T>(url: string, data?: unknown, config?: RequestInit & { params?: Record<string, unknown> }): Promise<FlexbeResponse<T>> {
-        return this.request<T>({ ...config, method: 'PUT', url, body: JSON.stringify(data) });
+    public put<T>(url: string, data?: unknown, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
+        return this.request<T>({ ...config, url, method: 'PUT', body: JSON.stringify(data) });
     }
 
-    public delete<T>(url: string, config?: RequestInit & { params?: Record<string, unknown> }): Promise<FlexbeResponse<T>> {
-        return this.request<T>({ ...config, method: 'DELETE', url });
+    public delete<T>(url: string, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
+        return this.request<T>({ ...config, url, method: 'DELETE' });
     }
 }

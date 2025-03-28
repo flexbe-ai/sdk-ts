@@ -150,6 +150,12 @@ export class TokenManager {
         } catch (error) {
             console.error('Failed to retrieve token:', error);
             this.clearToken();
+
+            // Schedule a retry after REFRESH_CHECK_INTERVAL
+            setTimeout(() => {
+                void this.retrieveToken();
+            }, REFRESH_CHECK_INTERVAL);
+
             throw error;
         }
     }
