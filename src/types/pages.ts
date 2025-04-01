@@ -1,5 +1,37 @@
 import { Pagination } from './index';
 
+export interface GridConfig {
+    color?: string;
+    desktop?: {
+        columns: number;
+        containerWidth: number;
+        columnWidth: number;
+        gap: number;
+    };
+    mobile?: {
+        columns: number;
+        containerWidth: number;
+        columnWidth: number;
+        gap: number;
+    };
+}
+
+export interface Screenshot {
+    id: number | null;
+    ext: string;
+    url: string | null;
+}
+
+export interface PageMeta {
+    title: string | null;
+    description: string | null;
+    keywords: string | null;
+    ogImage: string | null;
+    ogTitle: string | null;
+    ogDescription: string | null;
+    noindex: boolean;
+}
+
 export enum PageType {
     PAGE = 'page',
     FILE = 'file',
@@ -19,13 +51,17 @@ export enum PageStatus {
 export interface Page {
     id: number;
     type: PageType;
-    uri: string;
-    title: string | null;
     status: PageStatus;
-    updatedAt?: Date;
-    imgId: number | null;
-    folderId: number | null;
+    name: string;
+    uri: string | null;
+    language: string;
+    folderId: number;
     sortIndex: number;
+    updatedAt?: Date;
+    deletedAt: Date | null;
+    screenshot: Screenshot | null;
+    meta: PageMeta | null;
+    grid?: GridConfig;
 }
 
 export interface GetPagesParams {
