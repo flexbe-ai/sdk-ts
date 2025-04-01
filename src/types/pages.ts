@@ -75,7 +75,7 @@ export interface GetPagesParams {
 }
 
 export interface PageListResponse {
-    pages: Page[];
+    list: Page[];
     pagination: Pagination;
 }
 
@@ -86,7 +86,7 @@ export interface PageFolder {
 }
 
 export interface PageFolderListResponse {
-    folders: PageFolder[];
+    list: PageFolder[];
 }
 
 export interface UpdateFolderParams {

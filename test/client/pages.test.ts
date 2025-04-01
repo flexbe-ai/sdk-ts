@@ -25,7 +25,7 @@ describe('Pages', () => {
     it('should get list of pages with default parameters', async () => {
         const response = await client.pages.getPages();
         expect(response).toBeDefined();
-        expect(response.pages).toBeDefined();
+        expect(response.list).toBeDefined();
         expect(response.pagination).toBeDefined();
         expect(response.pagination.limit).toBeDefined();
         expect(response.pagination.offset).toBe(0);
@@ -43,7 +43,7 @@ describe('Pages', () => {
 
         const response = await client.pages.getPages(params);
         expect(response).toBeDefined();
-        expect(response.pages).toBeDefined();
+        expect(response.list).toBeDefined();
         expect(response.pagination).toBeDefined();
         expect(response.pagination.limit).toBe(params.limit);
         expect(response.pagination.offset).toBe(params.offset);
