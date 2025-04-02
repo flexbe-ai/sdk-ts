@@ -4,18 +4,20 @@ import { FlexbeError } from '../../src/types';
 
 describe('Pages', () => {
     let client: FlexbeClient;
+    let siteApi: ReturnType<FlexbeClient['getSiteApi']>;
     const testConfig = {
         apiKey: process.env.FLEXBE_API_KEY || 'test-api-key',
         baseUrl: process.env.FLEXBE_API_URL || 'https://api.flexbe.com',
-        siteId: process.env.FLEXBE_SITE_ID || '0',
     };
+    const testSiteId = Number(process.env.FLEXBE_SITE_ID) || 1;
 
     beforeEach(() => {
         client = new FlexbeClient(testConfig);
+        siteApi = client.getSiteApi(testSiteId);
     });
 
     it('should initialize with correct configuration', () => {
-        expect(client.pages).toBeDefined();
+        expect(siteApi.pages).toBeDefined();
         // Access protected config for testing
         const config = (client as unknown as { config: { baseUrl: string; apiKey: string } }).config;
         expect(config.baseUrl).toBe(testConfig.baseUrl);
@@ -23,7 +25,7 @@ describe('Pages', () => {
     });
 
     it('should get list of pages with default parameters', async () => {
-        const response = await client.pages.getPages();
+        const response = await siteApi.pages.getPages();
         expect(response).toBeDefined();
         expect(response.list).toBeDefined();
         expect(response.pagination).toBeDefined();
@@ -41,7 +43,7 @@ describe('Pages', () => {
             search: ''
         };
 
-        const response = await client.pages.getPages(params);
+        const response = await siteApi.pages.getPages(params);
         expect(response).toBeDefined();
         expect(response.list).toBeDefined();
         expect(response.pagination).toBeDefined();
@@ -52,7 +54,7 @@ describe('Pages', () => {
 
     it('should get a single page by ID', async () => {
         const pageId = 2272741;
-        const response = await client.pages.getPage(pageId);
+        const response = await siteApi.pages.getPage(pageId);
         expect(response).toBeDefined();
         expect(response.id).toBe(pageId);
         expect(response.type).toBeDefined();
@@ -63,7 +65,7 @@ describe('Pages', () => {
 
     it('should handle error when getting non-existent page', async () => {
         try {
-            await client.pages.getPage(999999);
+            await siteApi.pages.getPage(999999);
             fail('Should have thrown an error');
         } catch (error) {
             const flexbeError = error as FlexbeError;
@@ -74,7 +76,7 @@ describe('Pages', () => {
 
     it('should handle error when getting pages with invalid parameters', async () => {
         try {
-            await client.pages.getPages({
+            await siteApi.pages.getPages({
                 offset: -1,
                 limit: 0
             });

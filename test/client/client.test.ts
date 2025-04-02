@@ -20,17 +20,32 @@ describe('FlexbeClient', () => {
         expect(config.apiKey).toBe(testConfig.apiKey);
     });
 
-    it('should handle successful GET request', async () => {
-        const response = await client.api.get<{ status: string }>('/ping');
-        expect(response).toBeDefined();
-        expect(response.status).toBe(200);
-        expect(response.data).toBeDefined();
-        expect(response.data.status).toBe('ok');
+    it('should get site API instance', () => {
+        const siteId = 1;
+        const siteApi = client.getSiteApi(siteId);
+        expect(siteApi).toBeDefined();
+        expect(siteApi.pages).toBeDefined();
     });
 
-    it('should handle error response', async () => {
+    it('should return same site API instance for same site ID', () => {
+        const siteId = 1;
+        const siteApi1 = client.getSiteApi(siteId);
+        const siteApi2 = client.getSiteApi(siteId);
+        expect(siteApi1).toBe(siteApi2);
+    });
+
+    it('should handle successful GET request through site API', async () => {
+        const siteApi = client.getSiteApi(1);
+        const response = await siteApi.pages.getPages();
+        expect(response).toBeDefined();
+        expect(response.list).toBeDefined();
+        expect(response.pagination).toBeDefined();
+    });
+
+    it('should handle error response through site API', async () => {
         try {
-            await client.api.get('/non-existent-endpoint');
+            const siteApi = client.getSiteApi(1);
+            await siteApi.pages.getPage(999999);
             fail('Should have thrown an error');
         } catch (error) {
             const flexbeError = error as FlexbeError;
