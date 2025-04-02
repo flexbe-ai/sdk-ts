@@ -1,4 +1,4 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams } from '../types/pages';
+import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams } from '../types/pages';
 import { ApiClient } from './api-client';
 
 export class Pages {
@@ -76,5 +76,30 @@ export class Pages {
      */
     async deleteFolder(folderId: number): Promise<void> {
         await this.api.delete(`/sites/:siteId:/pages-folders/${folderId}`);
+    }
+
+    /**
+     * Update a page's properties
+     * @param pageId - ID of the page to update
+     * @param data - Update parameters including:
+     * - status: New status for the page
+     * - name: New name for the page
+     * - uri: New URI for the page
+     * - language: New language for the page
+     * - folderId: New folder ID for the page
+     * - sortIndex: New position in the page list
+     * - meta: Meta information for the page:
+     *   - title: Page title
+     *   - description: Meta description for SEO
+     *   - keywords: Meta keywords for SEO
+     *   - ogImage: Open Graph image URL for social sharing
+     *   - ogTitle: Open Graph title for social sharing
+     *   - ogDescription: Open Graph description for social sharing
+     *   - noindex: Whether to prevent search engine indexing
+     * - grid: Grid configuration for the page
+     */
+    async updatePage(pageId: number, data: UpdatePageParams): Promise<Page> {
+        const response = await this.api.put<Page>(`/sites/:siteId:/pages/${pageId}`, data);
+        return response.data;
     }
 }

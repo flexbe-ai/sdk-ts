@@ -98,3 +98,36 @@ export interface CreateFolderParams {
     title: string;
     sortIndex?: number;
 }
+
+export interface UpdatePageParams {
+    status?: PageStatus;
+    name?: string;
+    uri?: string;
+    language?: string;
+    folderId?: number;
+    sortIndex?: number;
+    meta?: {
+        title?: string;
+        description?: string;
+        keywords?: string;
+        ogImage?: string;
+        ogTitle?: string;
+        ogDescription?: string;
+        noindex?: boolean;
+    };
+    grid?: {
+        color?: string;
+        desktop?: {
+            columns: number;
+            containerWidth: number;
+            columnWidth: number;
+            gap: number;
+        };
+        mobile?: {
+            columns: number;
+            containerWidth: number;
+            columnWidth: number;
+            gap: number;
+        };
+    };
+}
