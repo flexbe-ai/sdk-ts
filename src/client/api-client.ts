@@ -10,15 +10,7 @@ export class ApiClient {
         this.auth = new FlexbeAuth(config);
     }
 
-    private replaceSiteId(url: string): string {
-        if (!this.config.siteId) {
-            return url;
-        }
-        return url.replace(/:siteId:/g, this.config.siteId);
-    }
-
     private buildUrl(path: string, params?: object): string {
-        const processedPath = this.replaceSiteId(path);
         const searchParams = new URLSearchParams();
         if (params) {
             Object.entries(params).forEach(([key, value]) => {
@@ -27,7 +19,7 @@ export class ApiClient {
                 }
             });
         }
-        return `${processedPath}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+        return `${path}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
     }
 
     private async request<T>(config: RequestInit & { url: string; params?: object }): Promise<FlexbeResponse<T>> {

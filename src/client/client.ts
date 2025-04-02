@@ -1,11 +1,11 @@
 import { FlexbeAuthType, FlexbeConfig } from '../types';
-import { Pages } from './pages';
 import { ApiClient } from './api-client';
+import { SiteApi } from './site-api';
 
 export class FlexbeClient {
     private readonly config: FlexbeConfig;
-    public readonly pages: Pages;
-    public readonly api: ApiClient;
+    private readonly api: ApiClient;
+    private readonly siteApis: Map<number, SiteApi> = new Map();
 
     constructor(config?: Partial<FlexbeConfig>) {
         const getEnvVar = (key: string): string | undefined => {
@@ -19,7 +19,6 @@ export class FlexbeClient {
             baseUrl: config?.baseUrl || getEnvVar('FLEXBE_API_URL') || 'https://api.flexbe.com',
             timeout: config?.timeout || 30000,
             apiKey: config?.apiKey || getEnvVar('FLEXBE_API_KEY') || '',
-            siteId: config?.siteId || getEnvVar('FLEXBE_SITE_ID'),
             authType: config?.authType || FlexbeAuthType.API_KEY,
         };
 
@@ -28,6 +27,19 @@ export class FlexbeClient {
         }
 
         this.api = new ApiClient(this.config);
-        this.pages = new Pages(this.api);
+    }
+
+    /**
+     * Get a SiteApi instance for a specific site
+     * @param siteId - The ID of the site to get an API instance for
+     * @returns A SiteApi instance for the specified site
+     */
+    public getSiteApi(siteId: number): SiteApi {
+        let siteApi = this.siteApis.get(siteId);
+        if (!siteApi) {
+            siteApi = new SiteApi(this.api, siteId);
+            this.siteApis.set(siteId, siteApi);
+        }
+        return siteApi;
     }
 }

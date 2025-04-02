@@ -16,23 +16,15 @@ import { FlexbeClient } from '@flexbe/sdk';
 // Initialize the client with API Key authentication
 const client = new FlexbeClient({
     apiKey: 'your-api-key',
-    siteId: 'your-site-id', // optional, required for site-specific endpoints
     baseUrl: 'https://api.flexbe.com', // optional
     timeout: 30000, // optional, defaults to 30 seconds
 });
+const siteApi = client.getSiteApi(SITE_ID)
 
-// Or initialize with JWT Bearer token authentication
-const client = new FlexbeClient({
-    authType: 'bearer',
-    siteId: 'your-site-id', // optional, required for site-specific endpoints
-    baseUrl: 'https://api.flexbe.com', // optional
-    timeout: 30000, // optional, defaults to 30 seconds
-});
-
-// Using the Pages API
+// Using the Pages API for a specific site
 try {
-    // Get list of pages
-    const pages = await client.pages.getPages({
+    // Get list of pages for site
+    const pages = await siteApi.pages.getPages({
         limit: 10,
         offset: 0,
         type: 'page',
@@ -40,8 +32,8 @@ try {
     });
     console.log(pages.pages);
 
-    // Get a single page
-    const page = await client.pages.getPage(123);
+    // Get a single page from site
+    const page = await siteApi.pages.getPage(123);
     console.log(page);
 } catch (error) {
     console.error(error.message);
@@ -58,7 +50,7 @@ try {
 - Automatic error handling
 - Configurable timeout and base URL
 - Native fetch API support (works in both Node.js and browser)
-- Site-specific endpoints support
+- Multi-site support with site-specific API instances
 - Query parameter handling
 - Request timeout handling
 - Token sharing between browser tabs (for JWT authentication)
@@ -68,7 +60,6 @@ try {
 The SDK supports the following environment variables:
 - `FLEXBE_API_KEY`: Your API key (required for API Key authentication)
 - `FLEXBE_API_URL`: Base URL (defaults to 'https://api.flexbe.com')
-- `FLEXBE_SITE_ID`: Your site ID
 
 ## Development
 

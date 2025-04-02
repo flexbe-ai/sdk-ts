@@ -4,6 +4,7 @@ import { ApiClient } from './api-client';
 export class Pages {
     constructor(
         private readonly api: ApiClient,
+        private readonly siteId: number
     ) {}
 
     /**
@@ -18,7 +19,7 @@ export class Pages {
      * - folderId: Filter by folder ID
      */
     async getPages(params?: GetPagesParams): Promise<PageListResponse> {
-        const response = await this.api.get<PageListResponse>('/sites/:siteId:/pages', { params });
+        const response = await this.api.get<PageListResponse>(`/sites/${this.siteId}/pages`, { params });
         return response.data;
     }
 
@@ -26,7 +27,7 @@ export class Pages {
      * Get a single page by ID
      */
     async getPage(pageId: number): Promise<Page> {
-        const response = await this.api.get<Page>(`/sites/:siteId:/pages/${pageId}`);
+        const response = await this.api.get<Page>(`/sites/${this.siteId}/pages/${pageId}`);
         return response.data;
     }
 
@@ -34,7 +35,7 @@ export class Pages {
      * Get list of folders for a site
      */
     async getFolders(): Promise<PageFolderListResponse> {
-        const response = await this.api.get<PageFolderListResponse>('/sites/:siteId:/pages-folders');
+        const response = await this.api.get<PageFolderListResponse>(`/sites/${this.siteId}/pages-folders`);
         return response.data;
     }
 
@@ -42,7 +43,7 @@ export class Pages {
      * Get a single folder by ID
      */
     async getFolder(folderId: number): Promise<PageFolder> {
-        const response = await this.api.get<PageFolder>(`/sites/:siteId:/pages-folders/${folderId}`);
+        const response = await this.api.get<PageFolder>(`/sites/${this.siteId}/pages-folders/${folderId}`);
         return response.data;
     }
 
@@ -54,7 +55,7 @@ export class Pages {
      * - sortIndex: New position in the folder list
      */
     async updateFolder(folderId: number, data: UpdateFolderParams): Promise<PageFolder> {
-        const response = await this.api.patch<PageFolder>(`/sites/:siteId:/pages-folders/${folderId}`, data);
+        const response = await this.api.patch<PageFolder>(`/sites/${this.siteId}/pages-folders/${folderId}`, data);
         return response.data;
     }
 
@@ -65,7 +66,7 @@ export class Pages {
      * - sortIndex: Position in the folder list (optional)
      */
     async createFolder(data: CreateFolderParams): Promise<PageFolder> {
-        const response = await this.api.post<PageFolder>('/sites/:siteId:/pages-folders', data);
+        const response = await this.api.post<PageFolder>(`/sites/${this.siteId}/pages-folders`, data);
         return response.data;
     }
 
@@ -75,7 +76,7 @@ export class Pages {
      * @throws {ForbiddenException} When the folder does not belong to the site
      */
     async deleteFolder(folderId: number): Promise<void> {
-        await this.api.delete(`/sites/:siteId:/pages-folders/${folderId}`);
+        await this.api.delete(`/sites/${this.siteId}/pages-folders/${folderId}`);
     }
 
     /**
@@ -99,7 +100,7 @@ export class Pages {
      * - grid: Grid configuration for the page
      */
     async updatePage(pageId: number, data: UpdatePageParams): Promise<Page> {
-        const response = await this.api.put<Page>(`/sites/:siteId:/pages/${pageId}`, data);
+        const response = await this.api.put<Page>(`/sites/${this.siteId}/pages/${pageId}`, data);
         return response.data;
     }
 }
