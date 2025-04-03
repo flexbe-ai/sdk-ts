@@ -1,5 +1,5 @@
 import { FlexbeClient } from '../../src/client/client';
-import { FlexbeError } from '../../src/types';
+import { BadRequestException } from '../../src/types';
 
 describe('FlexbeClient', () => {
     let client: FlexbeClient;
@@ -43,14 +43,18 @@ describe('FlexbeClient', () => {
     });
 
     it('should handle error response through site API', async () => {
+        const siteApi = client.getSiteApi(1);
         try {
-            const siteApi = client.getSiteApi(1);
-            await siteApi.pages.getPage(999999);
+            await siteApi.pages.getPages({
+                offset: -1,
+                limit: 0
+            });
             fail('Should have thrown an error');
         } catch (error) {
-            const flexbeError = error as FlexbeError;
-            expect(flexbeError.message).toBeDefined();
-            expect(flexbeError.status).toBeDefined();
+            expect(error).toBeInstanceOf(BadRequestException);
+            const badRequestError = error as BadRequestException;
+            expect(badRequestError.message).toBeDefined();
+            expect(badRequestError.statusCode).toBe(400);
         }
     });
 });
