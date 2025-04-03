@@ -12,14 +12,19 @@ export class Pages {
      * @param params - Query parameters including:
      * - offset: Number of items to skip (default: 0)
      * - limit: Maximum number of items to return (default: 100)
-     * - type: Filter by page type
-     * - status: Filter by page status
+     * - type: Filter by page type (could be an array of types)
+     * - status: Filter by page status (could be an array of statuses)
      * - uri: Search by URI (exact match with '/' or partial match with '%word%')
-     * - title: Search by title
      * - folderId: Filter by folder ID
      */
     async getPages(params?: GetPagesParams): Promise<PageListResponse> {
-        const response = await this.api.get<PageListResponse>(`/sites/${this.siteId}/pages`, { params });
+        const processedParams = params ? {
+            ...params,
+            type: Array.isArray(params.type) ? params.type.join(',') : params.type,
+            status: Array.isArray(params.status) ? params.status.join(',') : params.status
+        } : undefined;
+
+        const response = await this.api.get<PageListResponse>(`/sites/${this.siteId}/pages`, { params: processedParams });
         return response.data;
     }
 

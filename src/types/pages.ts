@@ -61,16 +61,14 @@ export interface Page {
     deletedAt: Date | null;
     screenshot: Screenshot | null;
     meta: PageMeta | null;
-    grid?: GridConfig;
 }
 
 export interface GetPagesParams {
     offset?: number;
     limit?: number;
-    type?: PageType;
-    status?: PageStatus;
+    type?: PageType | PageType[];
+    status?: PageStatus | PageStatus[];
     uri?: string;
-    title?: string;
     folderId?: number;
 }
 
@@ -114,20 +112,5 @@ export interface UpdatePageParams {
         ogTitle?: string;
         ogDescription?: string;
         noindex?: boolean;
-    };
-    grid?: {
-        color?: string;
-        desktop?: {
-            columns: number;
-            containerWidth: number;
-            columnWidth: number;
-            gap: number;
-        };
-        mobile?: {
-            columns: number;
-            containerWidth: number;
-            columnWidth: number;
-            gap: number;
-        };
     };
 }
