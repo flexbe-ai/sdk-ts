@@ -1,6 +1,6 @@
 import { FlexbeClient } from '../../src/client/client';
 import { PageType, PageStatus } from '../../src/types/pages';
-import { FlexbeError } from '../../src/types';
+import { NotFoundException, BadRequestException } from '../../src/types';
 
 describe('Pages', () => {
     let client: FlexbeClient;
@@ -68,9 +68,10 @@ describe('Pages', () => {
             await siteApi.pages.getPage(999999);
             fail('Should have thrown an error');
         } catch (error) {
-            const flexbeError = error as FlexbeError;
-            expect(flexbeError.message).toBeDefined();
-            expect(flexbeError.status).toBeDefined();
+            expect(error).toBeInstanceOf(NotFoundException);
+            const notFoundError = error as NotFoundException;
+            expect(notFoundError.message).toBeDefined();
+            expect(notFoundError.statusCode).toBe(404);
         }
     });
 
@@ -82,9 +83,10 @@ describe('Pages', () => {
             });
             fail('Should have thrown an error');
         } catch (error) {
-            const flexbeError = error as FlexbeError;
-            expect(flexbeError.message).toBeDefined();
-            expect(flexbeError.status).toBeDefined();
+            expect(error).toBeInstanceOf(BadRequestException);
+            const badRequestError = error as BadRequestException;
+            expect(badRequestError.message).toBeDefined();
+            expect(badRequestError.statusCode).toBe(400);
         }
     });
 });

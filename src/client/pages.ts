@@ -16,6 +16,11 @@ export class Pages {
      * - status: Filter by page status (could be an array of statuses)
      * - uri: Search by URI (exact match with '/' or partial match with '%word%')
      * - folderId: Filter by folder ID
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {ForbiddenException} When the site is not accessible
+     * @throws {BadRequestException} When the query parameters are invalid
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
      */
     async getPages(params?: GetPagesParams): Promise<PageListResponse> {
         const processedParams = params ? {
@@ -30,6 +35,11 @@ export class Pages {
 
     /**
      * Get a single page by ID
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
      */
     async getPage(pageId: number): Promise<Page> {
         const response = await this.api.get<Page>(`/sites/${this.siteId}/pages/${pageId}`);
@@ -38,6 +48,10 @@ export class Pages {
 
     /**
      * Get list of folders for a site
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {ForbiddenException} When the site is not accessible
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
      */
     async getFolders(): Promise<PageFolderListResponse> {
         const response = await this.api.get<PageFolderListResponse>(`/sites/${this.siteId}/pages-folders`);
@@ -46,6 +60,11 @@ export class Pages {
 
     /**
      * Get a single folder by ID
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the folder is not found
+     * @throws {ForbiddenException} When the folder does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
      */
     async getFolder(folderId: number): Promise<PageFolder> {
         const response = await this.api.get<PageFolder>(`/sites/${this.siteId}/pages-folders/${folderId}`);
@@ -58,6 +77,12 @@ export class Pages {
      * @param data - Update parameters:
      * - title: New title for the folder
      * - sortIndex: New position in the folder list
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the folder is not found
+     * @throws {ForbiddenException} When the folder does not belong to the site
+     * @throws {BadRequestException} When the update parameters are invalid
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
      */
     async updateFolder(folderId: number, data: UpdateFolderParams): Promise<PageFolder> {
         const response = await this.api.patch<PageFolder>(`/sites/${this.siteId}/pages-folders/${folderId}`, data);
@@ -69,6 +94,11 @@ export class Pages {
      * @param data - Create parameters:
      * - title: Title of the new folder (required)
      * - sortIndex: Position in the folder list (optional)
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {ForbiddenException} When the site is not accessible
+     * @throws {BadRequestException} When the create parameters are invalid
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
      */
     async createFolder(data: CreateFolderParams): Promise<PageFolder> {
         const response = await this.api.post<PageFolder>(`/sites/${this.siteId}/pages-folders`, data);
@@ -77,11 +107,27 @@ export class Pages {
 
     /**
      * Delete a folder and its items
+     * @throws {UnauthorizedException} When the API key is invalid or expired
      * @throws {NotFoundException} When the folder is not found
      * @throws {ForbiddenException} When the folder does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
      */
     async deleteFolder(folderId: number): Promise<void> {
         await this.api.delete(`/sites/${this.siteId}/pages-folders/${folderId}`);
+    }
+
+    /**
+     * Delete a page
+     * @param pageId - ID of the page to delete
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async deletePage(pageId: number): Promise<void> {
+        await this.api.delete(`/sites/${this.siteId}/pages/${pageId}`);
     }
 
     /**
@@ -103,6 +149,12 @@ export class Pages {
      *   - ogDescription: Open Graph description for social sharing
      *   - noindex: Whether to prevent search engine indexing
      * - grid: Grid configuration for the page
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {BadRequestException} When the update parameters are invalid
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
      */
     async updatePage(pageId: number, data: UpdatePageParams): Promise<Page> {
         const response = await this.api.put<Page>(`/sites/${this.siteId}/pages/${pageId}`, data);

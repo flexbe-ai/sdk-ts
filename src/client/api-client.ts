@@ -1,4 +1,4 @@
-import { FlexbeConfig, FlexbeResponse, FlexbeError, FlexbeErrorResponse } from '../types';
+import { FlexbeConfig, FlexbeResponse, FlexbeError, FlexbeErrorResponse, NotFoundException, ForbiddenException, BadRequestException, UnauthorizedException, ServerException, TimeoutException } from '../types';
 import { FlexbeAuth } from './auth';
 
 export class ApiClient {
@@ -44,15 +44,34 @@ export class ApiClient {
             clearTimeout(timeoutId);
 
             if (!response.ok) {
-                const defaultError: FlexbeErrorResponse = { message: response.statusText };
-                const errorData = await response.json().catch(() => defaultError) as FlexbeErrorResponse;
-                const error: FlexbeError = {
-                    message: errorData.message || response.statusText,
-                    code: errorData.code,
-                    status: response.status,
-                    details: errorData.details,
+                const defaultError: FlexbeErrorResponse = {
+                    message: response.statusText,
+                    error: response.statusText,
+                    statusCode: response.status
                 };
-                throw error;
+                const errorData = await response.json().catch(() => defaultError) as FlexbeErrorResponse;
+
+                switch (errorData.statusCode) {
+                    case 400:
+                        throw new BadRequestException(errorData.message);
+                    case 401:
+                        throw new UnauthorizedException(errorData.message);
+                    case 403:
+                        throw new ForbiddenException(errorData.message);
+                    case 404:
+                        throw new NotFoundException(errorData.message);
+                    case 500:
+                    case 502:
+                    case 503:
+                    case 504:
+                        throw new ServerException(errorData.message, errorData.statusCode);
+                    default:
+                        throw {
+                            message: errorData.message,
+                            error: errorData.error,
+                            statusCode: errorData.statusCode
+                        } as FlexbeError;
+                }
             }
 
             const data = await response.json() as T;
@@ -63,13 +82,9 @@ export class ApiClient {
             };
         } catch (error) {
             if (error instanceof Error && error.name === 'AbortError') {
-                const timeoutError: FlexbeError = {
-                    message: 'Request timeout',
-                    status: 408,
-                };
-                throw timeoutError;
+                throw new TimeoutException('Request timeout');
             }
-            throw error as FlexbeError;
+            throw error;
         }
     }
 
