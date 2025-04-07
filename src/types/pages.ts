@@ -144,3 +144,18 @@ export interface BulkUpdateFolderResponse {
     updated: PageFolder[];
     errors: BulkUpdateFolderError[];
 }
+
+export interface BulkDeletePagesDto {
+    pageIds: number[];
+}
+
+export interface BulkDeleteError {
+    pageId: number;
+    code: number;
+    message: string;
+}
+
+export interface BulkDeleteResponseDto {
+    deleted: number[];
+    errors: BulkDeleteError[];
+}

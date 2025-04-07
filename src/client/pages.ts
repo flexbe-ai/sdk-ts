@@ -1,4 +1,4 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse } from '../types/pages';
+import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponseDto } from '../types/pages';
 import { ApiClient } from './api-client';
 
 export class Pages {
@@ -203,6 +203,25 @@ export class Pages {
      */
     async bulkUpdateFolders(updates: BulkUpdateFolderItem[]): Promise<BulkUpdateFolderResponse> {
         const response = await this.api.patch<BulkUpdateFolderResponse>(`/sites/${this.siteId}/pages-folders`, updates);
+        return response.data;
+    }
+
+    /**
+     * Bulk delete multiple pages
+     * @param pageIds - Array of page IDs to delete
+     * @returns Object containing:
+     * - deleted: Array of successfully deleted page IDs
+     * - errors: Array of errors for failed deletions
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {ForbiddenException} When the site is not accessible
+     * @throws {BadRequestException} When all pages fail to delete
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async bulkDeletePages(pageIds: number[]): Promise<BulkDeleteResponseDto> {
+        const response = await this.api.delete<BulkDeleteResponseDto>(`/sites/${this.siteId}/pages`, {
+            body: JSON.stringify({ pageIds })
+        });
         return response.data;
     }
 }
