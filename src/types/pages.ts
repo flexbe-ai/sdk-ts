@@ -114,3 +114,33 @@ export interface UpdatePageParams {
         noindex?: boolean;
     };
 }
+
+export interface BulkUpdatePageItem extends UpdatePageParams {
+    pageId: number;
+}
+
+export interface BulkUpdateError {
+    pageId: number;
+    code: number;
+    message: string;
+}
+
+export interface BulkUpdateResponse {
+    updated: Page[];
+    errors: BulkUpdateError[];
+}
+
+export interface BulkUpdateFolderItem extends UpdateFolderParams {
+    folderId: number;
+}
+
+export interface BulkUpdateFolderError {
+    folderId: number;
+    code: number;
+    message: string;
+}
+
+export interface BulkUpdateFolderResponse {
+    updated: PageFolder[];
+    errors: BulkUpdateFolderError[];
+}

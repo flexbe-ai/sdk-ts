@@ -1,4 +1,4 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams } from '../types/pages';
+import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse } from '../types/pages';
 import { ApiClient } from './api-client';
 
 export class Pages {
@@ -158,6 +158,51 @@ export class Pages {
      */
     async updatePage(pageId: number, data: UpdatePageParams): Promise<Page> {
         const response = await this.api.put<Page>(`/sites/${this.siteId}/pages/${pageId}`, data);
+        return response.data;
+    }
+
+    /**
+     * Bulk update multiple pages
+     * @param updates - Array of page updates, each containing:
+     * - pageId: ID of the page to update
+     * - status: New status for the page
+     * - name: New name for the page
+     * - uri: New URI for the page
+     * - language: New language for the page
+     * - folderId: New folder ID for the page
+     * - sortIndex: New position in the page list
+     * - meta: Meta information for the page
+     * @returns Object containing:
+     * - updated: Array of successfully updated pages
+     * - errors: Array of errors for failed updates
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {ForbiddenException} When the site is not accessible
+     * @throws {BadRequestException} When all pages fail to update
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async bulkUpdatePages(updates: BulkUpdatePageItem[]): Promise<BulkUpdateResponse> {
+        const response = await this.api.patch<BulkUpdateResponse>(`/sites/${this.siteId}/pages`, updates);
+        return response.data;
+    }
+
+    /**
+     * Bulk update multiple folders
+     * @param updates - Array of folder updates, each containing:
+     * - folderId: ID of the folder to update
+     * - title: New title for the folder
+     * - sortIndex: New position in the folder list
+     * @returns Object containing:
+     * - updated: Array of successfully updated folders
+     * - errors: Array of errors for failed updates
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {ForbiddenException} When the site is not accessible
+     * @throws {BadRequestException} When all folders fail to update
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async bulkUpdateFolders(updates: BulkUpdateFolderItem[]): Promise<BulkUpdateFolderResponse> {
+        const response = await this.api.patch<BulkUpdateFolderResponse>(`/sites/${this.siteId}/pages-folders`, updates);
         return response.data;
     }
 }
