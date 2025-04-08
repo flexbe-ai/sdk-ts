@@ -117,11 +117,11 @@ export interface UpdatePageParams {
 }
 
 export interface BulkUpdatePageItem extends UpdatePageParams {
-    pageId: number;
+    id: number;
 }
 
 export interface BulkUpdateError {
-    pageId: number;
+    id: number;
     code: number;
     message: string;
 }
@@ -132,11 +132,11 @@ export interface BulkUpdateResponse {
 }
 
 export interface BulkUpdateFolderItem extends UpdateFolderParams {
-    folderId: number;
+    id: number;
 }
 
 export interface BulkUpdateFolderError {
-    folderId: number;
+    id: number;
     code: number;
     message: string;
 }
@@ -151,7 +151,7 @@ export interface BulkDeletePagesDto {
 }
 
 export interface BulkDeleteError {
-    pageId: number;
+    id: number;
     code: number;
     message: string;
 }

@@ -66,14 +66,14 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async getFolder(folderId: number): Promise<PageFolder> {
-        const response = await this.api.get<PageFolder>(`/sites/${this.siteId}/pages-folders/${folderId}`);
+    async getFolder(id: number): Promise<PageFolder> {
+        const response = await this.api.get<PageFolder>(`/sites/${this.siteId}/pages-folders/${id}`);
         return response.data;
     }
 
     /**
      * Update a folder's properties
-     * @param folderId - ID of the folder to update
+     * @param id - ID of the folder to update
      * @param data - Update parameters:
      * - title: New title for the folder
      * - sortIndex: New position in the folder list
@@ -84,8 +84,8 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async updateFolder(folderId: number, data: UpdateFolderParams): Promise<PageFolder> {
-        const response = await this.api.patch<PageFolder>(`/sites/${this.siteId}/pages-folders/${folderId}`, data);
+    async updateFolder(id: number, data: UpdateFolderParams): Promise<PageFolder> {
+        const response = await this.api.patch<PageFolder>(`/sites/${this.siteId}/pages-folders/${id}`, data);
         return response.data;
     }
 
@@ -113,8 +113,8 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async deleteFolder(folderId: number): Promise<void> {
-        await this.api.delete(`/sites/${this.siteId}/pages-folders/${folderId}`);
+    async deleteFolder(id: number): Promise<void> {
+        await this.api.delete(`/sites/${this.siteId}/pages-folders/${id}`);
     }
 
     /**
@@ -208,7 +208,7 @@ export class Pages {
 
     /**
      * Bulk delete multiple pages
-     * @param pageIds - Array of page IDs to delete
+     * @param ids - Array of page IDs to delete
      * @returns Object containing:
      * - deleted: Array of successfully deleted page IDs
      * - errors: Array of errors for failed deletions
@@ -218,9 +218,9 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async bulkDeletePages(pageIds: number[]): Promise<BulkDeleteResponseDto> {
+    async bulkDeletePages(ids: number[]): Promise<BulkDeleteResponseDto> {
         const response = await this.api.delete<BulkDeleteResponseDto>(`/sites/${this.siteId}/pages`, {
-            body: JSON.stringify({ pageIds })
+            body: JSON.stringify({ ids })
         });
         return response.data;
     }
