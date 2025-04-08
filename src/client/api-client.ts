@@ -74,6 +74,15 @@ export class ApiClient {
                 }
             }
 
+            // Handle 204 No Content response
+            if (response.status === 204) {
+                return {
+                    data: null as T,
+                    status: response.status,
+                    statusText: response.statusText,
+                };
+            }
+
             const data = await response.json() as T;
             return {
                 data,
