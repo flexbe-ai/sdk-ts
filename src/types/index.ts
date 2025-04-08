@@ -98,3 +98,5 @@ export class TimeoutException extends Error {
         this.name = 'TimeoutException';
     }
 }
+
+export type SiteApi = import('../client/site-api').SiteApi;

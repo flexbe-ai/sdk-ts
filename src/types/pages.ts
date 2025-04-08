@@ -45,6 +45,7 @@ export enum PageType {
 export enum PageStatus {
     PUBLISHED = 'published',
     DRAFTED = 'drafted',
+    REMOVED = 'removed',
     DELETED = 'deleted'
 }
 
