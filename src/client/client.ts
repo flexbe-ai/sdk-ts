@@ -1,11 +1,13 @@
 import { FlexbeAuthType, FlexbeConfig } from '../types';
 import { ApiClient } from './api-client';
 import { SiteApi } from './site-api';
+import { MetaApi } from './meta-api';
 
 export class FlexbeClient {
     private readonly config: FlexbeConfig;
     private readonly api: ApiClient;
     private readonly siteApis: Map<number, SiteApi> = new Map();
+    public readonly meta: MetaApi;
 
     constructor(config?: Partial<FlexbeConfig>) {
         const getEnvVar = (key: string): string | undefined => {
@@ -27,6 +29,7 @@ export class FlexbeClient {
         }
 
         this.api = new ApiClient(this.config);
+        this.meta = new MetaApi(this.api);
     }
 
     /**
