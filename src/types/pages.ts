@@ -62,6 +62,7 @@ export interface Page {
     deletedAt: Date | null;
     screenshot: Screenshot | null;
     meta: PageMeta | null;
+    themeId: number;
 }
 
 export interface GetPagesParams {
@@ -71,6 +72,7 @@ export interface GetPagesParams {
     status?: PageStatus | PageStatus[];
     uri?: string;
     folderId?: number;
+    themeId?: number;
 }
 
 export interface PageListResponse {

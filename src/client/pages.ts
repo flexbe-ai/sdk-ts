@@ -16,6 +16,7 @@ export class Pages {
      * - status: Filter by page status (could be an array of statuses)
      * - uri: Search by URI (exact match with '/' or partial match with '%word%')
      * - folderId: Filter by folder ID
+     * - themeId: Filter by theme ID
      * @throws {UnauthorizedException} When the API key is invalid or expired
      * @throws {ForbiddenException} When the site is not accessible
      * @throws {BadRequestException} When the query parameters are invalid
