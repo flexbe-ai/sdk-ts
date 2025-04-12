@@ -80,7 +80,7 @@ export interface PageListResponse {
 
 export interface PageFolder {
     id: number;
-    title: string;
+    name: string;
     sortIndex: number;
 }
 
@@ -89,12 +89,12 @@ export interface PageFolderListResponse {
 }
 
 export interface UpdateFolderParams {
-    title?: string;
+    name?: string;
     sortIndex?: number;
 }
 
 export interface CreateFolderParams {
-    title: string;
+    name: string;
     sortIndex?: number;
 }
 

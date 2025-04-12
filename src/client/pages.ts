@@ -75,8 +75,8 @@ export class Pages {
      * Update a folder's properties
      * @param id - ID of the folder to update
      * @param data - Update parameters:
-     * - title: New title for the folder
-     * - sortIndex: New position in the folder list
+     * - name: New name for the folder (max 50 characters)
+     * - sortIndex: New position in the folder list (minimum 0)
      * @throws {UnauthorizedException} When the API key is invalid or expired
      * @throws {NotFoundException} When the folder is not found
      * @throws {ForbiddenException} When the folder does not belong to the site
@@ -92,8 +92,8 @@ export class Pages {
     /**
      * Create a new folder
      * @param data - Create parameters:
-     * - title: Title of the new folder (required)
-     * - sortIndex: Position in the folder list (optional)
+     * - name: Name of the new folder (required, max 50 characters)
+     * - sortIndex: Position in the folder list (optional, minimum 0)
      * @throws {UnauthorizedException} When the API key is invalid or expired
      * @throws {ForbiddenException} When the site is not accessible
      * @throws {BadRequestException} When the create parameters are invalid
@@ -135,18 +135,18 @@ export class Pages {
      * @param pageId - ID of the page to update
      * @param data - Update parameters including:
      * - status: New status for the page
-     * - name: New name for the page
-     * - uri: New URI for the page
+     * - name: New name for the page (max 150 characters)
+     * - uri: New URI for the page (max 255 characters, automatically normalized with leading and trailing slashes)
      * - language: New language for the page
      * - folderId: New folder ID for the page
      * - sortIndex: New position in the page list
      * - meta: Meta information for the page:
-     *   - title: Page title
-     *   - description: Meta description for SEO
-     *   - keywords: Meta keywords for SEO
+     *   - title: Page title (max 200 characters)
+     *   - description: Meta description for SEO (max 1000 characters)
+     *   - keywords: Meta keywords for SEO (max 1000 characters)
      *   - ogImage: Open Graph image URL for social sharing
-     *   - ogTitle: Open Graph title for social sharing
-     *   - ogDescription: Open Graph description for social sharing
+     *   - ogTitle: Open Graph title for social sharing (max 200 characters)
+     *   - ogDescription: Open Graph description for social sharing (max 1000 characters)
      *   - noindex: Whether to prevent search engine indexing
      * - grid: Grid configuration for the page
      * @throws {UnauthorizedException} When the API key is invalid or expired
@@ -190,7 +190,7 @@ export class Pages {
      * Bulk update multiple folders
      * @param updates - Array of folder updates, each containing:
      * - folderId: ID of the folder to update
-     * - title: New title for the folder
+     * - name: New name for the folder
      * - sortIndex: New position in the folder list
      * @returns Object containing:
      * - updated: Array of successfully updated folders
