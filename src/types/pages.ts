@@ -107,15 +107,7 @@ export interface UpdatePageParams {
     language?: string;
     folderId?: number;
     sortIndex?: number;
-    meta?: {
-        title?: string;
-        description?: string;
-        keywords?: string;
-        ogImage?: string;
-        ogTitle?: string;
-        ogDescription?: string;
-        noindex?: boolean;
-    };
+    meta?: Partial<PageMeta>;
 }
 
 export interface BulkUpdatePageItem extends UpdatePageParams {
