@@ -1,4 +1,4 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponseDto, PageContentDto, UpdatePageContentDto } from '../types/pages';
+import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent } from '../types/pages';
 import { ApiClient } from './api-client';
 
 export class Pages {
@@ -219,8 +219,8 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async bulkDeletePages(ids: number[]): Promise<BulkDeleteResponseDto> {
-        const response = await this.api.delete<BulkDeleteResponseDto>(`/sites/${this.siteId}/pages`, {
+    async bulkDeletePages(ids: number[]): Promise<BulkDeleteResponse> {
+        const response = await this.api.delete<BulkDeleteResponse>(`/sites/${this.siteId}/pages`, {
             body: JSON.stringify({ ids })
         });
         return response.data;
@@ -236,8 +236,8 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async getPageContent(pageId: number): Promise<PageContentDto> {
-        const response = await this.api.get<PageContentDto>(`/sites/${this.siteId}/pages/${pageId}/content`);
+    async getPageContent(pageId: number): Promise<PageContent> {
+        const response = await this.api.get<PageContent>(`/sites/${this.siteId}/pages/${pageId}/content`);
         return response.data;
     }
 
@@ -253,8 +253,8 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async updatePageContent(pageId: number, content: UpdatePageContentDto): Promise<PageContentDto> {
-        const response = await this.api.put<PageContentDto>(`/sites/${this.siteId}/pages/${pageId}/content`, content);
+    async updatePageContent(pageId: number, content: Partial<PageContent>): Promise<PageContent> {
+        const response = await this.api.put<PageContent>(`/sites/${this.siteId}/pages/${pageId}/content`, content);
         return response.data;
     }
 }

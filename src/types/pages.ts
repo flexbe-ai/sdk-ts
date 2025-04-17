@@ -140,7 +140,7 @@ export interface BulkUpdateFolderResponse {
     errors: BulkUpdateFolderError[];
 }
 
-export interface BulkDeletePagesDto {
+export interface BulkDeletePages {
     pageIds: number[];
 }
 
@@ -150,7 +150,7 @@ export interface BulkDeleteError {
     message: string;
 }
 
-export interface BulkDeleteResponseDto {
+export interface BulkDeleteResponse {
     deleted: number[];
     errors: BulkDeleteError[];
 }
@@ -309,7 +309,7 @@ export interface PageModal {
     };
 }
 
-export interface PageContentDto {
+export interface PageContent {
     blocks: PageBlock[];
     modals: PageModal[];
     elements: PageElement[];
@@ -319,17 +319,4 @@ export interface PageContentDto {
     fonts: PageFont;
     abtests: PageABTest[];
     responsive: string | boolean;
-}
-
-export interface UpdatePageContentDto {
-    id: number;
-    blocks?: PageBlock[];
-    modals?: PageModal[];
-    elements?: PageElement[];
-    widgets?: PageWidget[];
-    codes?: string[];
-    background?: PageBackground;
-    fonts?: PageFont;
-    abtests?: PageABTest[];
-    responsive?: string | boolean;
 }
