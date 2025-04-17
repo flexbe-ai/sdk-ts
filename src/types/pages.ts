@@ -154,3 +154,182 @@ export interface BulkDeleteResponseDto {
     deleted: number[];
     errors: BulkDeleteError[];
 }
+
+export interface PageBackground {
+    image: {
+        id: number;
+        ext: string;
+        average: string;
+        preview: string;
+        width: number;
+        height: number;
+        proportion: number;
+        border: string;
+        animated: boolean;
+        transparent: number;
+    } | null;
+    styles: {
+        backgroundRepeat: string;
+        backgroundPosition: string;
+        backgroundSize: string;
+        backgroundFixed: boolean;
+        backgroundColor: string;
+        contrast: string;
+    };
+}
+
+export interface PageGrid {
+    color: string;
+    desktop: {
+        columns: string;
+        containerWidth: string;
+        columnWidth: string;
+        gap: string;
+    };
+    mobile: {
+        columns: string;
+        containerWidth: string;
+        columnWidth: string;
+        gap: string;
+    };
+}
+
+export interface PageFont {
+    set: Array<{
+        id: string;
+        uid: string;
+        protected: boolean;
+        title: string;
+        style: {
+            fontId: string;
+            family: string;
+            weight: number;
+            size: string;
+            line_height: number;
+            letter_spacing: number;
+            registry: string;
+            decoration_italic: boolean;
+            color: string;
+            contrast: string;
+            decoration_strike: boolean;
+            decoration_underline: boolean;
+            colors: {
+                enable: boolean;
+                light: {
+                    color: string;
+                    opacity: number;
+                    contrast: string;
+                };
+                dark: {
+                    color: string;
+                    opacity: number;
+                    contrast: string;
+                };
+            };
+        };
+        mobile: {
+            weight: string;
+            size: string;
+            line_height: number;
+            letter_spacing: string;
+            fontId: string;
+            family: string;
+            registry: string;
+            decoration_italic: string;
+            decoration_strike: string;
+            decoration_underline: string;
+            colors: {
+                light: string;
+                dark: string;
+            };
+        };
+        subsets: string[];
+    }>;
+}
+
+export interface PageBlock {
+    update_time: number;
+    data: Record<string, unknown>;
+    id: string;
+    is: string;
+    template_id: string;
+    refPageId?: number;
+    p_id: number;
+    aboveTheFold?: boolean;
+}
+
+export interface PageElement {
+    update_time: number;
+    data: Record<string, unknown>;
+    id: string;
+    is: string;
+    template_id: string;
+    mod_id?: string;
+    p_id: number;
+    aboveTheFold?: boolean;
+    hidden?: string;
+}
+
+export interface PageWidget {
+    update_time: number;
+    data: Record<string, unknown>;
+    id: string;
+    is: string;
+    template_id: string;
+    untouched?: boolean;
+    p_id: number;
+}
+
+export interface PageABTest {
+    a: string;
+    b: string;
+    current: 'a' | 'b';
+    is_active: number;
+    id: number;
+}
+
+export interface PageModal {
+    update_time: number;
+    data: Record<string, unknown>;
+    id: string;
+    is: string;
+    template_id: string;
+    mod_id: string;
+    p_id: number;
+    screenshot: {
+        id: number;
+        ext: string;
+        average: string;
+        preview: string;
+        width: number;
+        height: number;
+        proportion: number;
+        animated: boolean;
+        transparent: number;
+    };
+}
+
+export interface PageContentDto {
+    blocks: PageBlock[];
+    modals: PageModal[];
+    elements: PageElement[];
+    widgets: PageWidget[];
+    codes: string[];
+    background: PageBackground;
+    fonts: PageFont;
+    abtests: PageABTest[];
+    responsive: string | boolean;
+}
+
+export interface UpdatePageContentDto {
+    id: number;
+    blocks?: PageBlock[];
+    modals?: PageModal[];
+    elements?: PageElement[];
+    widgets?: PageWidget[];
+    codes?: string[];
+    background?: PageBackground;
+    fonts?: PageFont;
+    abtests?: PageABTest[];
+    responsive?: string | boolean;
+}

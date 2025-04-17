@@ -1,4 +1,4 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponseDto } from '../types/pages';
+import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponseDto, PageContentDto, UpdatePageContentDto } from '../types/pages';
 import { ApiClient } from './api-client';
 
 export class Pages {
@@ -223,6 +223,38 @@ export class Pages {
         const response = await this.api.delete<BulkDeleteResponseDto>(`/sites/${this.siteId}/pages`, {
             body: JSON.stringify({ ids })
         });
+        return response.data;
+    }
+
+    /**
+     * Get page content
+     * @param pageId - ID of the page to get content for
+     * @returns The page content
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async getPageContent(pageId: number): Promise<PageContentDto> {
+        const response = await this.api.get<PageContentDto>(`/sites/${this.siteId}/pages/${pageId}/content`);
+        return response.data;
+    }
+
+    /**
+     * Update page content
+     * @param pageId - ID of the page to update content for
+     * @param content - The new page content
+     * @returns The updated page content
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {BadRequestException} When the update parameters are invalid
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async updatePageContent(pageId: number, content: UpdatePageContentDto): Promise<PageContentDto> {
+        const response = await this.api.put<PageContentDto>(`/sites/${this.siteId}/pages/${pageId}/content`, content);
         return response.data;
     }
 }
