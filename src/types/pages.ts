@@ -303,10 +303,10 @@ export interface PageWidget {
 }
 
 export interface PageABTest {
+    id: number;
     a: string;
     b: string;
-    is_active: boolean;
-    id: number;
+    isActive: boolean;
 }
 
 export interface PageModal {
