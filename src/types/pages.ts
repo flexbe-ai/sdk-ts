@@ -312,7 +312,6 @@ export interface PageWidget {
 export interface PageABTest {
     a: string;
     b: string;
-    current: 'a' | 'b';
     is_active: number;
     id: number;
 }
@@ -334,10 +333,12 @@ export interface PageContent {
     elements: PageElement[];
     widgets: PageWidget[];
     codes: string[];
-    background: PageBackground;
-    textStyles: TextStyleItem[];
+    settings: {
+        background?: PageBackground;
+        textStyles?: TextStyleItem[];
+        responsive?: string | boolean;
+    } | null;
     abtests: PageABTest[];
-    responsive: string | boolean;
     assets: {
         images: number[];
         files: string[];
