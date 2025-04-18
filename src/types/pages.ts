@@ -155,19 +155,43 @@ export interface BulkDeleteResponse {
     errors: BulkDeleteError[];
 }
 
+type HexColor = `#${ string }`;
+type RGBColor = `rgb(${ string })`;
+type RGBAColor = `rgba(${ string })`;
+type HSLColor = `hsl(${ string })`;
+type HSLAColor = `hsla(${ string })`;
+
+type CSSLinearGradient = `linear-gradient(${ string })`;
+type CSSRadialGradient = `radial-gradient(${ string })`;
+
+type CSSColor = HexColor | RGBColor | RGBAColor | HSLColor | HSLAColor | string;
+type ColorContrast = 'dark' | 'light';
+
+export interface ImageObj {
+    id: number;
+    ext: string;
+    name?: string;
+    average?: string;
+    preview?: string;
+    width?: number;
+    height?: number;
+    proportion?: number;
+    border?: 'none' | 'transparent' | 'mixed' | string;
+    animated?: boolean;
+    transparent?: number;
+}
+
+export interface PageBackgroundStyles {
+    backgroundColor: CSSColor | CSSLinearGradient | CSSRadialGradient;
+    backgroundFixed: boolean;
+    backgroundRepeat: 'repeat' | 'repeat-x' | 'repeat-y' | 'no-repeat';
+    backgroundPosition: string;
+    backgroundSize: 'cover' | 'contain' | 'auto';
+    contrast: ColorContrast;
+}
+
 export interface PageBackground {
-    image: {
-        id: number;
-        ext: string;
-        average: string;
-        preview: string;
-        width: number;
-        height: number;
-        proportion: number;
-        border: string;
-        animated: boolean;
-        transparent: number;
-    } | null;
+    image: ImageObj | null;
     styles: {
         backgroundRepeat: string;
         backgroundPosition: string;
@@ -194,57 +218,62 @@ export interface PageGrid {
     };
 }
 
-export interface PageFont {
-    set: Array<{
-        id: string;
-        uid: string;
-        protected: boolean;
-        title: string;
-        style: {
-            fontId: string;
-            family: string;
-            weight: number;
-            size: string;
-            line_height: number;
-            letter_spacing: number;
-            registry: string;
-            decoration_italic: boolean;
-            color: string;
-            contrast: string;
-            decoration_strike: boolean;
-            decoration_underline: boolean;
-            colors: {
-                enable: boolean;
-                light: {
-                    color: string;
-                    opacity: number;
-                    contrast: string;
-                };
-                dark: {
-                    color: string;
-                    opacity: number;
-                    contrast: string;
-                };
-            };
-        };
-        mobile: {
-            weight: string;
-            size: string;
-            line_height: number;
-            letter_spacing: string;
-            fontId: string;
-            family: string;
-            registry: string;
-            decoration_italic: string;
-            decoration_strike: string;
-            decoration_underline: string;
-            colors: {
-                light: string;
-                dark: string;
-            };
-        };
-        subsets: string[];
-    }>;
+// Text style (set[])
+export interface TextStyleItem {
+    uid: string; // Unique font id
+    id: string; // Font type (content, title, ...)
+    title: string; // User defined name
+    protected?: boolean; // Protected from deletion
+    source?: 'project' | 'page'; // Source of the style (for UI only)
+    style: TextStyleProperties;
+    mobile?: Pick<TextStyleProperties, 'size' | 'weight' | 'line_height' | 'letter_spacing'>;
+}
+
+export interface TextStyleProperties {
+    fontId?: string;
+    family?: string;
+
+    size: 'inherit' | number | string; // Font size with unit (e.g., '16px', '1em'), default unit 'px'
+    weight: 'inherit' | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900; // Font weight
+    line_height: 'inherit' | number; // Line height in % (e.g., 150 = 1.5)
+    letter_spacing: 'inherit' | number | string; // Letter spacing with unit (e.g., '0.05em', '1px'), default unit 'px'
+
+    registry?: 'inherit' | 'none' | 'capitalize' | 'uppercase' | 'lowercase'; // Text transform
+    decoration_italic?: 'inherit' | 'italic' | 'normal' | false; // Italic font style
+
+    color?: 'auto' | CSSColor; // Color css value
+    contrast?: 'light' | 'dark'; // Contrast to color (if not auto)
+}
+
+// Catalogue font item
+export interface FontFamilyItem {
+    id?: string;
+    name: string;
+    source: 'user' | 'google' | 'system';
+    subsets?: string[];
+    variants: FontVariant[];
+}
+
+// Uploaded font
+export type UploadedFont = {
+    id: string;
+    name: string;
+    variants?: FontVariant[];
+};
+
+// Font face variant
+export interface FontVariant {
+    fileName?: string;
+    fileExt?: string;
+    format?: string;
+    weight: number;
+    style: 'normal' | 'italic';
+}
+
+export interface StylesDataRaw {
+    uploadedFonts?: UploadedFont[];
+    siteTextStyles: TextStyleItem[];
+    pageTextStyles?: TextStyleItem[];
 }
 
 export interface PageBlock {
@@ -296,17 +325,7 @@ export interface PageModal {
     template_id: string;
     mod_id: string;
     p_id: number;
-    screenshot: {
-        id: number;
-        ext: string;
-        average: string;
-        preview: string;
-        width: number;
-        height: number;
-        proportion: number;
-        animated: boolean;
-        transparent: number;
-    };
+    screenshot: ImageObj | null;
 }
 
 export interface PageContent {
@@ -316,7 +335,11 @@ export interface PageContent {
     widgets: PageWidget[];
     codes: string[];
     background: PageBackground;
-    fonts: PageFont;
+    textStyles: TextStyleItem[];
     abtests: PageABTest[];
     responsive: string | boolean;
+    assets: {
+        images: number[];
+        files: string[];
+    };
 }
