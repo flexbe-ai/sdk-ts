@@ -192,14 +192,7 @@ export interface PageBackgroundStyles {
 
 export interface PageBackground {
     image: ImageObj | null;
-    styles: {
-        backgroundRepeat: string;
-        backgroundPosition: string;
-        backgroundSize: string;
-        backgroundFixed: boolean;
-        backgroundColor: string;
-        contrast: string;
-    };
+    styles: PageBackgroundStyles;
 }
 
 export interface PageGrid {
@@ -312,7 +305,7 @@ export interface PageWidget {
 export interface PageABTest {
     a: string;
     b: string;
-    is_active: number;
+    is_active: boolean;
     id: number;
 }
 
