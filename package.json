@@ -1,6 +1,6 @@
 {
     "name": "@flexbe/sdk",
-    "version": "0.2.17",
+    "version": "0.2.18",
     "description": "TypeScript SDK for Flexbe API",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
