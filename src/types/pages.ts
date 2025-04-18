@@ -321,6 +321,8 @@ export interface PageModal {
 }
 
 export interface PageContent {
+    versionId: number;
+    versionTime: number;
     blocks: PageBlock[];
     modals: PageModal[];
     elements: PageElement[];
