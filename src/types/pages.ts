@@ -58,11 +58,11 @@ export interface Page {
     language: string;
     folderId: number;
     sortIndex: number;
-    updatedAt?: Date;
-    deletedAt: Date | null;
+    themeId: number;
+    updatedAt: string;
+    deletedAt: string | null;
     screenshot: Screenshot | null;
     meta: PageMeta | null;
-    themeId: number;
 }
 
 export interface GetPagesParams {
