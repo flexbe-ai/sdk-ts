@@ -339,3 +339,5 @@ export interface PageContent {
         files: string[];
     };
 }
+
+export type UpdatePageContentParams = Omit<PageContent, 'versionId' | 'versionTime'>;

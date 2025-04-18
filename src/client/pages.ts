@@ -1,4 +1,4 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent } from '../types/pages';
+import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent, UpdatePageContentParams } from '../types/pages';
 import { ApiClient } from './api-client';
 
 export class Pages {
@@ -244,7 +244,7 @@ export class Pages {
     /**
      * Update page content
      * @param pageId - ID of the page to update content for
-     * @param content - The new page content
+     * @param content - The new page content (excluding versionId and versionTime)
      * @returns The updated page content
      * @throws {UnauthorizedException} When the API key is invalid or expired
      * @throws {NotFoundException} When the page is not found
@@ -253,7 +253,7 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async updatePageContent(pageId: number, content: Partial<PageContent>): Promise<PageContent> {
+    async updatePageContent(pageId: number, content: Partial<UpdatePageContentParams>): Promise<PageContent> {
         const response = await this.api.put<PageContent>(`/sites/${this.siteId}/pages/${pageId}/content`, content);
         return response.data;
     }
