@@ -1,4 +1,4 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent, UpdatePageContentParams } from '../types/pages';
+import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent, UpdatePageContentParams, AbTest, CreateAbTestParams, UpdateAbTestParams } from '../types/pages';
 import { ApiClient } from './api-client';
 
 export class Pages {
@@ -256,5 +256,91 @@ export class Pages {
     async updatePageContent(pageId: number, content: Partial<UpdatePageContentParams>): Promise<PageContent> {
         const response = await this.api.put<PageContent>(`/sites/${this.siteId}/pages/${pageId}/content`, content);
         return response.data;
+    }
+
+    /**
+     * Get all AB tests for a page
+     * @param pageId - ID of the page to get AB tests for
+     * @returns Array of AB tests
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async getAbTests(pageId: number): Promise<AbTest[]> {
+        const response = await this.api.get<AbTest[]>(`/sites/${this.siteId}/pages/${pageId}/abtests`);
+        return response.data;
+    }
+
+    /**
+     * Get a single AB test by ID
+     * @param pageId - ID of the page the AB test belongs to
+     * @param testId - ID of the AB test to get
+     * @returns The requested AB test
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page or AB test is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async getAbTest(pageId: number, testId: number): Promise<AbTest> {
+        const response = await this.api.get<AbTest>(`/sites/${this.siteId}/pages/${pageId}/abtests/${testId}`);
+        return response.data;
+    }
+
+    /**
+     * Create a new AB test
+     * @param pageId - ID of the page to create the AB test for
+     * @param data - Create parameters:
+     * - isActive: Whether the test is active (optional, defaults to true)
+     * @returns The created AB test
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {BadRequestException} When the create parameters are invalid
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async createAbTest(pageId: number, data: CreateAbTestParams): Promise<AbTest> {
+        const response = await this.api.post<AbTest>(`/sites/${this.siteId}/pages/${pageId}/abtests`, data);
+        return response.data;
+    }
+
+    /**
+     * Update an AB test
+     * @param pageId - ID of the page the AB test belongs to
+     * @param testId - ID of the AB test to update
+     * @param data - Update parameters:
+     * - isActive: Whether the test is active
+     * - aCountView: Number of views for variant A
+     * - aCountLead: Number of leads for variant A
+     * - bCountView: Number of views for variant B
+     * - bCountLead: Number of leads for variant B
+     * @returns The updated AB test
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page or AB test is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {BadRequestException} When the update parameters are invalid
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async updateAbTest(pageId: number, testId: number, data: UpdateAbTestParams): Promise<AbTest> {
+        const response = await this.api.put<AbTest>(`/sites/${this.siteId}/pages/${pageId}/abtests/${testId}`, data);
+        return response.data;
+    }
+
+    /**
+     * Delete an AB test
+     * @param pageId - ID of the page the AB test belongs to
+     * @param testId - ID of the AB test to delete
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page or AB test is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async deleteAbTest(pageId: number, testId: number): Promise<void> {
+        await this.api.delete(`/sites/${this.siteId}/pages/${pageId}/abtests/${testId}`);
     }
 }
