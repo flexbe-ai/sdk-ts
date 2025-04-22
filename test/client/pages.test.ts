@@ -66,7 +66,7 @@ describe('Pages', () => {
     it('should handle error when getting non-existent page', async () => {
         try {
             // Try to get a page that doesn't exist in the test site
-            await siteApi.pages.getPage(0);
+            await siteApi.pages.getPage(128127812121);
             fail('Should have thrown an error');
         } catch (error) {
             expect(error).toBeInstanceOf(NotFoundException);
