@@ -2,6 +2,7 @@ import { FlexbeAuthType, FlexbeConfig } from '../types';
 import { ApiClient } from './api-client';
 import { SiteApi } from './site-api';
 import { MetaApi } from './meta-api';
+import { TokenManager } from './token-manager';
 
 export class FlexbeClient {
     private readonly config: FlexbeConfig;
@@ -44,5 +45,17 @@ export class FlexbeClient {
             this.siteApis.set(siteId, siteApi);
         }
         return siteApi;
+    }
+
+    /**
+     * Revokes the current authentication token and clears it from storage.
+     * This should be called during logout to ensure proper cleanup.
+     * @returns Promise that resolves when the token is revoked
+     */
+    public async revokeToken(): Promise<void> {
+        if (this.config.authType !== FlexbeAuthType.BEARER) {
+            return;
+        }
+        await TokenManager.getInstance().revokeToken();
     }
 }

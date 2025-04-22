@@ -261,4 +261,32 @@ export class TokenManager {
             localStorage.removeItem(TOKEN_STORAGE_KEY);
         }
     }
+
+    public async revokeToken(): Promise<void> {
+        const token = this.token;
+        this.clearToken();
+
+        if (!token) return;
+
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+            await fetch('/oauth/revoke', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token.accessToken}`
+                },
+                body: JSON.stringify({ token: token.accessToken }),
+                credentials: 'include',
+                signal: controller.signal,
+            });
+
+            clearTimeout(timeoutId);
+        } catch (error) {
+            console.error('Failed to revoke token:', error);
+            // Even if revocation fails, we still want to clear the local token
+        }
+    }
 }
