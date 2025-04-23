@@ -341,26 +341,3 @@ export interface PageContent {
 }
 
 export type UpdatePageContentParams = Omit<PageContent, 'versionId' | 'versionTime'>;
-
-export interface AbTest {
-    id: number;
-    a: string;
-    b: string;
-    isActive: boolean;
-    aCountView?: number;
-    aCountLead?: number;
-    bCountView?: number;
-    bCountLead?: number;
-}
-
-export interface CreateAbTestParams {
-    isActive?: boolean;
-}
-
-export interface UpdateAbTestParams {
-    isActive?: boolean;
-    aCountView?: number;
-    aCountLead?: number;
-    bCountView?: number;
-    bCountLead?: number;
-}
