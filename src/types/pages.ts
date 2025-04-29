@@ -341,3 +341,16 @@ export interface PageContent {
 }
 
 export type UpdatePageContentParams = Omit<PageContent, 'versionId' | 'versionTime'>;
+
+export interface PageVersion {
+    id: number;
+    createdAt: string;
+}
+
+export interface PageVersionListResponse {
+    list: PageVersion[];
+}
+
+export interface PageVersionData extends PageVersion {
+    data: Record<string, unknown>;
+}

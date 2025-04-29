@@ -1,4 +1,4 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent, UpdatePageContentParams } from '../types/pages';
+import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent, UpdatePageContentParams, PageVersionListResponse, PageVersionData } from '../types/pages';
 import { ApiClient } from './api-client';
 
 export class Pages {
@@ -255,6 +255,37 @@ export class Pages {
      */
     async updatePageContent(pageId: number, content: Partial<UpdatePageContentParams>): Promise<PageContent> {
         const response = await this.api.put<PageContent>(`/sites/${this.siteId}/pages/${pageId}/content`, content);
+        return response.data;
+    }
+
+    /**
+     * Get list of page versions
+     * @param pageId - ID of the page to get versions for
+     * @returns List of page versions
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async getPageVersions(pageId: number): Promise<PageVersionListResponse> {
+        const response = await this.api.get<PageVersionListResponse>(`/sites/${this.siteId}/pages/${pageId}/versions`);
+        return response.data;
+    }
+
+    /**
+     * Get a specific page version
+     * @param pageId - ID of the page
+     * @param versionId - ID of the version to get
+     * @returns The requested page version with data
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page or version is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async getPageVersion(pageId: number, versionId: number): Promise<PageVersionData> {
+        const response = await this.api.get<PageVersionData>(`/sites/${this.siteId}/pages/${pageId}/versions/${versionId}`);
         return response.data;
     }
 }
