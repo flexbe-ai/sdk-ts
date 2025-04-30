@@ -61,7 +61,7 @@ export class TokenManager {
 
             if (!event.newValue) {
                 this.clearToken();
-                void this.retrieveToken();
+                // void this.retrieveToken();
                 return;
             }
 
