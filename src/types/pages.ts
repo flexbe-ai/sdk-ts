@@ -345,6 +345,7 @@ export type UpdatePageContentParams = Omit<PageContent, 'versionId' | 'versionTi
 export interface PageVersion {
     id: number;
     createdAt: string;
+    selected?: boolean;
 }
 
 export interface PageVersionListResponse {
