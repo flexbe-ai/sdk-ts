@@ -1,4 +1,4 @@
-import { Pagination } from './index';
+import { FlexbeBulkError, Pagination } from './index';
 
 export interface GridConfig {
     color?: string;
@@ -114,15 +114,9 @@ export interface BulkUpdatePageItem extends UpdatePageParams {
     id: number;
 }
 
-export interface BulkUpdateError {
-    id: number;
-    code: number;
-    message: string;
-}
-
 export interface BulkUpdateResponse {
     updated: Page[];
-    errors: BulkUpdateError[];
+    errors: FlexbeBulkError[];
 }
 
 export interface BulkUpdateFolderItem extends UpdateFolderParams {

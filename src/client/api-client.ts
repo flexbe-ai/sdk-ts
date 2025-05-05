@@ -53,23 +53,24 @@ export class ApiClient {
 
                 switch (errorData.statusCode) {
                     case 400:
-                        throw new BadRequestException(errorData.message);
+                        throw new BadRequestException(errorData.message, errorData.error, errorData.errors);
                     case 401:
-                        throw new UnauthorizedException(errorData.message);
+                        throw new UnauthorizedException(errorData.message, errorData.error, errorData.errors);
                     case 403:
-                        throw new ForbiddenException(errorData.message);
+                        throw new ForbiddenException(errorData.message, errorData.error, errorData.errors);
                     case 404:
-                        throw new NotFoundException(errorData.message);
+                        throw new NotFoundException(errorData.message, errorData.error, errorData.errors);
                     case 500:
                     case 502:
                     case 503:
                     case 504:
-                        throw new ServerException(errorData.message, errorData.statusCode);
+                        throw new ServerException(errorData.message, errorData.error, errorData.statusCode, errorData.errors);
                     default:
                         throw {
                             message: errorData.message,
                             error: errorData.error,
-                            statusCode: errorData.statusCode
+                            statusCode: errorData.statusCode,
+                            errors: errorData.errors
                         } as FlexbeError;
                 }
             }
