@@ -1,13 +1,34 @@
-import { FlexbeConfig, FlexbeResponse, FlexbeError, FlexbeErrorResponse, NotFoundException, ForbiddenException, BadRequestException, UnauthorizedException, ServerException, TimeoutException } from '../types';
-import { FlexbeAuth } from './auth';
+import { FlexbeConfig, FlexbeResponse, FlexbeError, FlexbeErrorResponse, NotFoundException, ForbiddenException, BadRequestException, UnauthorizedException, ServerException, TimeoutException, FlexbeAuthType } from '../types';
+import { TokenManager } from './token-manager';
 
 export class ApiClient {
     private readonly config: FlexbeConfig;
-    private readonly auth: FlexbeAuth;
+    private readonly tokenManager: TokenManager;
 
     constructor(config: FlexbeConfig) {
         this.config = config;
-        this.auth = new FlexbeAuth(config);
+        this.tokenManager = TokenManager.getInstance();
+
+        if (this.config.authType === FlexbeAuthType.BEARER) {
+            // Start initialization but don't wait for it
+            void this.tokenManager.getToken(); // just warm up the token manager before any request
+        }
+    }
+
+    private async getAuthHeaders(): Promise<Record<string, string>> {
+        const headers: Record<string, string> = {};
+
+        if (this.config.authType === FlexbeAuthType.API_KEY) {
+            headers['x-api-key'] = this.config.apiKey as string;
+        } else if (this.config.authType === FlexbeAuthType.BEARER) {
+            const token = await this.tokenManager.getToken();
+            if (!token) {
+                throw new Error('No valid bearer token available');
+            }
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        return headers;
     }
 
     private buildUrl(path: string, params?: object): string {
@@ -24,14 +45,13 @@ export class ApiClient {
 
     private async request<T>(config: RequestInit & { url: string; params?: object }): Promise<FlexbeResponse<T>> {
         try {
-            await this.auth.ensureInitialized();
-
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), this.config.timeout);
 
             const url = this.buildUrl(config.url, config.params);
             const headers = {
-                ...(await this.auth.getAuthHeaders()),
+                'Content-Type': 'application/json',
+                ...(await this.getAuthHeaders()),
                 ...config.headers,
             };
 
@@ -91,6 +111,10 @@ export class ApiClient {
                 statusText: response.statusText,
             };
         } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                this.config.hooks?.onUnauthorized?.();
+            }
+
             if (error instanceof Error && error.name === 'AbortError') {
                 throw new TimeoutException('Request timeout');
             }

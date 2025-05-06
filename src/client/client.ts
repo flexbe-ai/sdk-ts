@@ -18,11 +18,16 @@ export class FlexbeClient {
             return undefined;
         };
 
+        const defaultConfig: FlexbeConfig = {
+            baseUrl: getEnvVar('FLEXBE_API_URL') || 'https://api.flexbe.com',
+            timeout: 30000,
+            apiKey: getEnvVar('FLEXBE_API_KEY') || '',
+            authType: FlexbeAuthType.API_KEY,
+        };
+
         this.config = {
-            baseUrl: config?.baseUrl || getEnvVar('FLEXBE_API_URL') || 'https://api.flexbe.com',
-            timeout: config?.timeout || 30000,
-            apiKey: config?.apiKey || getEnvVar('FLEXBE_API_KEY') || '',
-            authType: config?.authType || FlexbeAuthType.API_KEY,
+            ...defaultConfig,
+            ...config,
         };
 
         if (this.config.authType === 'apiKey' && !this.config.apiKey) {

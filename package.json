@@ -24,8 +24,7 @@
         "format": "prettier --write \"src/**/*.ts\"",
         "prepare": "npm run build",
         "prepublishOnly": "npm test && npm run lint",
-        "version": "npm version",
-        "publish": "npm publish --access public"
+        "version": "npm version"
     },
     "keywords": [
         "flexbe",

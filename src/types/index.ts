@@ -9,6 +9,9 @@ export interface FlexbeConfig {
     timeout?: number;
     siteId?: string;
     authType?: FlexbeAuthType;
+    hooks?: {
+        onUnauthorized?: () => void;
+    };
 }
 
 export interface FlexbeResponse<T> {
