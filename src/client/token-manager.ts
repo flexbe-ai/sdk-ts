@@ -1,6 +1,6 @@
 import { JwtToken, TokenResponse, UnauthorizedException } from '../types';
 
-const TOKEN_STORAGE_KEY = 'flexbe_jwt_token';
+const TOKEN_STORAGE_KEY = 'flexbe_jwt';
 const TOKEN_REFRESH_THRESHOLD = 5*60*1000; // update token 5 minutes before expiration
 
 interface JwtPayload {
@@ -19,6 +19,13 @@ export class TokenManager {
         if (!TokenManager.instance) {
             TokenManager.instance = new TokenManager();
         }
+
+        if (typeof window !== 'undefined') {
+            // Clean up old token storage place
+            // TODO remove this after June 1, 2025
+            localStorage.removeItem('flexbe_jwt_token');;
+        }
+
         return TokenManager.instance;
     }
 
