@@ -1,4 +1,4 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent, UpdatePageContentParams, PageVersionListResponse, PageVersionData } from '../types/pages';
+import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent, UpdatePageContentParams, PageVersionListResponse, PageHistoryItemData } from '../types/pages';
 import { ApiClient } from './api-client';
 
 export class Pages {
@@ -268,8 +268,8 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async getPageVersions(pageId: number): Promise<PageVersionListResponse> {
-        const response = await this.api.get<PageVersionListResponse>(`/sites/${this.siteId}/pages/${pageId}/versions`);
+    async getPageHistory(pageId: number): Promise<PageVersionListResponse> {
+        const response = await this.api.get<PageVersionListResponse>(`/sites/${this.siteId}/pages/${pageId}/history`);
         return response.data;
     }
 
@@ -284,8 +284,8 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async getPageVersion(pageId: number, versionId: number): Promise<PageVersionData> {
-        const response = await this.api.get<PageVersionData>(`/sites/${this.siteId}/pages/${pageId}/versions/${versionId}`);
+    async getPageHistoryItem(pageId: number, versionId: number): Promise<PageHistoryItemData> {
+        const response = await this.api.get<PageHistoryItemData>(`/sites/${this.siteId}/pages/${pageId}/history/${versionId}`);
         return response.data;
     }
 }

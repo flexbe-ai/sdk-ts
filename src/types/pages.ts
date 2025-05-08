@@ -336,16 +336,16 @@ export interface PageContent {
 
 export type UpdatePageContentParams = Omit<PageContent, 'versionId' | 'versionTime'>;
 
-export interface PageVersion {
+export interface PageHistoryItem {
     id: number;
     createdAt: string;
     selected?: boolean;
 }
 
 export interface PageVersionListResponse {
-    list: PageVersion[];
+    list: PageHistoryItem[];
 }
 
-export interface PageVersionData extends PageVersion {
+export interface PageHistoryItemData extends PageHistoryItem {
     data: Record<string, unknown>;
 }
