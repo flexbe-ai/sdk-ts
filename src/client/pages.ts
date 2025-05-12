@@ -136,6 +136,7 @@ export class Pages {
      * @param pageId - ID of the page to update
      * @param data - Update parameters including:
      * - status: New status for the page
+     * - versionId: ID of the version to set as current
      * - name: New name for the page (max 150 characters)
      * - uri: New URI for the page (max 255 characters, automatically normalized with leading and trailing slashes)
      * - language: New language for the page
@@ -149,10 +150,9 @@ export class Pages {
      *   - ogTitle: Open Graph title for social sharing (max 200 characters)
      *   - ogDescription: Open Graph description for social sharing (max 1000 characters)
      *   - noindex: Whether to prevent search engine indexing
-     * - grid: Grid configuration for the page
      * @throws {UnauthorizedException} When the API key is invalid or expired
-     * @throws {NotFoundException} When the page is not found
-     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {NotFoundException} When the page or version is not found
+     * @throws {ForbiddenException} When the page does not belong to the site or version belongs to a different page
      * @throws {BadRequestException} When the update parameters are invalid
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out

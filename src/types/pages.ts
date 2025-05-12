@@ -102,6 +102,7 @@ export interface CreateFolderParams {
 
 export interface UpdatePageParams {
     status?: PageStatus;
+    versionId?: number;
     name?: string;
     uri?: string;
     language?: string;
