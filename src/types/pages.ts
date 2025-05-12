@@ -51,6 +51,7 @@ export enum PageStatus {
 
 export interface Page {
     id: number;
+    versionId: number | null;
     type: PageType;
     status: PageStatus;
     name: string;
@@ -343,10 +344,24 @@ export interface PageHistoryItem {
     selected?: boolean;
 }
 
-export interface PageVersionListResponse {
+export interface PageHistoryListResponse {
     list: PageHistoryItem[];
 }
 
 export interface PageHistoryItemData extends PageHistoryItem {
     data: Record<string, unknown>;
 }
+
+export interface PageVersionItem {
+    id: number;
+    createdAt: string;
+}
+
+export interface PageVersionListResponse {
+    list: PageVersionItem[];
+}
+
+export interface PageVersionDataResponse {
+    data: PageContent;
+}
+
