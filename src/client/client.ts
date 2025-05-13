@@ -1,8 +1,10 @@
-import { FlexbeAuthType, FlexbeConfig } from '../types';
+import { FlexbeAuthType } from '../types';
 import { ApiClient } from './api-client';
-import { SiteApi } from './site-api';
 import { MetaApi } from './meta-api';
+import { SiteApi } from './site-api';
 import { TokenManager } from './token-manager';
+
+import type { FlexbeConfig } from '../types';
 
 export class FlexbeClient {
     private readonly config: FlexbeConfig;

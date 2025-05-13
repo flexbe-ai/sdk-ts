@@ -1,6 +1,6 @@
 import { FlexbeClient } from '../../src/client/client';
-import { PageType, PageStatus } from '../../src/types/pages';
-import { NotFoundException, BadRequestException } from '../../src/types';
+import { BadRequestException, NotFoundException } from '../../src/types';
+import { PageStatus, PageType } from '../../src/types/pages';
 
 describe('Pages', () => {
     let client: FlexbeClient;
@@ -24,7 +24,7 @@ describe('Pages', () => {
         expect(config.apiKey).toBe(testConfig.apiKey);
     });
 
-    it('should get list of pages with default parameters', async () => {
+    it('should get list of pages with default parameters', async() => {
         const response = await siteApi.pages.getPages();
         expect(response).toBeDefined();
         expect(response.list).toBeDefined();
@@ -34,13 +34,13 @@ describe('Pages', () => {
         expect(response.pagination.total).toBeDefined();
     });
 
-    it('should get list of pages with custom parameters', async () => {
+    it('should get list of pages with custom parameters', async() => {
         const params = {
             offset: 0,
             limit: 10, // API default limit
             type: PageType.PAGE,
             status: PageStatus.PUBLISHED,
-            search: ''
+            search: '',
         };
 
         const response = await siteApi.pages.getPages(params);
@@ -52,7 +52,7 @@ describe('Pages', () => {
         expect(response.pagination.total).toBeDefined();
     });
 
-    it('should get a single page by ID', async () => {
+    it('should get a single page by ID', async() => {
         const pageId = 2272741;
         const response = await siteApi.pages.getPage(pageId);
         expect(response).toBeDefined();
@@ -63,12 +63,13 @@ describe('Pages', () => {
         expect(response.sortIndex).toBeDefined();
     });
 
-    it('should handle error when getting non-existent page', async () => {
+    it('should handle error when getting non-existent page', async() => {
         try {
             // Try to get a page that doesn't exist in the test site
             await siteApi.pages.getPage(128127812121);
             fail('Should have thrown an error');
-        } catch (error) {
+        }
+        catch (error) {
             expect(error).toBeInstanceOf(NotFoundException);
             const notFoundError = error as NotFoundException;
             expect(notFoundError.message).toBeDefined();
@@ -76,14 +77,15 @@ describe('Pages', () => {
         }
     });
 
-    it('should handle error when getting pages with invalid parameters', async () => {
+    it('should handle error when getting pages with invalid parameters', async() => {
         try {
             await siteApi.pages.getPages({
                 offset: -1,
-                limit: 0
+                limit: 0,
             });
             fail('Should have thrown an error');
-        } catch (error) {
+        }
+        catch (error) {
             expect(error).toBeInstanceOf(BadRequestException);
             const badRequestError = error as BadRequestException;
             expect(badRequestError.message).toBeDefined();

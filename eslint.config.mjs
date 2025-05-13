@@ -1,3 +1,8 @@
-import config from '@flexbe/eslint-config';
+import { baseConfig, combine, typescriptConfig } from '@flexbe/eslint-config';
 
-export default config;
+export default combine(
+    baseConfig(),
+    typescriptConfig({
+        tsconfigPath: './tsconfig.json',
+    })
+);

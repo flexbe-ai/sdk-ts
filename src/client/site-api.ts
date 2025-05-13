@@ -1,6 +1,7 @@
-import { ApiClient } from './api-client';
 import { Pages } from './pages';
 import { Stat } from './stat';
+
+import type { ApiClient } from './api-client';
 
 export class SiteApi {
     public readonly pages: Pages;
