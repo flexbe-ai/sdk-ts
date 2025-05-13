@@ -41,8 +41,8 @@
         "url": "https://github.com/flexbe/sdk-ts/issues"
     },
     "homepage": "https://github.com/flexbe/sdk-ts#readme",
-    "dependencies": {},
     "devDependencies": {
+        "@flexbe/eslint-config": "^1.0.4",
         "@types/jest": "^29.5.12",
         "@types/node": "^20.11.19",
         "@typescript-eslint/eslint-plugin": "^7.0.1",
