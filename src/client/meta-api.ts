@@ -1,5 +1,5 @@
-import { ApiClient } from './api-client';
-import { SiteCurrency, SiteLanguage, UserLanguage } from '../types/meta';
+import type { ApiClient } from './api-client';
+import type { SiteCurrency, SiteLanguage, UserLanguage } from '../types/meta';
 
 export class MetaApi {
     constructor(private readonly api: ApiClient) {}
@@ -10,7 +10,7 @@ export class MetaApi {
      */
     public async getSiteLanguages(): Promise<SiteLanguage[]> {
         const response = await this.api.get<SiteLanguage[]>('/meta/site-languages', {
-            headers: { 'Authorization': '' }
+            headers: { Authorization: '' },
         });
         return response.data;
     }
@@ -21,7 +21,7 @@ export class MetaApi {
      */
     public async getUserLanguages(): Promise<UserLanguage[]> {
         const response = await this.api.get<UserLanguage[]>('/meta/user-languages', {
-            headers: { 'Authorization': '' }
+            headers: { Authorization: '' },
         });
         return response.data;
     }
@@ -32,7 +32,7 @@ export class MetaApi {
      */
     public async getSiteCurrencies(): Promise<SiteCurrency[]> {
         const response = await this.api.get<SiteCurrency[]>('/meta/site-currencies', {
-            headers: { 'Authorization': '' }
+            headers: { Authorization: '' },
         });
         return response.data;
     }

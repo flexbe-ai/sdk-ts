@@ -1,5 +1,7 @@
-import { FlexbeConfig, FlexbeResponse, FlexbeError, FlexbeErrorResponse, NotFoundException, ForbiddenException, BadRequestException, UnauthorizedException, ServerException, TimeoutException, FlexbeAuthType } from '../types';
+import { BadRequestException, FlexbeAuthType, ForbiddenException, NotFoundException, ServerException, TimeoutException, UnauthorizedException } from '../types';
 import { TokenManager } from './token-manager';
+
+import type { FlexbeConfig, FlexbeError, FlexbeErrorResponse, FlexbeResponse } from '../types';
 
 export class ApiClient {
     private readonly config: FlexbeConfig;
@@ -20,12 +22,13 @@ export class ApiClient {
 
         if (this.config.authType === FlexbeAuthType.API_KEY) {
             headers['x-api-key'] = this.config.apiKey as string;
-        } else if (this.config.authType === FlexbeAuthType.BEARER) {
+        }
+        else if (this.config.authType === FlexbeAuthType.BEARER) {
             const token = await this.tokenManager.getToken();
             if (!token) {
                 throw new Error('No valid bearer token available');
             }
-            headers['Authorization'] = `Bearer ${token}`;
+            headers.Authorization = `Bearer ${ token }`;
         }
 
         return headers;
@@ -40,7 +43,7 @@ export class ApiClient {
                 }
             });
         }
-        return `${path}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+        return `${ path }${ searchParams.toString() ? `?${ searchParams.toString() }` : '' }`;
     }
 
     private async request<T>(config: RequestInit & { url: string; params?: object }): Promise<FlexbeResponse<T>> {
@@ -67,7 +70,7 @@ export class ApiClient {
                 const defaultError: FlexbeErrorResponse = {
                     message: response.statusText,
                     error: response.statusText,
-                    statusCode: response.status
+                    statusCode: response.status,
                 };
                 const errorData = await response.json().catch(() => defaultError) as FlexbeErrorResponse;
 
@@ -90,7 +93,7 @@ export class ApiClient {
                             message: errorData.message,
                             error: errorData.error,
                             statusCode: errorData.statusCode,
-                            errors: errorData.errors
+                            errors: errorData.errors,
                         } as FlexbeError;
                 }
             }
@@ -110,7 +113,8 @@ export class ApiClient {
                 status: response.status,
                 statusText: response.statusText,
             };
-        } catch (error) {
+        }
+        catch (error) {
             if (error instanceof UnauthorizedException) {
                 this.config.hooks?.onUnauthorized?.();
             }
@@ -122,23 +126,23 @@ export class ApiClient {
         }
     }
 
-    public get<T>(url: string, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
+    public async get<T>(url: string, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
         return this.request<T>({ ...config, url, method: 'GET' });
     }
 
-    public post<T>(url: string, data?: unknown, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
+    public async post<T>(url: string, data?: unknown, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
         return this.request<T>({ ...config, url, method: 'POST', body: JSON.stringify(data) });
     }
 
-    public put<T>(url: string, data?: unknown, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
+    public async put<T>(url: string, data?: unknown, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
         return this.request<T>({ ...config, url, method: 'PUT', body: JSON.stringify(data) });
     }
 
-    public patch<T>(url: string, data?: unknown, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
+    public async patch<T>(url: string, data?: unknown, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
         return this.request<T>({ ...config, url, method: 'PATCH', body: JSON.stringify(data) });
     }
 
-    public delete<T>(url: string, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
+    public async delete<T>(url: string, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
         return this.request<T>({ ...config, url, method: 'DELETE' });
     }
 }

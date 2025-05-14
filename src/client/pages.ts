@@ -1,5 +1,5 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent, UpdatePageContentParams, PageHistoryListResponse, PageHistoryItemData, PageVersionListResponse, PageVersionDataResponse } from '../types/pages';
-import { ApiClient } from './api-client';
+import type { ApiClient } from './api-client';
+import type { BulkDeleteResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkUpdatePageItem, BulkUpdateResponse, CreateFolderParams, GetPagesParams, Page, PageContent, PageFolder, PageFolderListResponse, PageHistoryItemData, PageHistoryListResponse, PageListResponse, PageVersionDataResponse, PageVersionListResponse, UpdateFolderParams, UpdatePageContentParams, UpdatePageParams } from '../types/pages';
 
 export class Pages {
     constructor(
@@ -24,13 +24,15 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async getPages(params?: GetPagesParams): Promise<PageListResponse> {
-        const processedParams = params ? {
-            ...params,
-            type: Array.isArray(params.type) ? params.type.join(',') : params.type,
-            status: Array.isArray(params.status) ? params.status.join(',') : params.status
-        } : undefined;
+        const processedParams = params
+            ? {
+                ...params,
+                type: Array.isArray(params.type) ? params.type.join(',') : params.type,
+                status: Array.isArray(params.status) ? params.status.join(',') : params.status,
+            }
+            : undefined;
 
-        const response = await this.api.get<PageListResponse>(`/sites/${this.siteId}/pages`, { params: processedParams });
+        const response = await this.api.get<PageListResponse>(`/sites/${ this.siteId }/pages`, { params: processedParams });
         return response.data;
     }
 
@@ -43,7 +45,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async getPage(pageId: number): Promise<Page> {
-        const response = await this.api.get<Page>(`/sites/${this.siteId}/pages/${pageId}`);
+        const response = await this.api.get<Page>(`/sites/${ this.siteId }/pages/${ pageId }`);
         return response.data;
     }
 
@@ -55,7 +57,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async getFolders(): Promise<PageFolderListResponse> {
-        const response = await this.api.get<PageFolderListResponse>(`/sites/${this.siteId}/pages-folders`);
+        const response = await this.api.get<PageFolderListResponse>(`/sites/${ this.siteId }/pages-folders`);
         return response.data;
     }
 
@@ -68,7 +70,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async getFolder(id: number): Promise<PageFolder> {
-        const response = await this.api.get<PageFolder>(`/sites/${this.siteId}/pages-folders/${id}`);
+        const response = await this.api.get<PageFolder>(`/sites/${ this.siteId }/pages-folders/${ id }`);
         return response.data;
     }
 
@@ -86,7 +88,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async updateFolder(id: number, data: UpdateFolderParams): Promise<PageFolder> {
-        const response = await this.api.patch<PageFolder>(`/sites/${this.siteId}/pages-folders/${id}`, data);
+        const response = await this.api.patch<PageFolder>(`/sites/${ this.siteId }/pages-folders/${ id }`, data);
         return response.data;
     }
 
@@ -102,7 +104,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async createFolder(data: CreateFolderParams): Promise<PageFolder> {
-        const response = await this.api.post<PageFolder>(`/sites/${this.siteId}/pages-folders`, data);
+        const response = await this.api.post<PageFolder>(`/sites/${ this.siteId }/pages-folders`, data);
         return response.data;
     }
 
@@ -115,7 +117,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async deleteFolder(id: number): Promise<void> {
-        await this.api.delete(`/sites/${this.siteId}/pages-folders/${id}`);
+        await this.api.delete(`/sites/${ this.siteId }/pages-folders/${ id }`);
     }
 
     /**
@@ -128,7 +130,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async deletePage(pageId: number): Promise<void> {
-        await this.api.delete(`/sites/${this.siteId}/pages/${pageId}`);
+        await this.api.delete(`/sites/${ this.siteId }/pages/${ pageId }`);
     }
 
     /**
@@ -158,7 +160,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async updatePage(pageId: number, data: UpdatePageParams): Promise<Page> {
-        const response = await this.api.put<Page>(`/sites/${this.siteId}/pages/${pageId}`, data);
+        const response = await this.api.put<Page>(`/sites/${ this.siteId }/pages/${ pageId }`, data);
         return response.data;
     }
 
@@ -183,7 +185,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async bulkUpdatePages(updates: BulkUpdatePageItem[]): Promise<BulkUpdateResponse> {
-        const response = await this.api.patch<BulkUpdateResponse>(`/sites/${this.siteId}/pages`, updates);
+        const response = await this.api.patch<BulkUpdateResponse>(`/sites/${ this.siteId }/pages`, updates);
         return response.data;
     }
 
@@ -203,7 +205,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async bulkUpdateFolders(updates: BulkUpdateFolderItem[]): Promise<BulkUpdateFolderResponse> {
-        const response = await this.api.patch<BulkUpdateFolderResponse>(`/sites/${this.siteId}/pages-folders`, updates);
+        const response = await this.api.patch<BulkUpdateFolderResponse>(`/sites/${ this.siteId }/pages-folders`, updates);
         return response.data;
     }
 
@@ -220,8 +222,8 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async bulkDeletePages(ids: number[]): Promise<BulkDeleteResponse> {
-        const response = await this.api.delete<BulkDeleteResponse>(`/sites/${this.siteId}/pages`, {
-            body: JSON.stringify({ ids })
+        const response = await this.api.delete<BulkDeleteResponse>(`/sites/${ this.siteId }/pages`, {
+            body: JSON.stringify({ ids }),
         });
         return response.data;
     }
@@ -237,7 +239,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async getPageContent(pageId: number): Promise<PageContent> {
-        const response = await this.api.get<PageContent>(`/sites/${this.siteId}/pages/${pageId}/content`);
+        const response = await this.api.get<PageContent>(`/sites/${ this.siteId }/pages/${ pageId }/content`);
         return response.data;
     }
 
@@ -254,7 +256,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async updatePageContent(pageId: number, content: Partial<UpdatePageContentParams>): Promise<PageContent> {
-        const response = await this.api.put<PageContent>(`/sites/${this.siteId}/pages/${pageId}/content`, content);
+        const response = await this.api.put<PageContent>(`/sites/${ this.siteId }/pages/${ pageId }/content`, content);
         return response.data;
     }
 
@@ -269,7 +271,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async getPageHistory(pageId: number): Promise<PageHistoryListResponse> {
-        const response = await this.api.get<PageHistoryListResponse>(`/sites/${this.siteId}/pages/${pageId}/history`);
+        const response = await this.api.get<PageHistoryListResponse>(`/sites/${ this.siteId }/pages/${ pageId }/history`);
         return response.data;
     }
 
@@ -285,7 +287,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async getPageHistoryItem(pageId: number, versionId: number): Promise<PageHistoryItemData> {
-        const response = await this.api.get<PageHistoryItemData>(`/sites/${this.siteId}/pages/${pageId}/history/${versionId}`);
+        const response = await this.api.get<PageHistoryItemData>(`/sites/${ this.siteId }/pages/${ pageId }/history/${ versionId }`);
         return response.data;
     }
 
@@ -300,7 +302,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async getPageVersions(pageId: number): Promise<PageVersionListResponse> {
-        const response = await this.api.get<PageVersionListResponse>(`/sites/${this.siteId}/pages/${pageId}/versions`);
+        const response = await this.api.get<PageVersionListResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions`);
         return response.data;
     }
 
@@ -316,7 +318,7 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async getPageVersion(pageId: number, versionId: number): Promise<PageVersionDataResponse> {
-        const response = await this.api.get<PageVersionDataResponse>(`/sites/${this.siteId}/pages/${pageId}/versions/${versionId}`);
+        const response = await this.api.get<PageVersionDataResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions/${ versionId }`);
         return response.data;
     }
 }
