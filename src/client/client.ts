@@ -63,6 +63,7 @@ export class FlexbeClient {
         if (this.config.authType !== FlexbeAuthType.BEARER) {
             return;
         }
+
         await TokenManager.getInstance().revokeToken();
     }
 }

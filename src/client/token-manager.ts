@@ -16,6 +16,7 @@ interface JwtPayload {
 export class TokenManager {
     private static instance: TokenManager;
     private tokenPromise: Promise<void> | null = null;
+    private isRevoking: boolean = false;
 
     public static getInstance(): TokenManager {
         if (!TokenManager.instance) {
@@ -32,6 +33,10 @@ export class TokenManager {
     }
 
     public async getToken(): Promise<string | null> {
+        if (this.isRevoking) {
+            return null;
+        }
+
         const token = this.getStoredToken();
         if (token && token.expiresAt > Date.now()) {
             // TODO check if token expire less that 1 minute
@@ -49,12 +54,16 @@ export class TokenManager {
     }
 
     public async revokeToken(): Promise<void> {
+        this.isRevoking = true;
         const token = this.getStoredToken();
-        this.clearToken();
 
         if (!token) {
+            this.isRevoking = false;
             return;
         }
+
+        // Optimistic token cleanup
+        this.clearToken();
 
         try {
             const controller = new AbortController();
@@ -75,6 +84,11 @@ export class TokenManager {
         }
         catch (error) {
             console.error('Failed to revoke token:', error);
+        }
+        finally {
+            // Finally cleanup the token
+            this.clearToken();
+            this.isRevoking = false;
         }
     }
 
