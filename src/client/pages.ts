@@ -1,5 +1,5 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent, UpdatePageContentParams, PageHistoryListResponse, PageHistoryItemData, PageVersionListResponse, PageVersionDataResponse, CreatePageVersionParams } from '../types/pages';
 import { ApiClient } from './api-client';
+import { BulkDeleteResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkUpdatePageItem, BulkUpdateResponse, CreateFolderParams, CreatePageVersionParams, GetPagesParams, Page, PageContent, PageFolder, PageFolderListResponse, PageHistoryItemData, PageHistoryListResponse, PageListResponse, PageVersionDataResponse, PageVersionListResponse, UpdateFolderParams, UpdatePageContentParams, UpdatePageParams } from '../types/pages';
 
 export class Pages {
     constructor(
@@ -342,7 +342,7 @@ export class Pages {
         data: CreatePageVersionParams
     ): Promise<PageVersionDataResponse> {
         const response = await this.api.post<PageVersionDataResponse>(
-            `/sites/${this.siteId}/pages/${pageId}/versions`,
+            `/sites/${ this.siteId }/pages/${ pageId }/versions`,
             data
         );
         return response.data;
