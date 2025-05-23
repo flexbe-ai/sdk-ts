@@ -301,6 +301,21 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
+    async getVersions(pageId: number): Promise<PageVersionListResponse> {
+        const response = await this.api.get<PageVersionListResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions`);
+        return response.data;
+    }
+
+    /**
+     * @deprecated Use getVersions instead, remove it after frontend will be updated
+     * @param pageId - ID of the page to get versions for
+     * @returns List of page versions
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
     async getPageVersions(pageId: number): Promise<PageVersionListResponse> {
         const response = await this.api.get<PageVersionListResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions`);
         return response.data;
@@ -309,7 +324,7 @@ export class Pages {
     /**
      * Get a specific page version
      * @param pageId - ID of the page
-     * @param versionId - ID of the version to get
+     * @param versionId - ID of the version to get or 'published' to get the published version
      * @returns The requested page version with data
      * @throws {UnauthorizedException} When the API key is invalid or expired
      * @throws {NotFoundException} When the page or version is not found
@@ -317,9 +332,23 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async getPageVersion(pageId: number, versionId: number): Promise<PageVersionDataResponse> {
+    async getVersion(pageId: number, versionId: number | 'published'): Promise<PageVersionDataResponse> {
         const response = await this.api.get<PageVersionDataResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions/${ versionId }`);
         return response.data;
+    }
+
+    /**
+     * Get the published version of a page
+     * @param pageId - ID of the page
+     * @returns The published page version with data
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found or has no published version
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async getPublishedVersion(pageId: number): Promise<PageVersionDataResponse> {
+        return this.getVersion(pageId, 'published');
     }
 
     /**
