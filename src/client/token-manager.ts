@@ -1,7 +1,9 @@
-import { JwtToken, TokenResponse, UnauthorizedException } from '../types';
+import { UnauthorizedException } from '../types';
+
+import type { JwtToken, TokenResponse } from '../types';
 
 const TOKEN_STORAGE_KEY = 'flexbe_jwt';
-const TOKEN_REFRESH_THRESHOLD = 5*60*1000; // update token 5 minutes before expiration
+const TOKEN_REFRESH_THRESHOLD = 5 * 60 * 1000; // update token 5 minutes before expiration
 
 interface JwtPayload {
     sub: number;
@@ -14,6 +16,7 @@ interface JwtPayload {
 export class TokenManager {
     private static instance: TokenManager;
     private tokenPromise: Promise<void> | null = null;
+    private isRevoking: boolean = false;
 
     public static getInstance(): TokenManager {
         if (!TokenManager.instance) {
@@ -23,13 +26,17 @@ export class TokenManager {
         if (typeof window !== 'undefined') {
             // Clean up old token storage place
             // TODO remove this after June 1, 2025
-            localStorage.removeItem('flexbe_jwt_token');;
+            localStorage.removeItem('flexbe_jwt_token'); ;
         }
 
         return TokenManager.instance;
     }
 
     public async getToken(): Promise<string | null> {
+        if (this.isRevoking) {
+            return null;
+        }
+
         const token = this.getStoredToken();
         if (token && token.expiresAt > Date.now()) {
             // TODO check if token expire less that 1 minute
@@ -47,10 +54,16 @@ export class TokenManager {
     }
 
     public async revokeToken(): Promise<void> {
+        this.isRevoking = true;
         const token = this.getStoredToken();
-        this.clearToken();
 
-        if (!token) return;
+        if (!token) {
+            this.isRevoking = false;
+            return;
+        }
+
+        // Optimistic token cleanup
+        this.clearToken();
 
         try {
             const controller = new AbortController();
@@ -60,7 +73,7 @@ export class TokenManager {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token.accessToken}`
+                    Authorization: `Bearer ${ token.accessToken }`,
                 },
                 body: JSON.stringify({ token: token.accessToken }),
                 credentials: 'include',
@@ -68,13 +81,21 @@ export class TokenManager {
             });
 
             clearTimeout(timeoutId);
-        } catch (error) {
+        }
+        catch (error) {
             console.error('Failed to revoke token:', error);
+        }
+        finally {
+            // Finally cleanup the token
+            this.clearToken();
+            this.isRevoking = false;
         }
     }
 
     private getStoredToken(): JwtToken | null {
-        if (typeof window === 'undefined') return null;
+        if (typeof window === 'undefined') {
+            return null;
+        }
 
         const storedToken = localStorage.getItem(TOKEN_STORAGE_KEY);
         if (!storedToken) {
@@ -84,7 +105,8 @@ export class TokenManager {
         try {
             const token = JSON.parse(storedToken) as JwtToken;
             return token;
-        } catch (error) {
+        }
+        catch (error) {
             console.error('getStoredToken: Failed to parse stored token:', error);
             return null;
         }
@@ -99,7 +121,8 @@ export class TokenManager {
         this.tokenPromise = this.doRetrieveToken();
         try {
             await this.tokenPromise;
-        } finally {
+        }
+        finally {
             this.tokenPromise = null;
         }
     }
@@ -108,30 +131,26 @@ export class TokenManager {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-        try {
-            const response = await fetch('/oauth/token', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ grant_type: 'client_credentials' }),
-                credentials: 'include',
-                signal: controller.signal,
-            });
+        const response = await fetch('/oauth/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ grant_type: 'client_credentials' }),
+            credentials: 'include',
+            signal: controller.signal,
+        });
 
-            clearTimeout(timeoutId);
+        clearTimeout(timeoutId);
 
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({ message: response.statusText })) as { message: string };
-                if (response.status === 401) {
-                    throw new UnauthorizedException(errorData.message || response.statusText);
-                }
-                throw new Error(errorData.message || response.statusText);
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: response.statusText })) as { message: string };
+            if (response.status === 401) {
+                throw new UnauthorizedException(errorData.message || response.statusText);
             }
-
-            const data = await response.json() as TokenResponse;
-            this.setToken(data);
-        } catch (error) {
-            throw error;
+            throw new Error(errorData.message || response.statusText);
         }
+
+        const data = await response.json() as TokenResponse;
+        this.setToken(data);
     }
 
     private setToken(tokenResponse: TokenResponse): void {
@@ -151,7 +170,8 @@ export class TokenManager {
             const [, payload] = token.split('.');
             const decodedPayload = JSON.parse(atob(payload)) as JwtPayload;
             return decodedPayload.exp * 1000; // Convert to milliseconds
-        } catch (error) {
+        }
+        catch (error) {
             console.error('getExpirationFromToken: Failed to parse token expiration:', error);
             return Date.now() + (4 * 60 * 1000); // Default to 4 minutes if parsing fails
         }

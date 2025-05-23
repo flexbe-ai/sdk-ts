@@ -19,7 +19,7 @@ const client = new FlexbeClient({
     baseUrl: 'https://api.flexbe.com', // optional
     timeout: 30000, // optional, defaults to 30 seconds
 });
-const siteApi = client.getSiteApi(SITE_ID)
+const siteApi = client.getSiteApi(SITE_ID);
 
 // Using the Pages API for a specific site
 try {
@@ -28,14 +28,15 @@ try {
         limit: 10,
         offset: 0,
         type: 'page',
-        status: 'published'
+        status: 'published',
     });
     console.log(pages.pages);
 
     // Get a single page from site
     const page = await siteApi.pages.getPage(123);
     console.log(page);
-} catch (error) {
+}
+catch (error) {
     console.error(error.message);
 }
 
@@ -58,6 +59,7 @@ try {
 ## Environment Variables
 
 The SDK supports the following environment variables:
+
 - `FLEXBE_API_KEY`: Your API key (required for API Key authentication)
 - `FLEXBE_API_URL`: Base URL (defaults to 'https://api.flexbe.com')
 

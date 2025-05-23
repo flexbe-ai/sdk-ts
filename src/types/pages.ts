@@ -1,4 +1,4 @@
-import { FlexbeBulkError, Pagination } from './index';
+import type { FlexbeBulkError, Pagination } from './index';
 
 export interface GridConfig {
     color?: string;

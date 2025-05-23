@@ -34,7 +34,7 @@ describe('FlexbeClient', () => {
         expect(siteApi1).toBe(siteApi2);
     });
 
-    it('should handle successful GET request through site API', async () => {
+    it('should handle successful GET request through site API', async() => {
         const siteApi = client.getSiteApi(1);
         const response = await siteApi.pages.getPages();
         expect(response).toBeDefined();
@@ -42,15 +42,16 @@ describe('FlexbeClient', () => {
         expect(response.pagination).toBeDefined();
     });
 
-    it('should handle error response through site API', async () => {
+    it('should handle error response through site API', async() => {
         const siteApi = client.getSiteApi(1);
         try {
             await siteApi.pages.getPages({
                 offset: -1,
-                limit: 0
+                limit: 0,
             });
             fail('Should have thrown an error');
-        } catch (error) {
+        }
+        catch (error) {
             expect(error).toBeInstanceOf(BadRequestException);
             const badRequestError = error as BadRequestException;
             expect(badRequestError.message).toBeDefined();
