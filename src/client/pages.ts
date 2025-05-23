@@ -1,4 +1,4 @@
-import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent, UpdatePageContentParams, PageHistoryListResponse, PageHistoryItemData, PageVersionListResponse, PageVersionDataResponse } from '../types/pages';
+import { Page, GetPagesParams, PageListResponse, PageFolder, PageFolderListResponse, UpdateFolderParams, CreateFolderParams, UpdatePageParams, BulkUpdatePageItem, BulkUpdateResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkDeleteResponse, PageContent, UpdatePageContentParams, PageHistoryListResponse, PageHistoryItemData, PageVersionListResponse, PageVersionDataResponse, CreatePageVersionParams } from '../types/pages';
 import { ApiClient } from './api-client';
 
 export class Pages {
@@ -317,6 +317,32 @@ export class Pages {
      */
     async getPageVersion(pageId: number, versionId: number): Promise<PageVersionDataResponse> {
         const response = await this.api.get<PageVersionDataResponse>(`/sites/${this.siteId}/pages/${pageId}/versions/${versionId}`);
+        return response.data;
+    }
+
+    /**
+     * Create a new page version
+     * @param pageId - ID of the page to create version for
+     * @param data - Version data including:
+     * - data: Page data structure containing blocks, modals, widgets, etc.
+     * - assets: Optional page assets (images, files, screenshot)
+     * - publish: Whether to publish this version immediately (default: true)
+     * @returns The created page version with data
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {BadRequestException} When the version data is invalid
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async createVersion(
+        pageId: number,
+        data: CreatePageVersionParams
+    ): Promise<PageVersionDataResponse> {
+        const response = await this.api.post<PageVersionDataResponse>(
+            `/sites/${this.siteId}/pages/${pageId}/versions`,
+            data
+        );
         return response.data;
     }
 }

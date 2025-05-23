@@ -112,6 +112,16 @@ export interface UpdatePageParams {
     meta?: Partial<PageMeta>;
 }
 
+export interface CreatePageVersionParams {
+    data: PageDataStructure;
+    assets?: {
+        images: number[];
+        files: string[];
+        screenshot?: number | null;
+    };
+    publish?: boolean;
+}
+
 export interface BulkUpdatePageItem extends UpdatePageParams {
     id: number;
 }
@@ -361,7 +371,19 @@ export interface PageVersionListResponse {
     list: PageVersionItem[];
 }
 
-export interface PageVersionDataResponse {
-    data: PageContent;
+export interface PageDataStructure {
+    is: string;
+    template_id: string;
+    blocks: PageBlock[];
+    modals: PageModal[];
+    widgets: PageWidget[];
+    codes: string[];
+    abtests: PageABTest[];
+    background: PageBackground;
+    textStyles: TextStyleItem[];
+    responsive: string | boolean;
 }
 
+export interface PageVersionDataResponse extends PageVersionItem {
+    data: PageDataStructure;
+}
