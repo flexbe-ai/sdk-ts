@@ -1,5 +1,5 @@
 import { ApiClient } from './api-client';
-import { BulkDeleteResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkUpdatePageItem, BulkUpdateResponse, CreateFolderParams, CreatePageVersionParams, GetPagesParams, Page, PageContent, PageFolder, PageFolderListResponse, PageHistoryItemData, PageHistoryListResponse, PageListResponse, PageVersionDataResponse, PageVersionListResponse, UpdateFolderParams, UpdatePageContentParams, UpdatePageParams } from '../types/pages';
+import { BulkDeleteResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkUpdatePageItem, BulkUpdateResponse, CreateFolderParams, CreatePageVersionParams, GetPagesParams, Page, PageContent, PageFolder, PageFolderListResponse, PageListResponse, PageVersionDataResponse, PageVersionListResponse, UpdateFolderParams, UpdatePageContentParams, UpdatePageParams } from '../types/pages';
 
 export class Pages {
     constructor(
@@ -261,37 +261,6 @@ export class Pages {
     }
 
     /**
-     * Get list of page history items
-     * @param pageId - ID of the page to get history for
-     * @returns List of page history items
-     * @throws {UnauthorizedException} When the API key is invalid or expired
-     * @throws {NotFoundException} When the page is not found
-     * @throws {ForbiddenException} When the page does not belong to the site
-     * @throws {ServerException} When the server encounters an error
-     * @throws {TimeoutException} When the request times out
-     */
-    async getPageHistory(pageId: number): Promise<PageHistoryListResponse> {
-        const response = await this.api.get<PageHistoryListResponse>(`/sites/${ this.siteId }/pages/${ pageId }/history`);
-        return response.data;
-    }
-
-    /**
-     * Get a specific page history item
-     * @param pageId - ID of the page
-     * @param versionId - ID of the history item to get
-     * @returns The requested page history item with data
-     * @throws {UnauthorizedException} When the API key is invalid or expired
-     * @throws {NotFoundException} When the page or history item is not found
-     * @throws {ForbiddenException} When the page does not belong to the site
-     * @throws {ServerException} When the server encounters an error
-     * @throws {TimeoutException} When the request times out
-     */
-    async getPageHistoryItem(pageId: number, versionId: number): Promise<PageHistoryItemData> {
-        const response = await this.api.get<PageHistoryItemData>(`/sites/${ this.siteId }/pages/${ pageId }/history/${ versionId }`);
-        return response.data;
-    }
-
-    /**
      * Get list of page versions
      * @param pageId - ID of the page to get versions for
      * @returns List of page versions
@@ -302,21 +271,6 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async getVersions(pageId: number): Promise<PageVersionListResponse> {
-        const response = await this.api.get<PageVersionListResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions`);
-        return response.data;
-    }
-
-    /**
-     * @deprecated Use getVersions instead, remove it after frontend will be updated
-     * @param pageId - ID of the page to get versions for
-     * @returns List of page versions
-     * @throws {UnauthorizedException} When the API key is invalid or expired
-     * @throws {NotFoundException} When the page is not found
-     * @throws {ForbiddenException} When the page does not belong to the site
-     * @throws {ServerException} When the server encounters an error
-     * @throws {TimeoutException} When the request times out
-     */
-    async getPageVersions(pageId: number): Promise<PageVersionListResponse> {
         const response = await this.api.get<PageVersionListResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions`);
         return response.data;
     }
