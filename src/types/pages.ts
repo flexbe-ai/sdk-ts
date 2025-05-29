@@ -1,3 +1,6 @@
+import type {
+    PageEntityAnimation
+} from './animations';
 import type { FlexbeBulkError, Pagination } from './index';
 
 export interface GridConfig {
@@ -275,37 +278,78 @@ export interface StylesDataRaw {
     pageTextStyles?: TextStyleItem[];
 }
 
-export interface PageBlock {
-    update_time: number;
-    data: Record<string, unknown>;
-    id: string;
-    is: string;
-    template_id: string;
-    refPageId?: number;
-    p_id: number;
-    aboveTheFold?: boolean;
+
+export enum PageEntityType {
+    Block = 'block',
+    Modal = 'modal',
+    Element = 'element',
+    Widget = 'widget',
+    Layout = 'layout'
 }
 
-export interface PageElement {
-    update_time: number;
-    data: Record<string, unknown>;
+export enum PageEntityHidden {
+    All = 'all',
+    Mobile = 'mobile',
+    Desktop = 'desktop'
+}
+
+export type PageEntityEvent = {
+    event: string;
+    action: string;
+    action_code: string;
+    onlyFirst: boolean;
+    state: 'all' | 'in' | 'out';
+    [key: string]: any;
+};
+
+export type PageEntityData<T = Record<string, unknown>> = T;
+
+export type PageEntityMultiVars<T> = Record<string, { data: PageEntityData<T> }>;
+
+// Common base interface for page components
+export interface PageEntity<T = Record<string, unknown>> {
     id: string;
-    is: string;
+    is: PageEntityType;
     template_id: string;
     mod_id?: string;
-    p_id: number;
-    aboveTheFold?: boolean;
-    hidden?: string;
+    source_id?: string;
+    update_time: number;
+    data: T;
+    p_id?: number;
+    untouched?: boolean;
+    hidden?: 'none' | 'mobile' | 'desktop';
+    className?: string;
+    modals?: PageModal[];
+    animation?: PageEntityAnimation;
+    events?: PageEntityEvent[];
+    multidata?: { enabled: boolean; vars: PageEntityMultiVars<T> };
 }
 
-export interface PageWidget {
-    update_time: number;
-    data: Record<string, unknown>;
-    id: string;
-    is: string;
-    template_id: string;
-    untouched?: boolean;
-    p_id: number;
+export interface PageBlock<T = Record<string, unknown>> extends PageEntity<T> {
+    is: PageEntityType.Block;
+    refPageId?: number;
+    aboveTheFold?: boolean;
+    children?: Array<PageBlock | PageElement>;
+
+    multisection?: { enabled: boolean; main_var: string; vars: PageEntityMultiVars<T> };
+    geolanding?: { enabled: boolean; vars: Record<string, { city: string; data: PageEntityData<T> }> };
+}
+
+export interface PageWidget<T = Record<string, unknown>> extends PageEntity<T> {
+    is: PageEntityType.Widget;
+    children?: PageElement[];
+}
+
+export interface PageModal<T = Record<string, unknown>> extends PageEntity<T> {
+    is: PageEntityType.Modal;
+    screenshot: ImageObj | null;
+    children?: PageElement[];
+}
+
+export interface PageElement<T = Record<string, unknown>> extends PageEntity<T> {
+    is: PageEntityType.Element;
+    aboveTheFold?: boolean;
+    children?: PageElement[];
 }
 
 export interface PageABTest {
@@ -314,39 +358,6 @@ export interface PageABTest {
     b: string;
     isActive: boolean;
 }
-
-export interface PageModal {
-    update_time: number;
-    data: Record<string, unknown>;
-    id: string;
-    is: string;
-    template_id: string;
-    mod_id: string;
-    p_id: number;
-    screenshot: ImageObj | null;
-}
-
-export interface PageContent {
-    versionId: number;
-    versionTime: number;
-    blocks: PageBlock[];
-    modals: PageModal[];
-    elements: PageElement[];
-    widgets: PageWidget[];
-    codes: string[];
-    settings: {
-        background?: PageBackground;
-        textStyles?: TextStyleItem[];
-        responsive?: string | boolean;
-    } | null;
-    abtests: PageABTest[];
-    assets: {
-        images: number[];
-        files: string[];
-    };
-}
-
-export type UpdatePageContentParams = Omit<PageContent, 'versionId' | 'versionTime'>;
 
 export interface PageHistoryItem {
     id: number;
@@ -377,13 +388,41 @@ export interface PageDataStructure {
     blocks: PageBlock[];
     modals: PageModal[];
     widgets: PageWidget[];
-    codes: string[];
-    abtests: PageABTest[];
-    background: PageBackground;
-    textStyles: TextStyleItem[];
-    responsive: string | boolean;
+    abtests?: PageABTest[];
+    codes?: string[];
+    textStyles?: TextStyleItem[];
+    background?: PageBackground;
+    responsive?: 'auto' | boolean;
 }
 
 export interface PageVersionDataResponse extends PageVersionItem {
     data: PageDataStructure;
 }
+
+/**
+ * @deprecated This type is deprecated and will be removed in a future release. Use PageDataStructure or related types instead.
+ */
+export interface PageContent {
+    versionId: number;
+    versionTime: number;
+    blocks: PageBlock[];
+    modals: PageModal[];
+    elements: PageElement[];
+    widgets: PageWidget[];
+    codes: string[];
+    settings: {
+        background?: PageBackground;
+        textStyles?: TextStyleItem[];
+        responsive?: string | boolean;
+    } | null;
+    abtests: PageABTest[];
+    assets: {
+        images: number[];
+        files: string[];
+    };
+}
+
+/**
+ * @deprecated This type is deprecated and will be removed in a future release. Use PageDataStructure or related types instead.
+ */
+export type UpdatePageContentParams = Omit<PageContent, 'versionId' | 'versionTime'>;

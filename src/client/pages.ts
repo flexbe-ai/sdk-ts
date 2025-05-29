@@ -229,6 +229,7 @@ export class Pages {
     }
 
     /**
+     * @deprecated This method is deprecated and will be removed in a future release. Use the new page version API instead.
      * Get page content
      * @param pageId - ID of the page to get content for
      * @returns The page content
@@ -244,6 +245,7 @@ export class Pages {
     }
 
     /**
+     * @deprecated This method is deprecated and will be removed in a future release. Use the new page version API instead.
      * Update page content
      * @param pageId - ID of the page to update content for
      * @param content - The new page content (excluding versionId and versionTime)
