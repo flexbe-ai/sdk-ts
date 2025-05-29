@@ -1,5 +1,5 @@
-import type { ApiClient } from './api-client';
-import type { BulkDeleteResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkUpdatePageItem, BulkUpdateResponse, CreateFolderParams, GetPagesParams, Page, PageContent, PageFolder, PageFolderListResponse, PageHistoryItemData, PageHistoryListResponse, PageListResponse, PageVersionDataResponse, PageVersionListResponse, UpdateFolderParams, UpdatePageContentParams, UpdatePageParams } from '../types/pages';
+import { ApiClient } from './api-client';
+import { BulkDeleteResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkUpdatePageItem, BulkUpdateResponse, CreateFolderParams, CreatePageVersionParams, GetPagesParams, Page, PageContent, PageFolder, PageFolderListResponse, PageListResponse, PageVersionDataResponse, PageVersionListResponse, UpdateFolderParams, UpdatePageContentParams, UpdatePageParams } from '../types/pages';
 
 export class Pages {
     constructor(
@@ -261,37 +261,6 @@ export class Pages {
     }
 
     /**
-     * Get list of page history items
-     * @param pageId - ID of the page to get history for
-     * @returns List of page history items
-     * @throws {UnauthorizedException} When the API key is invalid or expired
-     * @throws {NotFoundException} When the page is not found
-     * @throws {ForbiddenException} When the page does not belong to the site
-     * @throws {ServerException} When the server encounters an error
-     * @throws {TimeoutException} When the request times out
-     */
-    async getPageHistory(pageId: number): Promise<PageHistoryListResponse> {
-        const response = await this.api.get<PageHistoryListResponse>(`/sites/${ this.siteId }/pages/${ pageId }/history`);
-        return response.data;
-    }
-
-    /**
-     * Get a specific page history item
-     * @param pageId - ID of the page
-     * @param versionId - ID of the history item to get
-     * @returns The requested page history item with data
-     * @throws {UnauthorizedException} When the API key is invalid or expired
-     * @throws {NotFoundException} When the page or history item is not found
-     * @throws {ForbiddenException} When the page does not belong to the site
-     * @throws {ServerException} When the server encounters an error
-     * @throws {TimeoutException} When the request times out
-     */
-    async getPageHistoryItem(pageId: number, versionId: number): Promise<PageHistoryItemData> {
-        const response = await this.api.get<PageHistoryItemData>(`/sites/${ this.siteId }/pages/${ pageId }/history/${ versionId }`);
-        return response.data;
-    }
-
-    /**
      * Get list of page versions
      * @param pageId - ID of the page to get versions for
      * @returns List of page versions
@@ -301,7 +270,7 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async getPageVersions(pageId: number): Promise<PageVersionListResponse> {
+    async getVersions(pageId: number): Promise<PageVersionListResponse> {
         const response = await this.api.get<PageVersionListResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions`);
         return response.data;
     }
@@ -309,7 +278,7 @@ export class Pages {
     /**
      * Get a specific page version
      * @param pageId - ID of the page
-     * @param versionId - ID of the version to get
+     * @param versionId - ID of the version to get or 'published' to get the published version
      * @returns The requested page version with data
      * @throws {UnauthorizedException} When the API key is invalid or expired
      * @throws {NotFoundException} When the page or version is not found
@@ -317,8 +286,48 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async getPageVersion(pageId: number, versionId: number): Promise<PageVersionDataResponse> {
+    async getVersion(pageId: number, versionId: number | 'published'): Promise<PageVersionDataResponse> {
         const response = await this.api.get<PageVersionDataResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions/${ versionId }`);
+        return response.data;
+    }
+
+    /**
+     * Get the published version of a page
+     * @param pageId - ID of the page
+     * @returns The published page version with data
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found or has no published version
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async getPublishedVersion(pageId: number): Promise<PageVersionDataResponse> {
+        return this.getVersion(pageId, 'published');
+    }
+
+    /**
+     * Create a new page version
+     * @param pageId - ID of the page to create version for
+     * @param data - Version data including:
+     * - data: Page data structure containing blocks, modals, widgets, etc.
+     * - assets: Optional page assets (images, files, screenshot)
+     * - publish: Whether to publish this version immediately (default: true)
+     * @returns The created page version with data
+     * @throws {UnauthorizedException} When the API key is invalid or expired
+     * @throws {NotFoundException} When the page is not found
+     * @throws {ForbiddenException} When the page does not belong to the site
+     * @throws {BadRequestException} When the version data is invalid
+     * @throws {ServerException} When the server encounters an error
+     * @throws {TimeoutException} When the request times out
+     */
+    async createVersion(
+        pageId: number,
+        data: CreatePageVersionParams
+    ): Promise<PageVersionDataResponse> {
+        const response = await this.api.post<PageVersionDataResponse>(
+            `/sites/${ this.siteId }/pages/${ pageId }/versions`,
+            data
+        );
         return response.data;
     }
 }
