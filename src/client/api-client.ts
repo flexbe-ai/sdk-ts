@@ -17,7 +17,7 @@ export class ApiClient {
         }
     }
 
-    private async getAuthHeaders(): Promise<Record<string, string>> {
+    public async getAuthHeaders(): Promise<Record<string, string>> {
         const headers: Record<string, string> = {};
 
         if (this.config.authType === FlexbeAuthType.API_KEY) {
@@ -34,7 +34,7 @@ export class ApiClient {
         return headers;
     }
 
-    private buildUrl(path: string, params?: object): string {
+    public buildUrl(path: string, params?: object): string {
         const searchParams = new URLSearchParams();
         if (params) {
             Object.entries(params).forEach(([key, value]) => {
@@ -46,7 +46,7 @@ export class ApiClient {
         return `${ path }${ searchParams.toString() ? `?${ searchParams.toString() }` : '' }`;
     }
 
-    private async request<T>(config: RequestInit & { url: string; params?: object }): Promise<FlexbeResponse<T>> {
+    public async request<T>(config: RequestInit & { url: string; params?: object }): Promise<FlexbeResponse<T>> {
         try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), this.config.timeout);
