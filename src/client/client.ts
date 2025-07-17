@@ -8,8 +8,9 @@ import type { FlexbeConfig } from '../types';
 
 export class FlexbeClient {
     private readonly config: FlexbeConfig;
-    private readonly api: ApiClient;
     private readonly siteApis: Map<number, SiteApi> = new Map();
+
+    public readonly api: ApiClient;
     public readonly meta: MetaApi;
 
     constructor(config?: Partial<FlexbeConfig>) {

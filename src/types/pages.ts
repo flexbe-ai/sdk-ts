@@ -397,6 +397,7 @@ export interface PageDataStructure {
 
 export interface PageVersionDataResponse extends PageVersionItem {
     data: PageDataStructure;
+    abtests?: PageABTest[];
 }
 
 /**
