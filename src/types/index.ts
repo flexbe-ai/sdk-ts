@@ -2,6 +2,7 @@ export * from './meta';
 export * from './animations';
 export * from './pages';
 export * from './stat';
+export * from './sandbox';
 
 export enum FlexbeAuthType {
     API_KEY = 'apiKey',
