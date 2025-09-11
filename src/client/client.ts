@@ -18,6 +18,7 @@ export class FlexbeClient {
             if (typeof process !== 'undefined' && process.env) {
                 return process.env[key];
             }
+
             return undefined;
         };
 
@@ -48,10 +49,12 @@ export class FlexbeClient {
      */
     public getSiteApi(siteId: number): SiteApi {
         let siteApi = this.siteApis.get(siteId);
+
         if (!siteApi) {
             siteApi = new SiteApi(this.api, siteId);
             this.siteApis.set(siteId, siteApi);
         }
+
         return siteApi;
     }
 

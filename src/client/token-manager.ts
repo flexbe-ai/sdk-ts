@@ -38,6 +38,7 @@ export class TokenManager {
         }
 
         const token = this.getStoredToken();
+
         if (token && token.expiresAt > Date.now()) {
             // TODO check if token expire less that 1 minute
             // if so, retrieve a new token
@@ -50,6 +51,7 @@ export class TokenManager {
 
         await this.retrieveToken();
         const retrievedToken = this.getStoredToken();
+
         return retrievedToken?.accessToken ?? null;
     }
 
@@ -59,6 +61,7 @@ export class TokenManager {
 
         if (!token) {
             this.isRevoking = false;
+
             return;
         }
 
@@ -98,16 +101,19 @@ export class TokenManager {
         }
 
         const storedToken = localStorage.getItem(TOKEN_STORAGE_KEY);
+
         if (!storedToken) {
             return null;
         }
 
         try {
             const token = JSON.parse(storedToken) as JwtToken;
+
             return token;
         }
         catch (error) {
             console.error('getStoredToken: Failed to parse stored token:', error);
+
             return null;
         }
     }
@@ -115,6 +121,7 @@ export class TokenManager {
     private async retrieveToken(): Promise<void> {
         if (this.tokenPromise) {
             await this.tokenPromise;
+
             return;
         }
 
@@ -143,13 +150,16 @@ export class TokenManager {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({ message: response.statusText })) as { message: string };
+
             if (response.status === 401) {
                 throw new UnauthorizedException(errorData.message || response.statusText);
             }
+
             throw new Error(errorData.message || response.statusText);
         }
 
         const data = await response.json() as TokenResponse;
+
         this.setToken(data);
     }
 
@@ -169,10 +179,12 @@ export class TokenManager {
         try {
             const [, payload] = token.split('.');
             const decodedPayload = JSON.parse(atob(payload)) as JwtPayload;
+
             return decodedPayload.exp * 1000; // Convert to milliseconds
         }
         catch (error) {
             console.error('getExpirationFromToken: Failed to parse token expiration:', error);
+
             return Date.now() + (4 * 60 * 1000); // Default to 4 minutes if parsing fails
         }
     }

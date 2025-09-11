@@ -12,6 +12,7 @@ export class MetaApi {
         const response = await this.api.get<SiteLanguage[]>('/meta/site-languages', {
             headers: { Authorization: '' },
         });
+
         return response.data;
     }
 
@@ -23,6 +24,7 @@ export class MetaApi {
         const response = await this.api.get<UserLanguage[]>('/meta/user-languages', {
             headers: { Authorization: '' },
         });
+
         return response.data;
     }
 
@@ -34,6 +36,7 @@ export class MetaApi {
         const response = await this.api.get<SiteCurrency[]>('/meta/site-currencies', {
             headers: { Authorization: '' },
         });
+
         return response.data;
     }
 }
