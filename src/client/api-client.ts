@@ -25,9 +25,11 @@ export class ApiClient {
         }
         else if (this.config.authType === FlexbeAuthType.BEARER) {
             const token = await this.tokenManager.getToken();
+
             if (!token) {
                 throw new Error('No valid bearer token available');
             }
+
             headers.Authorization = `Bearer ${ token }`;
         }
 
@@ -36,6 +38,7 @@ export class ApiClient {
 
     public buildUrl(path: string, params?: object): string {
         const searchParams = new URLSearchParams();
+
         if (params) {
             Object.entries(params).forEach(([key, value]) => {
                 if (value !== undefined && value !== null) {
@@ -43,6 +46,7 @@ export class ApiClient {
                 }
             });
         }
+
         return `${ path }${ searchParams.toString() ? `?${ searchParams.toString() }` : '' }`;
     }
 
@@ -88,6 +92,7 @@ export class ApiClient {
                     case 503:
                     case 504:
                         throw new ServerException(errorData.message, errorData.error, errorData.statusCode, errorData.errors);
+
                     default:
                         throw {
                             message: errorData.message,
@@ -108,6 +113,7 @@ export class ApiClient {
             }
 
             const data = await response.json() as T;
+
             return {
                 data,
                 status: response.status,
@@ -122,16 +128,27 @@ export class ApiClient {
             if (error instanceof Error && error.name === 'AbortError') {
                 throw new TimeoutException('Request timeout');
             }
+
             throw error;
         }
     }
 
     public async get<T>(url: string, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
-        return this.request<T>({ ...config, url, method: 'GET' });
+        return this.request<T>({
+            cache: 'no-store',
+            url,
+            method: 'GET',
+            ...config,
+        });
     }
 
     public async post<T>(url: string, data?: unknown, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
-        return this.request<T>({ ...config, url, method: 'POST', body: JSON.stringify(data) });
+        return this.request<T>({
+            ...config,
+            url,
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
     }
 
     public async put<T>(url: string, data?: unknown, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {

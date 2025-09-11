@@ -20,6 +20,7 @@ export class Sandbox {
     async create(branch: string): Promise<SandboxResponse> {
         const request: CreateSandboxRequest = { branch };
         const response = await this.api.post<SandboxResponse>(`/sites/${ this.siteId }/app/sandbox`, request);
+
         return response.data;
     }
 

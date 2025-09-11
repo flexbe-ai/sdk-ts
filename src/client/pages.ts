@@ -33,6 +33,7 @@ export class Pages {
             : undefined;
 
         const response = await this.api.get<PageListResponse>(`/sites/${ this.siteId }/pages`, { params: processedParams });
+
         return response.data;
     }
 
@@ -45,7 +46,12 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async getPage(pageId: number): Promise<Page> {
-        const response = await this.api.get<Page>(`/sites/${ this.siteId }/pages/${ pageId }`);
+        const response = await this.api.get<Page>(`/sites/${ this.siteId }/pages/${ pageId }`, {
+            params: {
+                v: Date.now().toString(32),
+            },
+        });
+
         return response.data;
     }
 
@@ -58,6 +64,7 @@ export class Pages {
      */
     async getFolders(): Promise<PageFolderListResponse> {
         const response = await this.api.get<PageFolderListResponse>(`/sites/${ this.siteId }/pages-folders`);
+
         return response.data;
     }
 
@@ -71,6 +78,7 @@ export class Pages {
      */
     async getFolder(id: number): Promise<PageFolder> {
         const response = await this.api.get<PageFolder>(`/sites/${ this.siteId }/pages-folders/${ id }`);
+
         return response.data;
     }
 
@@ -89,6 +97,7 @@ export class Pages {
      */
     async updateFolder(id: number, data: UpdateFolderParams): Promise<PageFolder> {
         const response = await this.api.patch<PageFolder>(`/sites/${ this.siteId }/pages-folders/${ id }`, data);
+
         return response.data;
     }
 
@@ -105,6 +114,7 @@ export class Pages {
      */
     async createFolder(data: CreateFolderParams): Promise<PageFolder> {
         const response = await this.api.post<PageFolder>(`/sites/${ this.siteId }/pages-folders`, data);
+
         return response.data;
     }
 
@@ -161,6 +171,7 @@ export class Pages {
      */
     async updatePage(pageId: number, data: UpdatePageParams): Promise<Page> {
         const response = await this.api.put<Page>(`/sites/${ this.siteId }/pages/${ pageId }`, data);
+
         return response.data;
     }
 
@@ -186,6 +197,7 @@ export class Pages {
      */
     async bulkUpdatePages(updates: BulkUpdatePageItem[]): Promise<BulkUpdateResponse> {
         const response = await this.api.patch<BulkUpdateResponse>(`/sites/${ this.siteId }/pages`, updates);
+
         return response.data;
     }
 
@@ -206,6 +218,7 @@ export class Pages {
      */
     async bulkUpdateFolders(updates: BulkUpdateFolderItem[]): Promise<BulkUpdateFolderResponse> {
         const response = await this.api.patch<BulkUpdateFolderResponse>(`/sites/${ this.siteId }/pages-folders`, updates);
+
         return response.data;
     }
 
@@ -225,6 +238,7 @@ export class Pages {
         const response = await this.api.delete<BulkDeleteResponse>(`/sites/${ this.siteId }/pages`, {
             body: JSON.stringify({ ids }),
         });
+
         return response.data;
     }
 
@@ -241,6 +255,7 @@ export class Pages {
      */
     async getPageContent(pageId: number): Promise<PageContent> {
         const response = await this.api.get<PageContent>(`/sites/${ this.siteId }/pages/${ pageId }/content`);
+
         return response.data;
     }
 
@@ -259,6 +274,7 @@ export class Pages {
      */
     async updatePageContent(pageId: number, content: Partial<UpdatePageContentParams>): Promise<PageContent> {
         const response = await this.api.put<PageContent>(`/sites/${ this.siteId }/pages/${ pageId }/content`, content);
+
         return response.data;
     }
 
@@ -274,6 +290,7 @@ export class Pages {
      */
     async getVersions(pageId: number): Promise<PageVersionListResponse> {
         const response = await this.api.get<PageVersionListResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions`);
+
         return response.data;
     }
 
@@ -289,7 +306,12 @@ export class Pages {
      * @throws {TimeoutException} When the request times out
      */
     async getVersion(pageId: number, versionId: number | 'published'): Promise<PageVersionDataResponse> {
-        const response = await this.api.get<PageVersionDataResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions/${ versionId }`);
+        const response = await this.api.get<PageVersionDataResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions/${ versionId }`, {
+            params: {
+                v: Date.now().toString(32),
+            },
+        });
+
         return response.data;
     }
 
@@ -330,6 +352,7 @@ export class Pages {
             `/sites/${ this.siteId }/pages/${ pageId }/versions`,
             data
         );
+
         return response.data;
     }
 }

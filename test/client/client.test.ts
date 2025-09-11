@@ -1,11 +1,18 @@
 import { FlexbeClient } from '../../src/client/client';
 import { BadRequestException } from '../../src/types';
 
+// Mock the ApiClient
+jest.mock('../../src/client/api-client', () => ({
+    ApiClient: jest.fn().mockImplementation(() => ({
+        request: jest.fn(),
+    })),
+}));
+
 describe('FlexbeClient', () => {
     let client: FlexbeClient;
     const testConfig = {
-        apiKey: process.env.FLEXBE_API_KEY || 'test-api-key',
-        baseUrl: process.env.FLEXBE_API_URL || 'https://api.flexbe.com',
+        apiKey: 'test-api-key',
+        baseUrl: 'https://api.flexbe.com',
     };
 
     beforeEach(() => {
@@ -35,6 +42,13 @@ describe('FlexbeClient', () => {
     });
 
     it('should handle successful GET request through site API', async() => {
+        const { ApiClient } = require('../../src/client/api-client');
+        const mockApiClient = new ApiClient();
+        mockApiClient.request.mockResolvedValue({
+            list: [{ id: 1, type: 'page', uri: '/test', status: 'published' }],
+            pagination: { limit: 10, offset: 0, total: 1 },
+        });
+
         const siteApi = client.getSiteApi(1);
         const response = await siteApi.pages.getPages();
         expect(response).toBeDefined();
@@ -43,6 +57,19 @@ describe('FlexbeClient', () => {
     });
 
     it('should handle error response through site API', async() => {
+        const { ApiClient } = require('../../src/client/api-client');
+        const mockApiClient = new ApiClient();
+        const error = new Error('Bad Request');
+        (error as any).status = 400;
+        (error as any).response = {
+            data: {
+                message: 'Invalid parameters',
+                error: 'BadRequest',
+                errors: [],
+            },
+        };
+        mockApiClient.request.mockRejectedValue(error);
+
         const siteApi = client.getSiteApi(1);
         try {
             await siteApi.pages.getPages({
