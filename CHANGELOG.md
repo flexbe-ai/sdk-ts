@@ -1,5 +1,11 @@
 # @flexbe/sdk
 
+## 0.2.47
+
+### Patch Changes
+
+- 22cf881: Add container, font and page-code types
+
 ## 0.2.46
 
 ### Patch Changes
