@@ -1,5 +1,5 @@
 import { ApiClient } from './api-client';
-import { BulkDeleteResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkUpdatePageItem, BulkUpdateResponse, CreateFolderParams, CreatePageVersionParams, GetPagesParams, Page, PageContent, PageFolder, PageFolderListResponse, PageListResponse, PageVersionDataResponse, PageVersionListResponse, UpdateFolderParams, UpdatePageContentParams, UpdatePageParams } from '../types/pages';
+import { BulkDeleteResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkUpdatePageItem, BulkUpdateResponse, CreateFolderParams, CreatePageVersionParams, GetPagesParams, Page, PageFolder, PageFolderListResponse, PageListResponse, PageVersionDataResponse, PageVersionListResponse, UpdateFolderParams, UpdatePageParams } from '../types/pages';
 
 export class Pages {
     constructor(
@@ -238,42 +238,6 @@ export class Pages {
         const response = await this.api.delete<BulkDeleteResponse>(`/sites/${ this.siteId }/pages`, {
             body: JSON.stringify({ ids }),
         });
-
-        return response.data;
-    }
-
-    /**
-     * @deprecated This method is deprecated and will be removed in a future release. Use the new page version API instead.
-     * Get page content
-     * @param pageId - ID of the page to get content for
-     * @returns The page content
-     * @throws {UnauthorizedException} When the API key is invalid or expired
-     * @throws {NotFoundException} When the page is not found
-     * @throws {ForbiddenException} When the page does not belong to the site
-     * @throws {ServerException} When the server encounters an error
-     * @throws {TimeoutException} When the request times out
-     */
-    async getPageContent(pageId: number): Promise<PageContent> {
-        const response = await this.api.get<PageContent>(`/sites/${ this.siteId }/pages/${ pageId }/content`);
-
-        return response.data;
-    }
-
-    /**
-     * @deprecated This method is deprecated and will be removed in a future release. Use the new page version API instead.
-     * Update page content
-     * @param pageId - ID of the page to update content for
-     * @param content - The new page content (excluding versionId and versionTime)
-     * @returns The updated page content
-     * @throws {UnauthorizedException} When the API key is invalid or expired
-     * @throws {NotFoundException} When the page is not found
-     * @throws {ForbiddenException} When the page does not belong to the site
-     * @throws {BadRequestException} When the update parameters are invalid
-     * @throws {ServerException} When the server encounters an error
-     * @throws {TimeoutException} When the request times out
-     */
-    async updatePageContent(pageId: number, content: Partial<UpdatePageContentParams>): Promise<PageContent> {
-        const response = await this.api.put<PageContent>(`/sites/${ this.siteId }/pages/${ pageId }/content`, content);
 
         return response.data;
     }

@@ -1,68 +1,68 @@
 {
-  "name": "@flexbe/sdk",
-  "version": "0.2.44",
-  "description": "TypeScript SDK for Flexbe API",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
-  "browser": "dist/browser/index.js",
-  "exports": {
-    ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/types/index.d.ts"
-    }
-  },
-  "scripts": {
-    "build": "bun run build:esm && bun run build:cjs && bun run build:browser",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:browser": "tsc -p tsconfig.browser.json",
-    "dev": "tsc -p tsconfig.esm.json --watch",
-    "test": "dotenv -e test/.env.test jest",
-    "lint": "eslint src --ext .ts --fix",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "prepare": "bun run build",
-    "prepublishOnly": "bun run lint",
-    "version": "changeset && changeset version",
-    "release": "changeset publish"
-  },
-  "keywords": [
-    "flexbe",
-    "sdk",
-    "typescript",
-    "api-client"
-  ],
-  "author": "Flexbe",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/flexbe/sdk-ts.git"
-  },
-  "bugs": {
-    "url": "https://github.com/flexbe/sdk-ts/issues"
-  },
-  "homepage": "https://github.com/flexbe/sdk-ts#readme",
-  "devDependencies": {
-    "@changesets/cli": "^2.29.7",
-    "@flexbe/eslint-config": "^1.0.11",
-    "@types/jest": "^30.0.0",
-    "@types/node": "^24.3.1",
-    "dotenv-cli": "^10.0.0",
-    "eslint": "^9.35.0",
-    "jest": "^30.1.3",
-    "ts-jest": "^29.4.1",
-    "typescript": "~5.9.2"
-  },
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "engines": {
-    "node": ">=20.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "packageManager": "bun@1.2.21"
+    "name": "@flexbe/sdk",
+    "version": "0.2.45",
+    "description": "TypeScript SDK for Flexbe API",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/types/index.d.ts",
+    "browser": "dist/browser/index.js",
+    "exports": {
+        ".": {
+            "import": "./dist/esm/index.js",
+            "require": "./dist/cjs/index.js",
+            "types": "./dist/types/index.d.ts"
+        }
+    },
+    "scripts": {
+        "build": "bun run build:esm && bun run build:cjs && bun run build:browser",
+        "build:esm": "tsc -p tsconfig.esm.json",
+        "build:cjs": "tsc -p tsconfig.cjs.json",
+        "build:browser": "tsc -p tsconfig.browser.json",
+        "dev": "tsc -p tsconfig.esm.json --watch",
+        "test": "dotenv -e test/.env.test jest",
+        "lint": "eslint src --ext .ts --fix",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "prepare": "bun run build",
+        "prepublishOnly": "bun run lint",
+        "version": "changeset && changeset version",
+        "release": "changeset publish"
+    },
+    "keywords": [
+        "flexbe",
+        "sdk",
+        "typescript",
+        "api-client"
+    ],
+    "author": "Flexbe",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/flexbe/sdk-ts.git"
+    },
+    "bugs": {
+        "url": "https://github.com/flexbe/sdk-ts/issues"
+    },
+    "homepage": "https://github.com/flexbe/sdk-ts#readme",
+    "devDependencies": {
+        "@changesets/cli": "^2.29.7",
+        "@flexbe/eslint-config": "^1.0.11",
+        "@types/jest": "^30.0.0",
+        "@types/node": "^24.3.1",
+        "dotenv-cli": "^10.0.0",
+        "eslint": "^9.35.0",
+        "jest": "^30.1.3",
+        "ts-jest": "^29.4.1",
+        "typescript": "~5.9.2"
+    },
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "packageManager": "bun@1.2.21"
 }
