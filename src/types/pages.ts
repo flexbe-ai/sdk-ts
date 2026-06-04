@@ -25,6 +25,12 @@ export interface Screenshot {
     url: string | null;
 }
 
+export interface PageSchemaMarkup {
+    data: unknown;
+    updatedAt: string | null;
+    genProducts?: boolean;
+}
+
 export interface PageMeta {
     title: string | null;
     description: string | null;
@@ -33,6 +39,7 @@ export interface PageMeta {
     ogTitle: string | null;
     ogDescription: string | null;
     noindex: boolean;
+    schemaMarkup?: PageSchemaMarkup | null;
 }
 
 export enum PageType {
@@ -382,7 +389,17 @@ export interface PageVersionListResponse {
     list: PageVersionItem[];
 }
 
+/** Layout page settings (background, responsive) — stored in version `data.data` */
+export interface PageLayoutData {
+    background?: PageBackground;
+    responsive?: 'auto' | false;
+}
+
+/**
+ * Page version JSON (`d_pages_versions.data`).
+ */
 export interface PageDataStructure {
+    id?: string;
     is: string;
     template_id: string;
     blocks: PageBlock[];
@@ -391,39 +408,19 @@ export interface PageDataStructure {
     abtests?: PageABTest[];
     codes?: string[];
     textStyles?: TextStyleItem[];
+    /** Layout settings (background, responsive) */
+    data?: PageLayoutData;
+    /**
+     * @deprecated Moved to `data.background`
+     */
     background?: PageBackground;
-    responsive?: 'auto' | boolean;
+    /**
+     * @deprecated Moved to `data.responsive`
+     */
+    responsive?: 'auto' | false | boolean;
 }
 
 export interface PageVersionDataResponse extends PageVersionItem {
     data: PageDataStructure;
     abtests?: PageABTest[];
 }
-
-/**
- * @deprecated This type is deprecated and will be removed in a future release. Use PageDataStructure or related types instead.
- */
-export interface PageContent {
-    versionId: number;
-    versionTime: number;
-    blocks: PageBlock[];
-    modals: PageModal[];
-    elements: PageElement[];
-    widgets: PageWidget[];
-    codes: string[];
-    settings: {
-        background?: PageBackground;
-        textStyles?: TextStyleItem[];
-        responsive?: string | boolean;
-    } | null;
-    abtests: PageABTest[];
-    assets: {
-        images: number[];
-        files: string[];
-    };
-}
-
-/**
- * @deprecated This type is deprecated and will be removed in a future release. Use PageDataStructure or related types instead.
- */
-export type UpdatePageContentParams = Omit<PageContent, 'versionId' | 'versionTime'>;
