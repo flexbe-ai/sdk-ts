@@ -211,6 +211,20 @@ export interface PageBackground {
     styles: PageBackgroundStyles;
 }
 
+export type PageContainerViewport = number | 'auto';
+
+export interface PageContainerBreakpoint {
+    width: number;
+    gutter: number;
+    viewport: PageContainerViewport;
+    maxViewport: PageContainerViewport;
+}
+
+export interface PageContainerSettings {
+    desktop: PageContainerBreakpoint;
+    mobile: PageContainerBreakpoint;
+}
+
 export interface PageGrid {
     color: string;
     desktop: {
@@ -258,9 +272,11 @@ export interface TextStyleProperties {
 export interface FontFamilyItem {
     id?: string;
     name: string;
-    source: 'user' | 'google' | 'system';
+    source: 'user' | 'google' | 'system' | 'flexbe';
     subsets?: string[];
     variants: FontVariant[];
+    /** For Flexbe fonts */
+    cssPath?: string;
 }
 
 // Uploaded font
@@ -284,6 +300,53 @@ export interface StylesDataRaw {
     siteTextStyles: TextStyleItem[];
     pageTextStyles?: TextStyleItem[];
 }
+
+export type PageCodeImage = {
+    type: 'img';
+    id: number;
+    name: string;
+    ext: string;
+    average: string;
+    proportion: number;
+};
+
+export type PageCodeFile = {
+    type: 'file';
+    id: number;
+    name: string;
+};
+
+export type PageCodeModule = {
+    id: string;
+    path: string;
+    content: string;
+};
+
+export type PageCodeSources = {
+    html: string;
+    js: string;
+    css: string;
+    modules: PageCodeModule[];
+};
+
+export type PageCodeAsset = PageCodeImage | PageCodeFile;
+
+export interface PageCodeMeta {
+    id: string;
+    name: string;
+    show_code: boolean;
+    is_body: boolean;
+}
+
+export type PageCode = {
+    html: string;
+    js: string;
+    css: string;
+    files: PageCodeAsset[];
+    sources: PageCodeSources;
+};
+
+export type PageCodeWithMeta = PageCodeMeta & PageCode;
 
 
 export enum PageEntityType {
@@ -309,12 +372,12 @@ export type PageEntityEvent = {
     [key: string]: any;
 };
 
-export type PageEntityData<T = Record<string, unknown>> = T;
+export type PageEntityData<T = Record<string, any>> = T;
 
 export type PageEntityMultiVars<T> = Record<string, { data: PageEntityData<T> }>;
 
 // Common base interface for page components
-export interface PageEntity<T = Record<string, unknown>> {
+export interface PageEntity<T = Record<string, any>> {
     id: string;
     is: PageEntityType;
     template_id: string;
@@ -332,7 +395,7 @@ export interface PageEntity<T = Record<string, unknown>> {
     multidata?: { enabled: boolean; vars: PageEntityMultiVars<T> };
 }
 
-export interface PageBlock<T = Record<string, unknown>> extends PageEntity<T> {
+export interface PageBlock<T = Record<string, any>> extends PageEntity<T> {
     is: PageEntityType.Block;
     refPageId?: number;
     aboveTheFold?: boolean;
@@ -342,18 +405,18 @@ export interface PageBlock<T = Record<string, unknown>> extends PageEntity<T> {
     geolanding?: { enabled: boolean; vars: Record<string, { city: string; data: PageEntityData<T> }> };
 }
 
-export interface PageWidget<T = Record<string, unknown>> extends PageEntity<T> {
+export interface PageWidget<T = Record<string, any>> extends PageEntity<T> {
     is: PageEntityType.Widget;
     children?: PageElement[];
 }
 
-export interface PageModal<T = Record<string, unknown>> extends PageEntity<T> {
+export interface PageModal<T = Record<string, any>> extends PageEntity<T> {
     is: PageEntityType.Modal;
     screenshot: ImageObj | null;
     children?: PageElement[];
 }
 
-export interface PageElement<T = Record<string, unknown>> extends PageEntity<T> {
+export interface PageElement<T = Record<string, any>> extends PageEntity<T> {
     is: PageEntityType.Element;
     aboveTheFold?: boolean;
     children?: PageElement[];
@@ -389,24 +452,28 @@ export interface PageVersionListResponse {
     list: PageVersionItem[];
 }
 
-/** Layout page settings (background, responsive) — stored in version `data.data` */
-export interface PageLayoutData {
+/**
+ * Layout `entity.data` in page version JSON.
+ * Known fields + arbitrary keys per `template_id`.
+ */
+export type PageLayoutData = {
     background?: PageBackground;
     responsive?: 'auto' | false;
-}
+    container?: PageContainerSettings;
+} & Record<string, any>;
 
 /**
  * Page version JSON (`d_pages_versions.data`).
  */
 export interface PageDataStructure {
     id?: string;
-    is: string;
+    is: PageEntityType.Layout;
     template_id: string;
     blocks: PageBlock[];
     modals: PageModal[];
     widgets: PageWidget[];
     abtests?: PageABTest[];
-    codes?: string[];
+    codes?: PageCodeWithMeta[];
     textStyles?: TextStyleItem[];
     /** Layout settings (background, responsive) */
     data?: PageLayoutData;
