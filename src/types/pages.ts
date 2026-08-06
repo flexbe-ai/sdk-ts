@@ -3,22 +3,6 @@ import type {
 } from './animations';
 import type { FlexbeBulkError, Pagination } from './index';
 
-export interface GridConfig {
-    color?: string;
-    desktop?: {
-        columns: number;
-        containerWidth: number;
-        columnWidth: number;
-        gap: number;
-    };
-    mobile?: {
-        columns: number;
-        containerWidth: number;
-        columnWidth: number;
-        gap: number;
-    };
-}
-
 export interface Screenshot {
     id: number | null;
     ext: string;
@@ -62,6 +46,8 @@ export enum PageStatus {
 export interface Page {
     id: number;
     versionId: number | null;
+    /** Last version opened in the editor (draft or published); null on legacy pages */
+    editorVersionId: number | null;
     type: PageType;
     status: PageStatus;
     name: string;
@@ -114,6 +100,8 @@ export interface CreateFolderParams {
 export interface UpdatePageParams {
     status?: PageStatus;
     versionId?: number;
+    /** Pin editor pointer without publishing */
+    editorVersionId?: number;
     name?: string;
     uri?: string;
     language?: string;
@@ -216,6 +204,7 @@ export type PageContainerViewport = number | 'auto';
 export interface PageContainerBreakpoint {
     width: number;
     gutter: number;
+    minViewport: PageContainerViewport;
     viewport: PageContainerViewport;
     maxViewport: PageContainerViewport;
 }
@@ -223,22 +212,6 @@ export interface PageContainerBreakpoint {
 export interface PageContainerSettings {
     desktop: PageContainerBreakpoint;
     mobile: PageContainerBreakpoint;
-}
-
-export interface PageGrid {
-    color: string;
-    desktop: {
-        columns: string;
-        containerWidth: string;
-        columnWidth: string;
-        gap: string;
-    };
-    mobile: {
-        columns: string;
-        containerWidth: string;
-        columnWidth: string;
-        gap: string;
-    };
 }
 
 // Text style (set[])
@@ -446,11 +419,25 @@ export interface PageHistoryItemData extends PageHistoryItem {
 export interface PageVersionItem {
     id: number;
     createdAt: string;
+    /** True if this version has never been published */
+    isDraft: boolean;
 }
 
 export interface PageVersionListResponse {
     list: PageVersionItem[];
 }
+
+export type PageVisualGridItem = {
+    columns: number;
+    columnWidth: number | null;
+    gap: number | null;
+};
+
+export type PageVisualGrid = {
+    color?: string;
+    desktop: PageVisualGridItem;
+    mobile: PageVisualGridItem;
+};
 
 /**
  * Layout `entity.data` in page version JSON.
@@ -460,6 +447,8 @@ export type PageLayoutData = {
     background?: PageBackground;
     responsive?: 'auto' | false;
     container?: PageContainerSettings;
+    /** Editor visual grid overlay settings */
+    visualGrid?: PageVisualGrid;
 } & Record<string, any>;
 
 /**

@@ -261,7 +261,7 @@ export class Pages {
     /**
      * Get a specific page version
      * @param pageId - ID of the page
-     * @param versionId - ID of the version to get or 'published' to get the published version
+     * @param versionId - Version id, `'published'` (public pointer), or `'editor'` (editorVersionId ?? published)
      * @returns The requested page version with data
      * @throws {UnauthorizedException} When the API key is invalid or expired
      * @throws {NotFoundException} When the page or version is not found
@@ -269,7 +269,7 @@ export class Pages {
      * @throws {ServerException} When the server encounters an error
      * @throws {TimeoutException} When the request times out
      */
-    async getVersion(pageId: number, versionId: number | 'published'): Promise<PageVersionDataResponse> {
+    async getVersion(pageId: number, versionId: number | 'published' | 'editor'): Promise<PageVersionDataResponse> {
         const response = await this.api.get<PageVersionDataResponse>(`/sites/${ this.siteId }/pages/${ pageId }/versions/${ versionId }`, {
             params: {
                 v: Date.now().toString(32),
