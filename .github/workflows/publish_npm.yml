@@ -1,0 +1,91 @@
+name: Publish NPM packages
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - "src/**"
+            - ".changeset/**"
+            - "package.json"
+            - "bun.lock"
+            - ".github/workflows/publish_npm.yml"
+    workflow_dispatch: {}
+
+concurrency:
+    group: npm-release-main
+    cancel-in-progress: false
+
+permissions:
+    contents: write
+    id-token: write
+
+jobs:
+    publish-npm:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  fetch-depth: 0
+
+            - uses: actions/setup-node@v5
+              with:
+                  node-version: "24"
+                  registry-url: "https://registry.npmjs.org"
+                  package-manager-cache: false
+
+            - uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: 1.2.21
+
+            - name: Gate
+              id: gate
+              run: |
+                  # Must be @changesets/cli — bare `changeset` has no bin (bunx fails before install)
+                  STATUS="$(bunx @changesets/cli status 2>&1 || true)"
+                  echo "$STATUS"
+
+                  if echo "$STATUS" | grep -q "Packages to be bumped"; then
+                      echo "run=true" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "run=false" >> "$GITHUB_OUTPUT"
+                  fi
+
+            - name: Install
+              if: ${{ steps.gate.outputs.run == 'true' }}
+              run: bun install --frozen-lockfile
+
+            - name: Build
+              if: ${{ steps.gate.outputs.run == 'true' }}
+              run: bun run build:publish
+              env:
+                  NODE_ENV: production
+
+            - name: Bump versions and create changelogs
+              if: ${{ steps.gate.outputs.run == 'true' }}
+              run: bun run version-packages
+
+            - name: Publish to NPM (OIDC Trusted)
+              if: ${{ steps.gate.outputs.run == 'true' }}
+              run: bun run release
+              env:
+                  NPM_CONFIG_PROVENANCE: true
+
+            - name: Update lockfile after bumps
+              if: ${{ steps.gate.outputs.run == 'true' }}
+              run: bun install
+
+            - name: Commit and push release files
+              if: ${{ steps.gate.outputs.run == 'true' }}
+              run: |
+                  if git diff --quiet && git diff --cached --quiet; then
+                      echo "Nothing to commit"
+                      exit 0
+                  fi
+
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+                  git add -A
+                  git commit -m "chore(release): version packages"
+                  git push origin HEAD:main
