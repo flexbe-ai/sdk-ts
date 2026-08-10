@@ -1,3 +1,4 @@
+import { Files, Images } from './media';
 import { Pages } from './pages';
 import { Redirects } from './redirects';
 import { Sandbox } from './sandbox';
@@ -10,6 +11,8 @@ export class SiteApi {
     public readonly redirects: Redirects;
     public readonly sandbox: Sandbox;
     public readonly stat: Stat;
+    public readonly images: Images;
+    public readonly files: Files;
 
     constructor(
         api: ApiClient,
@@ -19,5 +22,7 @@ export class SiteApi {
         this.redirects = new Redirects(api, siteId);
         this.sandbox = new Sandbox(api, siteId);
         this.stat = new Stat(api, siteId);
+        this.images = new Images(api, siteId);
+        this.files = new Files(api, siteId);
     }
 }

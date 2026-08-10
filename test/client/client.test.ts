@@ -32,6 +32,8 @@ describe('FlexbeClient', () => {
         const siteApi = client.getSiteApi(siteId);
         expect(siteApi).toBeDefined();
         expect(siteApi.pages).toBeDefined();
+        expect(siteApi.images).toBeDefined();
+        expect(siteApi.files).toBeDefined();
     });
 
     it('should return same site API instance for same site ID', () => {

@@ -4,6 +4,7 @@ export * from './pages';
 export * from './redirects';
 export * from './stat';
 export * from './sandbox';
+export * from './media';
 
 export enum FlexbeAuthType {
     API_KEY = 'apiKey',
