@@ -1,6 +1,7 @@
 export * from './meta';
 export * from './animations';
 export * from './pages';
+export * from './redirects';
 export * from './stat';
 export * from './sandbox';
 
