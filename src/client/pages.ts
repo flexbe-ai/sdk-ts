@@ -1,5 +1,27 @@
 import { ApiClient } from './api-client';
-import { BulkDeleteResponse, BulkUpdateFolderItem, BulkUpdateFolderResponse, BulkUpdatePageItem, BulkUpdateResponse, CreateFolderParams, CreatePageVersionParams, GetPagesParams, Page, PageFolder, PageFolderListResponse, PageListResponse, PageVersionDataResponse, PageVersionListResponse, UpdateFolderParams, UpdatePageParams } from '../types/pages';
+import {
+    BulkDeleteResponse,
+    BulkUpdateFolderItem,
+    BulkUpdateFolderResponse,
+    BulkUpdatePageItem,
+    BulkUpdateResponse,
+    CopyPageParams,
+    CopyPagesParams,
+    CopyPagesResponse,
+    CreateFolderParams,
+    CreatePageFromAiParams,
+    CreatePageParams,
+    CreatePageVersionParams,
+    GetPagesParams,
+    Page,
+    PageFolder,
+    PageFolderListResponse,
+    PageListResponse,
+    PageVersionDataResponse,
+    PageVersionListResponse,
+    UpdateFolderParams,
+    UpdatePageParams,
+} from '../types/pages';
 
 export class Pages {
     constructor(
@@ -33,6 +55,42 @@ export class Pages {
             : undefined;
 
         const response = await this.api.get<PageListResponse>(`/sites/${ this.siteId }/pages`, { params: processedParams });
+
+        return response.data;
+    }
+
+    /**
+     * Create a page: clone from template/source, or pass `type: 'global'` with layout body
+     */
+    async createPage(data: CreatePageParams): Promise<Page> {
+        const response = await this.api.post<Page>(`/sites/${ this.siteId }/pages`, data);
+
+        return response.data;
+    }
+
+    /**
+     * Create a page from a completed AI generation
+     */
+    async createPageFromAi(data: CreatePageFromAiParams): Promise<Page> {
+        const response = await this.api.post<Page>(`/sites/${ this.siteId }/pages/from-ai`, data);
+
+        return response.data;
+    }
+
+    /**
+     * Copy a single page
+     */
+    async copyPage(pageId: number, data: CopyPageParams): Promise<Page> {
+        const response = await this.api.post<Page>(`/sites/${ this.siteId }/pages/${ pageId }/copy`, data);
+
+        return response.data;
+    }
+
+    /**
+     * Bulk-copy pages
+     */
+    async copyPages(data: CopyPagesParams): Promise<CopyPagesResponse> {
+        const response = await this.api.post<CopyPagesResponse>(`/sites/${ this.siteId }/pages/copy`, data);
 
         return response.data;
     }
