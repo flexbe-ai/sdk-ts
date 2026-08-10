@@ -56,11 +56,21 @@ export class ApiClient {
             const timeoutId = setTimeout(() => controller.abort(), this.config.timeout);
 
             const url = this.buildUrl(config.url, config.params);
-            const headers = {
-                'Content-Type': 'application/json',
-                ...(await this.getAuthHeaders()),
-                ...config.headers,
+            const authHeaders = await this.getAuthHeaders();
+            const isFormData = typeof FormData !== 'undefined' && config.body instanceof FormData;
+            const headers: Record<string, string> = {
+                ...authHeaders,
+                ...(config.headers as Record<string, string> | undefined),
             };
+
+            if (isFormData) {
+                // Runtime must set multipart boundary — never force application/json
+                delete headers['Content-Type'];
+                delete headers['content-type'];
+            }
+            else if (!headers['Content-Type'] && !headers['content-type']) {
+                headers['Content-Type'] = 'application/json';
+            }
 
             const response = await fetch(this.config.baseUrl + url, {
                 ...config,
@@ -148,6 +158,16 @@ export class ApiClient {
             url,
             method: 'POST',
             body: JSON.stringify(data),
+        });
+    }
+
+    /** POST multipart/form-data without JSON.stringify. */
+    public async postForm<T>(url: string, formData: FormData, config?: RequestInit & { params?: object }): Promise<FlexbeResponse<T>> {
+        return this.request<T>({
+            ...config,
+            url,
+            method: 'POST',
+            body: formData,
         });
     }
 
