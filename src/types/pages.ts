@@ -122,6 +122,43 @@ export interface UpdatePageParams {
     meta?: Partial<PageMeta>;
 }
 
+export interface CreatePageParams {
+    /** Omit/`page` = clone from template or source; `global` = inline layout payload */
+    type?: PageType.PAGE | PageType.GLOBAL;
+    templateId?: number;
+    sourcePageId?: number;
+    name?: string;
+    uri?: string;
+    folderId?: number | null;
+    themeId?: number | null;
+    is?: string;
+    template_id?: string;
+    blocks?: unknown[];
+    modals?: unknown[];
+    widgets?: unknown[];
+}
+
+export interface CreatePageFromAiParams {
+    pageUUID: string;
+}
+
+export interface CopyPageParams {
+    name: string;
+    uri?: string;
+    folderId?: number | null;
+    targetSiteId?: number;
+}
+
+export interface CopyPagesParams {
+    pageIds: number[];
+    folderId?: number | null;
+    targetSiteId?: number;
+}
+
+export interface CopyPagesResponse {
+    pages: Page[];
+}
+
 export interface CreatePageVersionParams {
     data: PageDataStructure;
     assets?: {
