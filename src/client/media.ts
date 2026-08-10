@@ -12,7 +12,7 @@ export type UploadBinary = Blob | File | Buffer | ArrayBuffer | Uint8Array;
 
 function toBlob(data: UploadBinary, contentType?: string): Blob {
     if (typeof Blob !== 'undefined' && data instanceof Blob) {
-        return contentType && data.type !== contentType
+        return (contentType && data.type !== contentType)
             ? new Blob([data], { type: contentType })
             : data;
     }

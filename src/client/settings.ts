@@ -10,6 +10,7 @@ export class Settings {
     /** Normalized public site settings (camelCase sections). */
     async getSettings(): Promise<SiteSettings> {
         const response = await this.api.get<SiteSettings>(`/sites/${ this.siteId }/settings`);
+
         return response.data;
     }
 
@@ -19,6 +20,7 @@ export class Settings {
             `/sites/${ this.siteId }/settings`,
             patch
         );
+
         return response.data;
     }
 }
