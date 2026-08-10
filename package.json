@@ -24,7 +24,8 @@
         "format": "prettier --write \"src/**/*.ts\"",
         "prepare": "bun run build",
         "prepublishOnly": "bun run lint",
-        "version": "changeset && changeset version",
+        "build:publish": "bun run build",
+        "version-packages": "changeset version",
         "release": "changeset publish"
     },
     "keywords": [
