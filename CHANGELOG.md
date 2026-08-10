@@ -1,5 +1,14 @@
 # @flexbe/sdk
 
+## 0.3.0
+
+### Minor Changes
+
+- 600df60: Add site images and files media client
+- 31dce9d: Add page create/copy/from-ai client methods (global via createPage type)
+- 6876092: Add site redirects client (CRUD + replace by type) with public camelCase redirect types.
+- 1f19ca0: Add site settings client (`getSettings` / `updateSettings`) with public camelCase section types.
+
 ## 0.2.47
 
 ### Patch Changes
