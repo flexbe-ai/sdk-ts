@@ -4,7 +4,7 @@ import { MetaApi } from './meta-api';
 import { SiteApi } from './site-api';
 import { TokenManager } from './token-manager';
 
-import type { FlexbeConfig } from '../types';
+import type { AuthMe, FlexbeConfig, GetSitesParams, Site, SiteListResponse, UpdateSiteParams } from '../types';
 
 export class FlexbeClient {
     private readonly config: FlexbeConfig;
@@ -56,6 +56,30 @@ export class FlexbeClient {
         }
 
         return siteApi;
+    }
+
+    public async getMe(): Promise<AuthMe> {
+        const response = await this.api.get<AuthMe>('/auth/me');
+
+        return response.data;
+    }
+
+    public async getSites(params?: GetSitesParams): Promise<SiteListResponse> {
+        const response = await this.api.get<SiteListResponse>('/sites', { params });
+
+        return response.data;
+    }
+
+    public async getSite(siteId: number): Promise<Site> {
+        const response = await this.api.get<Site>(`/sites/${ siteId }`);
+
+        return response.data;
+    }
+
+    public async updateSite(siteId: number, patch: UpdateSiteParams): Promise<Site> {
+        const response = await this.api.patch<Site>(`/sites/${ siteId }`, patch);
+
+        return response.data;
     }
 
     /**
