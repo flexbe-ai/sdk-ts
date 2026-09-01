@@ -5,6 +5,8 @@ export * from './redirects';
 export * from './stat';
 export * from './sandbox';
 export * from './site-settings';
+export * from './sites';
+export * from './auth';
 export * from './media';
 
 export enum FlexbeAuthType {

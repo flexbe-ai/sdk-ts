@@ -2,16 +2,17 @@ import { FlexbeAuthType } from '../types';
 import { ApiClient } from './api-client';
 import { MetaApi } from './meta-api';
 import { SiteApi } from './site-api';
+import { Sites } from './sites';
 import { TokenManager } from './token-manager';
 
-import type { FlexbeConfig } from '../types';
+import type { AuthMe, FlexbeConfig } from '../types';
 
 export class FlexbeClient {
     private readonly config: FlexbeConfig;
-    private readonly siteApis: Map<number, SiteApi> = new Map();
 
     public readonly api: ApiClient;
     public readonly meta: MetaApi;
+    public readonly sites: Sites;
 
     constructor(config?: Partial<FlexbeConfig>) {
         const getEnvVar = (key: string): string | undefined => {
@@ -40,22 +41,21 @@ export class FlexbeClient {
 
         this.api = new ApiClient(this.config);
         this.meta = new MetaApi(this.api);
+        this.sites = new Sites(this.api);
     }
 
     /**
-     * Get a SiteApi instance for a specific site
-     * @param siteId - The ID of the site to get an API instance for
-     * @returns A SiteApi instance for the specified site
+     * Get a SiteApi instance for a specific site.
+     * Alias of `client.sites.getApi(siteId)`.
      */
     public getSiteApi(siteId: number): SiteApi {
-        let siteApi = this.siteApis.get(siteId);
+        return this.sites.getApi(siteId);
+    }
 
-        if (!siteApi) {
-            siteApi = new SiteApi(this.api, siteId);
-            this.siteApis.set(siteId, siteApi);
-        }
+    public async getMe(): Promise<AuthMe> {
+        const response = await this.api.get<AuthMe>('/auth/me');
 
-        return siteApi;
+        return response.data;
     }
 
     /**

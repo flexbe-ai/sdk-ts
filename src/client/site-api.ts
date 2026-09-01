@@ -6,6 +6,7 @@ import { Settings } from './settings';
 import { Stat } from './stat';
 
 import type { ApiClient } from './api-client';
+import type { Site, UpdateSiteParams } from '../types/sites';
 
 export class SiteApi {
     public readonly pages: Pages;
@@ -17,8 +18,8 @@ export class SiteApi {
     public readonly files: Files;
 
     constructor(
-        api: ApiClient,
-        siteId: number
+        private readonly api: ApiClient,
+        private readonly siteId: number
     ) {
         this.pages = new Pages(api, siteId);
         this.redirects = new Redirects(api, siteId);
@@ -28,4 +29,17 @@ export class SiteApi {
         this.images = new Images(api, siteId);
         this.files = new Files(api, siteId);
     }
+
+    public async get(): Promise<Site> {
+        const response = await this.api.get<Site>(`/sites/${ this.siteId }`);
+
+        return response.data;
+    }
+
+    public async update(patch: UpdateSiteParams): Promise<Site> {
+        const response = await this.api.patch<Site>(`/sites/${ this.siteId }`, patch);
+
+        return response.data;
+    }
 }
+
