@@ -1,5 +1,11 @@
 # @flexbe/sdk
 
+## 0.3.1
+
+### Patch Changes
+
+- 1b700f7: Add `getMe`, `sites.list()`, `sites.getApi(id)`, and site meta on `SiteApi` (`get` / `update`).
+
 ## 0.3.0
 
 ### Minor Changes
