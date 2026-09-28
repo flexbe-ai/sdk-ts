@@ -1,3 +1,4 @@
+import { Ecommerce } from './ecommerce';
 import { Files, Images } from './media';
 import { Pages } from './pages';
 import { Redirects } from './redirects';
@@ -9,6 +10,7 @@ import type { ApiClient } from './api-client';
 import type { Site, UpdateSiteParams } from '../types/sites';
 
 export class SiteApi {
+    public readonly ecommerce: Ecommerce;
     public readonly pages: Pages;
     public readonly redirects: Redirects;
     public readonly sandbox: Sandbox;
@@ -21,6 +23,7 @@ export class SiteApi {
         private readonly api: ApiClient,
         private readonly siteId: number
     ) {
+        this.ecommerce = new Ecommerce(api, siteId);
         this.pages = new Pages(api, siteId);
         this.redirects = new Redirects(api, siteId);
         this.sandbox = new Sandbox(api, siteId);

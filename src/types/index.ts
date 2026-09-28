@@ -8,6 +8,7 @@ export * from './site-settings';
 export * from './sites';
 export * from './auth';
 export * from './media';
+export * from './ecommerce';
 
 export enum FlexbeAuthType {
     API_KEY = 'apiKey',
