@@ -6,6 +6,7 @@ export * from './stat';
 export * from './sandbox';
 export * from './site-settings';
 export * from './sites';
+export * from './domains';
 export * from './auth';
 export * from './media';
 
@@ -148,3 +149,4 @@ export class TimeoutException extends Error {
 }
 
 export type SiteApi = import('../client/site-api').SiteApi;
+export type AccountApi = import('../client/account-api').AccountApi;
