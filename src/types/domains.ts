@@ -35,15 +35,25 @@ export type AccountDomainNs = {
 };
 
 /**
+ * Account registration status in API (DB stores int).
+ * Frontend splits: success → owned list; queued | wrongData | error | waitingPayment → applications.
+ */
+export type AccountDomainRegStatus =
+    | 'queued'
+    | 'success'
+    | 'wrongData'
+    | 'error'
+    | 'waitingPayment';
+
+/**
  * Unified account domain / registration list item.
- * Frontend splits by regStatus: Success (1) → owned list; pending → applications.
- * regStatus: 0 queued, 1 success, 3 wrong_data, 4 error, 10 waiting_payment.
+ * Frontend splits by regStatus: success → owned list; other → applications.
  */
 export type AccountDomain = {
     regId: number;
     name: string;
     nameDecoded: string;
-    regStatus: number;
+    regStatus: AccountDomainRegStatus;
     status: AccountDomainStatus | null;
     project: AccountDomainProject | null;
     isFree: boolean;
