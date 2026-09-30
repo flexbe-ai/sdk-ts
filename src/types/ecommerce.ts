@@ -84,6 +84,8 @@ export interface ListProductsParams {
     search?: string;
     productIds?: number[];
     status?: ProductListStatus;
+    priceMin?: number;
+    priceMax?: number;
 }
 
 export interface Category {
@@ -169,6 +171,26 @@ export interface ProductWriteParams {
     variants?: ProductVariantInput[];
 }
 
+export interface ProductUpsertItem extends ProductWriteParams {
+    id?: number;
+}
+
+export interface ProductUpsertHit {
+    index: number;
+    product: Product;
+}
+
+export interface ProductUpsertError {
+    index: number;
+    message: string;
+}
+
+export interface ProductUpsertResult {
+    created: ProductUpsertHit[];
+    updated: ProductUpsertHit[];
+    errors: ProductUpsertError[];
+}
+
 export type BulkProductAction = 'hide' | 'show' | 'remove' | 'restore';
 
 export interface BulkProductsParams {
@@ -211,4 +233,38 @@ export interface VariantProduct {
 export interface VariantLookup {
     product: VariantProduct;
     variant: ProductVariant;
+}
+
+export interface Promotion {
+    id: number;
+    type: 'discount' | 'promocode';
+    discountType: 'money' | 'percent' | 'delivery';
+    code: string | null;
+    discountAmount: string;
+    deliveryFree: boolean | null;
+    activeFrom: string;
+    dateFrom: string | null;
+    dateTo: string | null;
+    availableCount: number | null;
+    usageWithAnyDiscount: boolean | null;
+    active: boolean;
+    deletedAt: string | null;
+}
+
+export interface PromotionListResponse {
+    list: Promotion[];
+}
+
+export interface PromotionWriteParams {
+    type: Promotion['type'];
+    discountType: Promotion['discountType'];
+    code?: string | null;
+    discountAmount: string;
+    deliveryFree?: boolean | number | null;
+    activeFrom?: string | null;
+    dateFrom?: string | null;
+    dateTo?: string | null;
+    availableCount?: number | null;
+    usageWithAnyDiscount?: boolean | number | null;
+    active: boolean | number;
 }
