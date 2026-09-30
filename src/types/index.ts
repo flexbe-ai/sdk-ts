@@ -9,6 +9,7 @@ export * from './sites';
 export * from './domains';
 export * from './auth';
 export * from './media';
+export * from './ecommerce';
 
 export enum FlexbeAuthType {
     API_KEY = 'apiKey',
