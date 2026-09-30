@@ -39,11 +39,11 @@ export type AccountDomainNs = {
  * Frontend splits: success → owned list; queued | wrongData | error | waitingPayment → applications.
  */
 export type AccountDomainRegStatus =
-    | 'queued'
-    | 'success'
-    | 'wrongData'
-    | 'error'
-    | 'waitingPayment';
+  | 'queued'
+  | 'success'
+  | 'wrongData'
+  | 'error'
+  | 'waitingPayment';
 
 /**
  * Unified account domain / registration list item.
