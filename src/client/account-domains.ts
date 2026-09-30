@@ -17,7 +17,8 @@ export class AccountDomains {
 
     /**
      * List Success + pending regs (`{ list, pagination }`).
-     * Canceled never returned. Filter with `status=registered|pending`.
+     * Light items (no contacts/ns). Canceled never returned.
+     * Filter with `status=registered|pending`.
      */
     async list(params?: GetAccountDomainsParams): Promise<AccountDomainListResponse> {
         const response = await this.api.get<AccountDomainListResponse>(this.basePath(), { params });

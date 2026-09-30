@@ -10,11 +10,6 @@ export type AccountDomainProject = {
     access: AccountDomainProjectAccess;
 };
 
-export type AccountDomainStatus = {
-    /** Runtime status (expired, banned, active, …). Null for pending applications. */
-    code: string | null;
-};
-
 export type AccountDomainContacts = {
     email: string;
     phone: string;
@@ -45,23 +40,37 @@ export type AccountDomainRegStatus =
     | 'error'
     | 'waitingPayment';
 
+/** Profile alarm only — not site DNS / active. */
+export type AccountDomainAlarmCode = 'expired' | 'banned';
+
+export type AccountDomainStatus = {
+    code: AccountDomainAlarmCode;
+};
+
 /**
- * Unified account domain / registration list item.
- * Frontend splits by regStatus: success → owned list; other → applications.
+ * Light list item: GET /account/:accountId/domains
+ * No contacts/ns — those are on get(regId).
  */
-export type AccountDomain = {
+export type AccountDomainListItem = {
     regId: number;
     name: string;
     nameDecoded: string;
     regStatus: AccountDomainRegStatus;
+    /** Alarm only; null when ok / pending */
     status: AccountDomainStatus | null;
     project: AccountDomainProject | null;
     isFree: boolean;
     allowRenewal: boolean;
     expireTimestamp: number | null;
     expireAt: string | null;
-    contacts: AccountDomainContacts | null;
-    ns: AccountDomainNs | null;
+};
+
+/**
+ * Full card: GET /account/:accountId/domains/:regId (Success only).
+ */
+export type AccountDomain = AccountDomainListItem & {
+    contacts: AccountDomainContacts;
+    ns: AccountDomainNs;
 };
 
 export type AccountDomainsStatusFilter = 'registered' | 'pending';
@@ -74,7 +83,7 @@ export type GetAccountDomainsParams = {
 };
 
 export type AccountDomainListResponse = {
-    list: AccountDomain[];
+    list: AccountDomainListItem[];
     pagination: Pagination;
 };
 
