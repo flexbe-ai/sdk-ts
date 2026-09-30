@@ -1,5 +1,11 @@
 # @flexbe/sdk
 
+## 0.5.0
+
+### Minor Changes
+
+- 15637b9: Add catalog methods on `SiteApi.ecommerce`: read products, categories and variants; create and update products; create, update, delete and sort categories; bulk hide/show/remove/restore, move a product, and bind or unbind categories.
+
 ## 0.4.0
 
 ### Minor Changes
