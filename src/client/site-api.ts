@@ -4,6 +4,7 @@ import { Pages } from './pages';
 import { Redirects } from './redirects';
 import { Sandbox } from './sandbox';
 import { Settings } from './settings';
+import { SiteDomains } from './site-domains';
 import { Stat } from './stat';
 
 import type { ApiClient } from './api-client';
@@ -12,6 +13,7 @@ import type { Site, UpdateSiteParams } from '../types/sites';
 export class SiteApi {
     public readonly ecommerce: Ecommerce;
     public readonly pages: Pages;
+    public readonly domains: SiteDomains;
     public readonly redirects: Redirects;
     public readonly sandbox: Sandbox;
     public readonly settings: Settings;
@@ -25,6 +27,7 @@ export class SiteApi {
     ) {
         this.ecommerce = new Ecommerce(api, siteId);
         this.pages = new Pages(api, siteId);
+        this.domains = new SiteDomains(api, siteId);
         this.redirects = new Redirects(api, siteId);
         this.sandbox = new Sandbox(api, siteId);
         this.settings = new Settings(api, siteId);

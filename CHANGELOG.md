@@ -1,5 +1,11 @@
 # @flexbe/sdk
 
+## 0.4.0
+
+### Minor Changes
+
+- bd71a17: Add account and site domains clients (`account().domains`, `getSiteApi().domains`).
+
 ## 0.3.1
 
 ### Patch Changes

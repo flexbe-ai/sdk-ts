@@ -5,4 +5,6 @@ export * from './client/redirects';
 export * from './client/sandbox';
 export * from './client/media';
 export * from './client/sites';
+export * from './client/account-domains';
+export * from './client/site-domains';
 export * from './types';

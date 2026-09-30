@@ -1,4 +1,5 @@
 import { FlexbeAuthType } from '../types';
+import { AccountApi } from './account-api';
 import { ApiClient } from './api-client';
 import { MetaApi } from './meta-api';
 import { SiteApi } from './site-api';
@@ -50,6 +51,14 @@ export class FlexbeClient {
      */
     public getSiteApi(siteId: number): SiteApi {
         return this.sites.getApi(siteId);
+    }
+
+    /**
+     * Account-scoped API (domains list/get/unbind).
+     * Mirrors {@link getSiteApi}.
+     */
+    public account(accountId: number): AccountApi {
+        return new AccountApi(this.api, accountId);
     }
 
     public async getMe(): Promise<AuthMe> {
