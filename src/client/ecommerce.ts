@@ -109,7 +109,7 @@ export class Ecommerce {
         return response.data;
     }
 
-    /** Hide, show, remove or restore products. A product from another site is not changed. */
+    /** Hide, show, remove, restore or purge products. A product from another site is not changed. */
     async bulkProducts(data: BulkProductsParams): Promise<BulkProductsResult> {
         const response = await this.api.post<BulkProductsResult>(this.basePath('/products/bulk'), data);
 

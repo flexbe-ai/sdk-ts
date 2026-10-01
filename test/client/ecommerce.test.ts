@@ -37,7 +37,7 @@ describe('Ecommerce', () => {
         api.get
             .mockResolvedValueOnce({ data: list })
             .mockResolvedValueOnce({ data: product })
-            .mockResolvedValueOnce({ data: { list: [], total: 0, productCount: 0 } });
+            .mockResolvedValueOnce({ data: { list: [], total: 0, productCount: 0, removedProductCount: 0 } });
 
         await expect(ecommerce.listProducts({
             page: 2,
@@ -54,6 +54,7 @@ describe('Ecommerce', () => {
             list: [],
             total: 0,
             productCount: 0,
+            removedProductCount: 0,
         });
 
         expect(api.get.mock.calls).toEqual([

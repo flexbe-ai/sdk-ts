@@ -101,6 +101,7 @@ export interface CategoryListResponse {
     list: Category[];
     total: number;
     productCount: number;
+    removedProductCount: number;
 }
 
 export interface ListCategoriesParams {
@@ -191,7 +192,7 @@ export interface ProductUpsertResult {
     errors: ProductUpsertError[];
 }
 
-export type BulkProductAction = 'hide' | 'show' | 'remove' | 'restore';
+export type BulkProductAction = 'hide' | 'show' | 'remove' | 'restore' | 'purge';
 
 export interface BulkProductsParams {
     action: BulkProductAction;
