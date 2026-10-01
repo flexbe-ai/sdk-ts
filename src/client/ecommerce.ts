@@ -14,7 +14,12 @@ import type {
     MoveProductResult,
     Product,
     ProductListResponse,
+    ProductUpsertItem,
+    ProductUpsertResult,
     ProductWriteParams,
+    Promotion,
+    PromotionListResponse,
+    PromotionWriteParams,
     SortCategoriesParams,
     UpdateCategoryParams,
     VariantLookup,
@@ -94,7 +99,17 @@ export class Ecommerce {
         return response.data;
     }
 
-    /** Hide, show, remove or restore products. A product from another site is not changed. */
+    /**
+     * Create or update up to 50 products. Missing `id` creates; a live site id updates.
+     * Other items still write when one item fails.
+     */
+    async upsertProducts(items: ProductUpsertItem[]): Promise<ProductUpsertResult> {
+        const response = await this.api.post<ProductUpsertResult>(this.basePath('/products/batch'), { items });
+
+        return response.data;
+    }
+
+    /** Hide, show, remove, restore or purge products. A product from another site is not changed. */
     async bulkProducts(data: BulkProductsParams): Promise<BulkProductsResult> {
         const response = await this.api.post<BulkProductsResult>(this.basePath('/products/bulk'), data);
 
@@ -125,6 +140,41 @@ export class Ecommerce {
     /** Resolve picker variants by id. Variants from another site are omitted by the API. */
     async queryVariants(ids: number[]): Promise<VariantLookup[]> {
         const response = await this.api.post<VariantLookup[]>(this.basePath('/variants/query'), { ids });
+
+        return response.data;
+    }
+
+    /** List discounts and promocodes. Soft-deleted rows are omitted. */
+    async listPromotions(): Promise<PromotionListResponse> {
+        const response = await this.api.get<PromotionListResponse>(this.basePath('/promotions'));
+
+        return response.data;
+    }
+
+    /** Create a discount or promocode. */
+    async createPromotion(data: PromotionWriteParams): Promise<Promotion> {
+        const response = await this.api.post<Promotion>(this.basePath('/promotions'), data);
+
+        return response.data;
+    }
+
+    /** Update a discount or promocode. A promotion from another site is not changed. */
+    async updatePromotion(promotionId: number, data: PromotionWriteParams): Promise<Promotion> {
+        const response = await this.api.patch<Promotion>(this.basePath(`/promotions/${ promotionId }`), data);
+
+        return response.data;
+    }
+
+    /** Soft-delete a discount or promocode. */
+    async deletePromotion(promotionId: number): Promise<void> {
+        await this.api.delete(this.basePath(`/promotions/${ promotionId }`));
+    }
+
+    /** Find a live promotion by code. */
+    async getPromotionByCode(code: string): Promise<Promotion> {
+        const response = await this.api.get<Promotion>(
+            this.basePath(`/promotions/code/${ encodeURIComponent(code) }`)
+        );
 
         return response.data;
     }

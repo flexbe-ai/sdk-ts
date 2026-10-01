@@ -37,7 +37,7 @@ describe('Ecommerce', () => {
         api.get
             .mockResolvedValueOnce({ data: list })
             .mockResolvedValueOnce({ data: product })
-            .mockResolvedValueOnce({ data: { list: [], total: 0, productCount: 0 } });
+            .mockResolvedValueOnce({ data: { list: [], total: 0, productCount: 0, removedProductCount: 0 } });
 
         await expect(ecommerce.listProducts({
             page: 2,
@@ -46,12 +46,15 @@ describe('Ecommerce', () => {
             search: 'hat',
             productIds: [10, 11],
             status: ProductListStatus.VISIBLE,
+            priceMin: 2900,
+            priceMax: 2900,
         })).resolves.toBe(list);
         await expect(ecommerce.getProduct(10)).resolves.toBe(product);
         await expect(ecommerce.listCategories({ includeHidden: false })).resolves.toEqual({
             list: [],
             total: 0,
             productCount: 0,
+            removedProductCount: 0,
         });
 
         expect(api.get.mock.calls).toEqual([
@@ -63,6 +66,8 @@ describe('Ecommerce', () => {
                     search: 'hat',
                     productIds: '10,11',
                     status: ProductListStatus.VISIBLE,
+                    priceMin: 2900,
+                    priceMax: 2900,
                 },
             }],
             [`${ basePath }/products/10`],
@@ -122,6 +127,19 @@ describe('Ecommerce', () => {
         expect(api.patch).toHaveBeenCalledWith(`${ basePath }/products/10`, { ...body, name: 'Cap' });
     });
 
+    it('upserts a batch of products', async() => {
+        const result = {
+            created: [{ index: 0, product }],
+            updated: [],
+            errors: [],
+        };
+
+        api.post.mockResolvedValue({ data: result });
+
+        await expect(ecommerce.upsertProducts([{ name: 'Hat' }])).resolves.toBe(result);
+        expect(api.post).toHaveBeenCalledWith(`${ basePath }/products/batch`, { items: [{ name: 'Hat' }] });
+    });
+
     it('hides, moves and binds products', async() => {
         const bulk = { results: [{ id: 10, result: true as const }] };
 
@@ -146,5 +164,29 @@ describe('Ecommerce', () => {
             productIds: [10],
             categoryIds: [3],
         });
+    });
+
+    it('lists, writes and finds promotions', async() => {
+        const promotion = { id: 3, code: 'SALE' };
+        const body = { type: 'promocode' as const, discountType: 'percent' as const, code: 'SALE', discountAmount: '10', active: true };
+
+        api.get
+            .mockResolvedValueOnce({ data: { list: [promotion] } })
+            .mockResolvedValueOnce({ data: promotion });
+        api.post.mockResolvedValue({ data: promotion });
+        api.patch.mockResolvedValue({ data: promotion });
+        api.delete.mockResolvedValue({ data: undefined });
+
+        await expect(ecommerce.listPromotions()).resolves.toEqual({ list: [promotion] });
+        await expect(ecommerce.createPromotion(body)).resolves.toBe(promotion);
+        await expect(ecommerce.updatePromotion(3, body)).resolves.toBe(promotion);
+        await expect(ecommerce.deletePromotion(3)).resolves.toBeUndefined();
+        await expect(ecommerce.getPromotionByCode('A B')).resolves.toBe(promotion);
+
+        expect(api.get).toHaveBeenNthCalledWith(1, `${ basePath }/promotions`);
+        expect(api.post).toHaveBeenCalledWith(`${ basePath }/promotions`, body);
+        expect(api.patch).toHaveBeenCalledWith(`${ basePath }/promotions/3`, body);
+        expect(api.delete).toHaveBeenCalledWith(`${ basePath }/promotions/3`);
+        expect(api.get).toHaveBeenNthCalledWith(2, `${ basePath }/promotions/code/${ encodeURIComponent('A B') }`);
     });
 });
