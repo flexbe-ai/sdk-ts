@@ -1,5 +1,11 @@
 # @flexbe/sdk
 
+## 0.7.0
+
+### Minor Changes
+
+- 4f7b221: Add `ecommerce.globalCart` (`enabled` + opaque `data`) to site settings types.
+
 ## 0.6.0
 
 ### Minor Changes
