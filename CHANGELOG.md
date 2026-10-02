@@ -1,5 +1,19 @@
 # @flexbe/sdk
 
+## 0.6.0
+
+### Minor Changes
+
+- a91c5c5: Add `removedProductCount` on category list and bulk action `purge` for hard-deleting removed products.
+- 972731f: Add promotion methods on `SiteApi.ecommerce`: list, create, update, delete, and find a promocode by code.
+- 972731f: Add catalog batch upsert and list filters for variant priceMin/priceMax.
+
+## 0.5.0
+
+### Minor Changes
+
+- 15637b9: Add catalog methods on `SiteApi.ecommerce`: read products, categories and variants; create and update products; create, update, delete and sort categories; bulk hide/show/remove/restore, move a product, and bind or unbind categories.
+
 ## 0.4.0
 
 ### Minor Changes
