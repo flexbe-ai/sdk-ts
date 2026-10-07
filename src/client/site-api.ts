@@ -9,6 +9,7 @@ import { SiteDomains } from './site-domains';
 import { Stat } from './stat';
 
 import type { ApiClient } from './api-client';
+import type { BuildHtmlParams, BuildHtmlResult } from '../types/pages';
 import type { Site, UpdateSiteParams } from '../types/sites';
 
 export class SiteApi {
@@ -47,6 +48,12 @@ export class SiteApi {
 
     public async update(patch: UpdateSiteParams): Promise<Site> {
         const response = await this.api.patch<Site>(`/sites/${ this.siteId }`, patch);
+
+        return response.data;
+    }
+
+    public async buildHtml(body: BuildHtmlParams): Promise<BuildHtmlResult> {
+        const response = await this.api.post<BuildHtmlResult>(`/sites/${ this.siteId }/html/build`, body);
 
         return response.data;
     }
