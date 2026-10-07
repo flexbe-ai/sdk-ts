@@ -44,6 +44,10 @@ export interface LeadOrderItem {
         id: number;
         ext: string;
     };
+    reservation?: {
+        id: number;
+        quantity: number;
+    } | null;
 }
 
 export interface LeadShipping {
@@ -102,6 +106,7 @@ export interface Lead {
     orderShipping: LeadShipping | null;
     orderDiscounts: LeadOrderDiscount[] | null;
     payment: LeadPayment | null;
+    taxSnapshot: Record<string, unknown> | null;
     notes: string | null;
     tracking: LeadTracking | null;
     trackingExtra: Record<string, unknown> | null;
@@ -121,7 +126,7 @@ export interface LeadListResponse {
 /**
  * CamelCase query. The client sends the admin keys:
  * `filter[LeadStatus]`, `filter[PaymentStatus]`, `filter[Read]`,
- * `filter[ClientName]`, `filter[ClientEmail]`, `filter[ClientPhone]`,
+ * `filter[ClientNameContains]`, `filter[ClientEmailContains]`, `filter[ClientPhoneContains]`,
  * `filter[DateFrom]`, `filter[DateTo]`, `filter[numberMin]`,
  * `filter[numberMax]`, `filter[amountMin]`, `filter[amountMax]`.
  */
@@ -153,6 +158,28 @@ export interface UpdateLeadParams {
     payment?: {
         status?: LeadPaymentStatus;
     };
+}
+
+export interface ReplaceLeadProductsParams {
+    items: Array<{
+        productId: number;
+        variantId: number;
+        name: string;
+        quantity: number;
+        price: number;
+    }>;
+}
+
+export interface ApplyLeadPromotionParams {
+    id: number;
+}
+
+export interface SetLeadShippingParams {
+    id: string;
+    name: string;
+    price: number;
+    isCustomQuote?: boolean;
+    type?: string;
 }
 
 export interface LeadReservation {

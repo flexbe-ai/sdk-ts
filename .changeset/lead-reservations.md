@@ -2,4 +2,4 @@
 "@flexbe/sdk": minor
 ---
 
-Add `SiteApi.leads` methods to create, release, and top up lead reservations.
+Add `SiteApi.leads` for the lead list, card, field patch, order, and reservations.
