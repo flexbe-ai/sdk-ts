@@ -1,4 +1,5 @@
 import { Ecommerce } from './ecommerce';
+import { Leads } from './leads';
 import { Files, Images } from './media';
 import { Pages } from './pages';
 import { Redirects } from './redirects';
@@ -12,6 +13,7 @@ import type { Site, UpdateSiteParams } from '../types/sites';
 
 export class SiteApi {
     public readonly ecommerce: Ecommerce;
+    public readonly leads: Leads;
     public readonly pages: Pages;
     public readonly domains: SiteDomains;
     public readonly redirects: Redirects;
@@ -26,6 +28,7 @@ export class SiteApi {
         private readonly siteId: number
     ) {
         this.ecommerce = new Ecommerce(api, siteId);
+        this.leads = new Leads(api, siteId);
         this.pages = new Pages(api, siteId);
         this.domains = new SiteDomains(api, siteId);
         this.redirects = new Redirects(api, siteId);
