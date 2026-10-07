@@ -1,5 +1,6 @@
 export * from './client/client';
 export * from './client/ecommerce';
+export * from './client/leads';
 export * from './client/pages';
 export * from './client/redirects';
 export * from './client/sandbox';
