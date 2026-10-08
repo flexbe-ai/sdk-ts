@@ -358,6 +358,7 @@ export type BuildHtmlResult = {
     html: string;
     js: string;
     css: string;
+    utilities: string;
     errors: HtmlBuildMessage[];
     warnings: HtmlBuildMessage[];
 };
@@ -375,6 +376,7 @@ export type PageCode = {
     html: string;
     js: string;
     css: string;
+    utilities?: string;
     files: PageCodeAsset[];
     sources: PageCodeSources;
 };
