@@ -11,6 +11,9 @@ export type Site = {
     createdAt: string;
     role: SiteRole;
     access: SiteAccess;
+    domainUrl: string | null;
+    domainTitle: string | null;
+    domainIsTech: boolean | null;
 };
 
 export type GetSitesParams = {
@@ -26,6 +29,11 @@ export type SiteListResponse = {
 };
 
 export type UpdateSiteParams = {
+    name?: string;
+    isDraft?: boolean;
+};
+
+export type CreateSiteParams = {
     name?: string;
     isDraft?: boolean;
 };
