@@ -1,13 +1,25 @@
-# site > Statistics
+# Site → Statistics
 
-`site.stat` reads one A/B test and creates one.
+`site.stat` is the module for project statistics.
 
 ```typescript
 const test = await site.stat.createAbTest(pageId);
 const again = await site.stat.getAbTest(test.id);
 ```
 
-`AbTest` is `{ id, pageId, createdAt, aCountView, aCountLead, bCountView, bCountLead }`. Variant ids inside the page JSON are `PageABTest` on [Page data](page-data.md). The counters here are views and leads for those variants.
+## `AbTest`
+
+An A/B test of a page.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | Test id |
+| `pageId` | `number` | Page id |
+| `createdAt` | `string` | When it was created |
+| `aCountView` | `number` | Views of variant A |
+| `aCountLead` | `number` | Leads of variant A |
+| `bCountView` | `number` | Views of variant B |
+| `bCountLead` | `number` | Leads of variant B |
 
 ## `getAbTest`
 
@@ -25,7 +37,7 @@ const test = await site.stat.getAbTest(testId);
 | -------- | -------- | ----------- |
 | `testId` | `number` | Test id     |
 
-**Response** `AbTest`. Fields in the paragraph above.
+**Response** [`AbTest`](#abtest).
 
 ## `createAbTest`
 
@@ -41,6 +53,6 @@ const test = await site.stat.createAbTest(pageId);
 
 | Field    | Type     | Description                    |
 | -------- | -------- | ------------------------------ |
-| `pageId` | `number` | Page id. The body is `{ pageId }` |
+| `pageId` | `number` | Page id |
 
-**Response** `AbTest`. Fields in the paragraph above.
+**Response** [`AbTest`](#abtest).

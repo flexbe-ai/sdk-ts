@@ -1,4 +1,4 @@
-# site > Заявки
+# Сайт → Заявки
 
 `site.leads` читает и обновляет заявки одного сайта.
 
@@ -9,69 +9,158 @@ const page = await site.leads.list({ limit: 20, status: LeadStatus.NEW });
 const lead = page.list[0];
 ```
 
-`site.leads.get(id)` загружает одну карточку. Пути лежат на `/sites/{siteId}`, если у метода не сказано иначе.
+## `Lead`
 
-Доставка магазина, налог и общая корзина — в разделе [Настройки](settings.md). Скидки каталога — в разделе [Магазин](ecommerce.md). Скидка, записанная в заявке, — снимок на момент применения (`LeadOrderDiscount`).
+| Поле             | Тип                          | Описание                           |
+| ---------------- | ---------------------------- | ---------------------------------- |
+| `id`             | `number`                     | Id заявки                          |
+| `sequence`       | `number`                     | Номер заявки на сайте              |
+| `siteId`         | `number`                     | Id сайта                           |
+| `status`         | `LeadStatus`                 | Статус заявки                      |
+| `isRead`         | `boolean`                    | Заявку уже открывали               |
+| `formName`       | `string`                     | Имя формы                          |
+| `customer`       | `LeadCustomer`               | Покупатель                         |
+| `formFields`     | `LeadFormField[] \| null`    | Ответы полей формы                 |
+| `orderItems`     | `LeadOrderItem[] \| null`    | Строки заказа                      |
+| `orderShipping`  | `LeadShipping \| null`       | Доставка                           |
+| `orderDiscounts` | `LeadOrderDiscount[] \| null`| Снимки скидок                      |
+| `payment`        | `LeadPayment \| null`        | Оплата                             |
+| `taxSnapshot`    | объект или `null`            | Налог на момент заявки             |
+| `notes`          | `string \| null`             | Заметка                            |
+| `custom`         | объект или `null`            | Произвольные данные                |
+| `tracking`       | `LeadTracking \| null`       | Откуда пришла заявка               |
+| `trackingExtra`  | объект или `null`            | Дополнительные метки визита        |
+| `createdAt`      | `string`                     | Когда создали                      |
+| `updatedAt`      | `string`                     | Когда меняли. Необязательно        |
 
-## Карточка заявки
+### `LeadStatus`
 
-| Поле                          | Тип                    | Описание                                      |
-| ----------------------------- | ---------------------- | --------------------------------------------- |
-| `id`                          | `number`               | Id заявки                                     |
-| `sequence`                    | `number`               | Номер заявки на сайте                         |
-| `siteId`                      | `number`               | Id сайта                                      |
-| `status`                      | `LeadStatus`           | Статус заявки                                 |
-| `isRead`                      | `boolean`              | Заявку уже открывали                          |
-| `formName`                    | `string`               | Имя формы                                     |
-| `customer.name`               | `string`               | Имя                                           |
-| `customer.phone`              | `string`               | Телефон                                       |
-| `customer.email`              | `string \| null`       | Email                                         |
-| `formFields`                  | массив или `null`      | Ответы полей формы                            |
-| `formFields[].id`             | `number \| string`     | Id поля                                       |
-| `formFields[].name`           | `string`               | Подпись поля                                  |
-| `formFields[].value`          | `string \| null`       | Ответ                                         |
-| `formFields[].type`           | `string`               | Тип поля                                      |
-| `orderItems`                  | массив или `null`      | Строки заказа                                 |
-| `orderItems[].id`             | `string`               | Id строки                                     |
-| `orderItems[].productId`      | `number`               | Id товара                                     |
-| `orderItems[].variantId`      | `number`               | Id варианта                                   |
-| `orderItems[].name`           | `string`               | Название на момент заказа                     |
-| `orderItems[].quantity`       | `number`               | Количество                                    |
-| `orderItems[].price`          | `LeadMoney`            | Цена одной штуки                              |
-| `orderItems[].rowTotal`       | `LeadMoney`            | Сумма строки                                  |
-| `orderItems[].image.id`       | `number`               | Id картинки                                   |
-| `orderItems[].image.ext`      | `string`               | Расширение картинки                           |
-| `orderItems[].reservation`    | объект или `null`      | Резерв этой строки, если есть                 |
-| `orderItems[].reservation.id` | `number`               | Id резерва                                    |
-| `orderItems[].reservation.quantity` | `number`         | Сколько зарезервировано                       |
-| `orderShipping`               | `LeadShipping` или `null` | Доставка                                   |
-| `orderDiscounts`              | массив или `null`      | Снимки скидок на момент применения            |
-| `payment`                     | `LeadPayment` или `null` | Оплата                                      |
-| `payment.id`                  | `number`               | Id платежа                                    |
-| `payment.amount`              | `LeadMoney`            | Сумма                                         |
-| `payment.status`              | `LeadPaymentStatus`    | Статус оплаты                                 |
-| `payment.paymentProvider`     | `string`               | Провайдер                                     |
-| `payment.isTestPayment`       | `boolean`              | Тестовый платёж                               |
-| `payment.completedAt`         | `string`, необязательно | Когда оплата завершилась                     |
-| `taxSnapshot`                 | объект или `null`      | Налог, как он был на момент заявки            |
-| `notes`                       | `string` или `null`    | Заметка                                       |
-| `tracking`                    | объект или `null`      | Откуда пришла заявка                          |
-| `tracking.ip`                 | `string`               | IP                                            |
-| `tracking.deviceType`         | `string`               | Тип устройства                                |
-| `tracking.userAgent`          | `string`               | User-Agent                                    |
-| `tracking.visitorId`          | `string`               | Id посетителя                                 |
-| `tracking.pageId`             | `number`               | Страница, с которой отправили форму           |
-| `trackingExtra`               | объект или `null`      | Дополнительные метки визита                   |
-| `createdAt`                   | `string`               | Когда создали                                 |
-| `updatedAt`                   | `string`, необязательно | Когда меняли                                 |
+| Значение      | Описание   |
+| ------------- | ---------- |
+| `new`         | Новая      |
+| `in_progress` | В работе   |
+| `completed`   | Завершена  |
+| `canceled`    | Отменена   |
+| `deleted`     | Удалена    |
 
-`LeadStatus`: `new`, `in_progress`, `completed`, `canceled`, `deleted`.
+### `LeadPaymentStatus`
 
-`LeadPaymentStatus`: `pending`, `in_progress`, `paid`, `error`.
+| Значение      | Описание    |
+| ------------- | ----------- |
+| `pending`     | Ожидает     |
+| `in_progress` | В процессе  |
+| `paid`        | Оплачена    |
+| `error`       | Ошибка      |
 
-`LeadMoney` — это `value` (число), `unit` (валюта) и `string` (строка для показа, может быть `null`).
+### `LeadMoney`
 
-`orderShipping.fields` — поля способа доставки. `orderShipping.address` — `addressLine1`, необязательный `addressLine2`, `region`, `city`, `zipCode`. Тело для `setShipping` описано ниже, у этого метода.
+| Поле     | Тип               | Описание           |
+| -------- | ----------------- | ------------------ |
+| `value`  | `number`          | Число              |
+| `unit`   | `string`          | Валюта             |
+| `string` | `string \| null`  | Строка для показа  |
+
+### `LeadCustomer`
+
+| Поле    | Тип              | Описание |
+| ------- | ---------------- | -------- |
+| `name`  | `string`         | Имя      |
+| `phone` | `string`         | Телефон  |
+| `email` | `string \| null` | Email    |
+
+### `LeadFormField`
+
+| Поле    | Тип                | Описание     |
+| ------- | ------------------ | ------------ |
+| `id`    | `number \| string` | Id поля      |
+| `name`  | `string`           | Подпись поля |
+| `value` | `string \| null`   | Ответ        |
+| `type`  | `string`           | Тип поля     |
+
+### `LeadOrderItem`
+
+| Поле          | Тип                     | Описание                  |
+| ------------- | ----------------------- | ------------------------- |
+| `id`          | `string`                | Id строки                 |
+| `productId`   | `number`                | Id товара                 |
+| `variantId`   | `number`                | Id варианта               |
+| `name`        | `string`                | Название на момент заказа |
+| `quantity`    | `number`                | Количество                |
+| `price`       | `LeadMoney`             | Цена одной штуки          |
+| `rowTotal`    | `LeadMoney`             | Сумма строки              |
+| `image`       | `{ id, ext }`           | Картинка строки           |
+| `reservation` | `{ id, quantity } \| null` | Резерв строки. Необязательно |
+
+### `image`
+
+| Поле  | Тип      | Описание  |
+| ----- | -------- | --------- |
+| `id`  | `number` | Id картинки |
+| `ext` | `string` | Расширение  |
+
+### `reservation`
+
+| Поле       | Тип      | Описание                |
+| ---------- | -------- | ----------------------- |
+| `id`       | `number` | Id резерва              |
+| `quantity` | `number` | Сколько зарезервировано |
+
+### `LeadShipping`
+
+| Поле            | Тип          | Описание              |
+| --------------- | ------------ | --------------------- |
+| `id`            | `string`     | Id способа доставки   |
+| `name`          | `string`     | Название              |
+| `price`         | `LeadMoney`  | Цена                  |
+| `isCustomQuote` | `boolean`    | Своя цена             |
+| `type`          | `string`     | Тип доставки          |
+| `fields`        | `unknown[]`  | Поля способа доставки |
+| `address`       | `address`    | Адрес                 |
+
+### `address`
+
+| Поле           | Тип      | Описание        |
+| -------------- | -------- | --------------- |
+| `addressLine1` | `string` | Адрес           |
+| `addressLine2` | `string` | Необязательно   |
+| `region`       | `string` | Регион          |
+| `city`         | `string` | Город           |
+| `zipCode`      | `string` | Индекс          |
+
+### `LeadOrderDiscount`
+
+| Поле             | Тип                         | Описание        |
+| ---------------- | --------------------------- | --------------- |
+| `id`             | `number`                    | Id скидки       |
+| `type`           | `'discount' \| 'promocode'` | Вид скидки      |
+| `discountType`   | `'percent' \| 'money'`      | Как считается   |
+| `discountAmount` | `string`                    | Размер скидки   |
+| `deliveryFree`   | `boolean \| null`           | Бесплатная доставка |
+| `code`           | `string \| null`            | Промокод        |
+
+### `LeadPayment`
+
+| Поле              | Тип                 | Описание                              |
+| ----------------- | ------------------- | ------------------------------------- |
+| `id`              | `number`            | Id платежа                            |
+| `amount`          | `LeadMoney`         | Сумма                                 |
+| `status`          | `LeadPaymentStatus` | Статус оплаты                         |
+| `paymentProvider` | `string`            | Провайдер                             |
+| `isTestPayment`   | `boolean`           | Тестовый платёж                       |
+| `description`     | `string \| null`    | Описание                              |
+| `createdAt`       | `string \| null`    | Когда создан                          |
+| `payLink`         | `string \| null`    | Ссылка на оплату                      |
+| `completedAt`     | `string`            | Когда оплата завершилась. Необязательно |
+
+### `LeadTracking`
+
+| Поле         | Тип      | Описание                            |
+| ------------ | -------- | ----------------------------------- |
+| `ip`         | `string` | IP                                  |
+| `deviceType` | `string` | Тип устройства                      |
+| `userAgent`  | `string` | User-Agent                          |
+| `visitorId`  | `string` | Id посетителя                       |
+| `pageId`     | `number` | Страница, с которой отправили форму |
 
 ## `list`
 
@@ -108,7 +197,7 @@ const leads = await site.leads.list({ page: 1, limit: 20 });
 
 | Поле                | Тип      | Описание                     |
 | ------------------- | -------- | ---------------------------- |
-| `list`              | `Lead[]` | Заявки. Поля в таблице выше  |
+| `list`              | `Lead[]` | [`Lead`](#lead)  |
 | `pagination.limit`  | `number` | Размер страницы              |
 | `pagination.offset` | `number` | Смещение                     |
 | `pagination.total`  | `number` | Всего записей                |
@@ -129,7 +218,7 @@ const lead = await site.leads.get(leadId);
 | -------- | -------- | ---------- |
 | `leadId` | `number` | Id заявки  |
 
-**Ответ** `Lead`. Поля в таблице выше.
+**Ответ** [`Lead`](#lead).
 
 ## `update`
 
@@ -155,11 +244,11 @@ const lead = await site.leads.update(leadId, { status: "completed", isRead: true
 | `payment.status`      | `LeadPaymentStatus` | Статус оплаты               |
 | `payment.description` | `string \| null`    | Комментарий к оплате. Необязательно |
 
-**Ответ** `Lead`. Поля в таблице выше.
+**Ответ** [`Lead`](#lead).
 
 ## `updateMany`
 
-Меняет несколько заявок теми же полями, что `update`. Тело — `{ ids, ...data }`.
+Меняет несколько заявок теми же полями, что `update`.
 
 `POST /sites/{siteId}/leads/bulk`
 
@@ -192,7 +281,7 @@ const lead = await site.leads.remove(leadId);
 | -------- | -------- | --------- |
 | `leadId` | `number` | Id заявки |
 
-**Ответ** `Lead` со статусом `deleted`.
+**Ответ** [`Lead`](#lead) со статусом `deleted`.
 
 ## `replaceProducts`
 
@@ -218,7 +307,7 @@ const lead = await site.leads.replaceProducts(leadId, {
 | `items[].quantity` | `number` | Количество      |
 | `items[].price`    | `number` | Цена            |
 
-**Ответ** `Lead`. Поля в таблице выше.
+**Ответ** [`Lead`](#lead).
 
 ## `applyPromotion`
 
@@ -237,7 +326,7 @@ const lead = await site.leads.applyPromotion(leadId, { id: promotionId });
 | `leadId` | `number` | Id заявки  |
 | `id`     | `number` | Id акции   |
 
-**Ответ** `Lead`. Поля в таблице выше.
+**Ответ** [`Lead`](#lead).
 
 ## `removePromotion`
 
@@ -256,7 +345,7 @@ const lead = await site.leads.removePromotion(leadId, "promocode");
 | `leadId` | `number`                   | Id заявки         |
 | `type`   | `'discount' \| 'promocode'` | Что снять        |
 
-**Ответ** `Lead`. Поля в таблице выше.
+**Ответ** [`Lead`](#lead).
 
 ## `setShipping`
 
@@ -290,13 +379,13 @@ const lead = await site.leads.setShipping(leadId, {
 | `address.addressLine2` | `string` | Квартира. Необязательно          |
 | `address.zipCode`      | `string` | Индекс. Необязательно            |
 
-**Ответ** `Lead`. Поля в таблице выше.
+**Ответ** [`Lead`](#lead).
 
 ## Резервы
 
 ### `createReservations`
 
-Резервирует каждую товарную строку. Следующий вызов возвращает текущие строки и больше ничего не резервирует.
+Резервирует каждую товарную строку. Повторный вызов возвращает уже созданные резервы.
 
 `POST /sites/{siteId}/leads/{leadId}/reservations`
 

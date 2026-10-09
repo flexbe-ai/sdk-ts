@@ -1,6 +1,6 @@
-# site > Files
+# Site → Files
 
-`site.files` uploads files for one site and copies paths from another account. Paths sit on `/sites/{siteId}/files`.
+`site.files` uploads files for one site.
 
 ```typescript
 const file = await site.files.upload(bytes, "price.pdf", "application/pdf");
@@ -8,9 +8,29 @@ const file = await site.files.upload(bytes, "price.pdf", "application/pdf");
 
 `upload` returns the file record. Keep that object.
 
-`FileAsset` is `{ id, name, originalName?, ext, url }`.
+## `FileAsset`
 
-`UploadBinary` is `Blob | File | Buffer | ArrayBuffer | Uint8Array`. The file is sent as multipart field `file`.
+An uploaded site file.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | File id |
+| `name` | `string` | Name |
+| `originalName` | `string \| null` | Original name. Optional |
+| `ext` | `string` | Extension |
+| `url` | `string` | Public path |
+
+## `UploadBinary`
+
+Bytes accepted by an upload.
+
+| Type | Description |
+| --- | --- |
+| `Blob` | Browser blob |
+| `File` | Form file |
+| `Buffer` | Node.js buffer |
+| `ArrayBuffer` | Raw bytes |
+| `Uint8Array` | Bytes as a typed array |
 
 ## `upload`
 
@@ -30,7 +50,7 @@ const file = await site.files.upload(bytes, "price.pdf", "application/pdf");
 | `filename`    | `string`       | File name. Required                                  |
 | `contentType` | `string`       | MIME type. Defaults to `application/octet-stream`    |
 
-**Response** `FileAsset`. Fields in the paragraph above.
+**Response** [`FileAsset`](#fileasset).
 
 ## `uploadFromUrl`
 
@@ -48,33 +68,7 @@ const file = await site.files.uploadFromUrl({ url: "https://example.com/price.pd
 | ----- | -------- | ----------------------------- |
 | `url` | `string` | File address. The body is JSON |
 
-**Response** `FileAsset`. Fields in the paragraph above.
-
-## `copy`
-
-Copies files from another account onto this site.
-
-`POST /sites/{siteId}/files/copy`
-
-```typescript
-const copied = await site.files.copy({
-  sourceAccountId: 10,
-  paths: ["/files/price.pdf"],
-});
-```
-
-**Input**
-
-| Field             | Type       | Description                          |
-| ----------------- | ---------- | ------------------------------------ |
-| `sourceAccountId` | `number`   | Account that already holds the files |
-| `paths`           | `string[]` | `/files/foo.mp4` or `foo.mp4`        |
-
-**Response**
-
-| Field   | Type                    | Description                                                    |
-| ------- | ----------------------- | -------------------------------------------------------------- |
-| `files` | `(FileAsset \| null)[]` | Same order as `paths`. `null` when that path was not copied    |
+**Response** [`FileAsset`](#fileasset).
 
 ## `remove`
 
@@ -91,7 +85,3 @@ await site.files.remove(fileId);
 | Field    | Type     | Description |
 | -------- | -------- | ----------- |
 | `fileId` | `number` | File id     |
-
-**Response**
-
-No body.

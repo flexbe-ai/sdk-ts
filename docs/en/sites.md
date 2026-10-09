@@ -1,12 +1,29 @@
-# client > Sites
+# client → Sites
 
-A site is a project. `client.sites` lists and creates projects. `client.getSiteApi(siteId)` opens one project and exposes its resources. Creating the client is in [Get started](getting-started.md).
+A site is a project. `client.sites` lists and creates projects. `client.getSiteApi(siteId)` opens one project and exposes its resources. Creating the client is in [Get started](README.md).
 
 ```typescript
 const client = new FlexbeClient({ apiKey: "your-api-key" });
 const sites = await client.sites.list();
 const site = client.getSiteApi(sites.list[0].id);
 ```
+
+## `Site`
+
+A project.
+
+| Field          | Type                                                  | Description                                |
+| -------------- | ----------------------------------------------------- | ------------------------------------------ |
+| `id`           | `number`                                              | Project id                                 |
+| `accountId`    | `number`                                              | Owner account                              |
+| `name`         | `string \| null`                                      | Name                                       |
+| `isDraft`      | `boolean`                                             | Draft                                      |
+| `createdAt`    | `string`                                              | When it was created                        |
+| `role`         | `'owner' \| 'admin' \| 'editor' \| 'manager' \| null` | Current user's role on the site            |
+| `access`       | `'owner' \| 'share'`                                  | Your site, or access through a share       |
+| `domainUrl`    | `string \| null`                                      | Primary domain URL                         |
+| `domainTitle`  | `string \| null`                                      | Primary domain name for display            |
+| `domainIsTech` | `boolean \| null`                                     | The primary domain is a technical host     |
 
 ## `Sites`
 
@@ -33,7 +50,7 @@ const sites = await client.sites.list({ offset: 0, limit: 20 });
 
 | Field               | Type     | Description                      |
 | ------------------- | -------- | -------------------------------- |
-| `list`              | `Site[]` | Projects. Fields in the table below |
+| `list`              | `Site[]` | [`Site`](#site) |
 | `pagination.limit`  | `number` | Page size                        |
 | `pagination.offset` | `number` | Offset                           |
 | `pagination.total`  | `number` | Total rows                       |
@@ -55,7 +72,7 @@ const created = await client.sites.create({ name: "Shop", isDraft: true });
 | `name`    | `string`  | Name. Optional                 |
 | `isDraft` | `boolean` | Create as a draft. Optional    |
 
-**Response** `Site`. Fields in the table below.
+**Response** [`Site`](#site).
 
 ### `getApi`
 
@@ -73,21 +90,6 @@ const site = client.sites.getApi(siteId);
 
 **Response** `SiteApi`. The object that holds the site resources: pages, domains, leads, and the other sections.
 
-## `Site`
-
-| Field          | Type                                                  | Description                                |
-| -------------- | ----------------------------------------------------- | ------------------------------------------ |
-| `id`           | `number`                                              | Project id                                 |
-| `accountId`    | `number`                                              | Owner account                              |
-| `name`         | `string \| null`                                      | Name                                       |
-| `isDraft`      | `boolean`                                             | Draft                                      |
-| `createdAt`    | `string`                                              | When it was created                        |
-| `role`         | `'owner' \| 'admin' \| 'editor' \| 'manager' \| null` | Current user's role on the site            |
-| `access`       | `'owner' \| 'share'`                                  | Your site, or access through a share       |
-| `domainUrl`    | `string \| null`                                      | Primary domain URL                         |
-| `domainTitle`  | `string \| null`                                      | Primary domain name for display            |
-| `domainIsTech` | `boolean \| null`                                     | The primary domain is a technical host     |
-
 ## site
 
 ### `get`
@@ -104,7 +106,7 @@ const project = await site.get();
 
 No parameters.
 
-**Response** `Site`. Fields in the table above.
+**Response** [`Site`](#site).
 
 ### `update`
 
@@ -123,7 +125,7 @@ const project = await site.update({ name: "New name" });
 | `name`    | `string`  | Name. Optional       |
 | `isDraft` | `boolean` | Draft. Optional      |
 
-**Response** `Site`. Fields in the table above.
+**Response** [`Site`](#site).
 
 ### `buildHtml`
 

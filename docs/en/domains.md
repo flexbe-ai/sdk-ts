@@ -1,10 +1,8 @@
 # Domains
 
-## site > Domains
+## Site → Domains
 
-`SiteDomains`. Paths sit on `/sites/{siteId}/domains`.
-
-`SiteDomain`:
+### `SiteDomain`
 
 | Field                          | Type                             | Description                                                          |
 | ------------------------------ | -------------------------------- | -------------------------------------------------------------------- |
@@ -42,7 +40,7 @@ const domains = await site.domains.list({ offset: 0, limit: 20 });
 
 | Field               | Type           | Description                    |
 | ------------------- | -------------- | ------------------------------ |
-| `list`              | `SiteDomain[]` | Domains. Fields in the table above |
+| `list`              | `SiteDomain[]` | [`SiteDomain`](#sitedomain) |
 | `pagination.limit`  | `number`       | Page size                      |
 | `pagination.offset` | `number`       | Offset                         |
 | `pagination.total`  | `number`       | Total rows                     |
@@ -67,7 +65,7 @@ const domain = await site.domains.bind({ name: "shop.example.com" });
 
 | Field  | Type         | Description                         |
 | ------ | ------------ | ----------------------------------- |
-| result | `SiteDomain` | The bound domain. Fields in the table above |
+| result | `SiteDomain` | The bound domain. [`SiteDomain`](#sitedomain) |
 
 ### `remove`
 
@@ -85,15 +83,11 @@ await site.domains.remove(domainId);
 | ---------- | -------- | ----------- |
 | `domainId` | `number` | Domain id   |
 
-**Response**
+A domain registered through Flexbe stays on the account and only loses the site binding. A third-party domain is deleted.
 
-No body. A domain registered through Flexbe stays on the account and only loses the site binding. A third-party domain is deleted.
+## account → Domains
 
-## account > Domains
-
-`AccountDomains`. Paths sit on `/account/{accountId}/domains`.
-
-`AccountDomain`:
+### `AccountDomain`
 
 | Field                    | Type                                                           | Description                                                    |
 | ------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------- |
@@ -151,7 +145,7 @@ const domains = await client.account(accountId).domains.list({
 
 | Field               | Type              | Description                   |
 | ------------------- | ----------------- | ----------------------------- |
-| `list`              | `AccountDomain[]` | Domains and applications. Fields above |
+| `list`              | `AccountDomain[]` | Domains and applications. [`AccountDomain`](#accountdomain) |
 | `pagination.limit`  | `number`          | Page size                     |
 | `pagination.offset` | `number`          | Offset                        |
 | `pagination.total`  | `number`          | Total rows                    |
@@ -176,7 +170,7 @@ const domain = await client.account(accountId).domains.get(regId);
 
 | Field  | Type            | Description                  |
 | ------ | --------------- | ---------------------------- |
-| result | `AccountDomain` | The domain. Fields in the table above |
+| result | `AccountDomain` | [`AccountDomain`](#accountdomain) |
 
 ### `unbindSite`
 
@@ -193,7 +187,3 @@ await client.account(accountId).domains.unbindSite(regId);
 | Field   | Type     | Description      |
 | ------- | -------- | ---------------- |
 | `regId` | `number` | Registration id  |
-
-**Response**
-
-No body.

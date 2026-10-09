@@ -1,52 +1,83 @@
-# site > Pages
+# Site → Pages
 
-`site.pages` covers page cards, folders, and versions. The layout JSON inside a version is [Page data](page-data.md). To compile an HTML block, use `site.buildHtml` on [Sites](sites.md).
+This module works with the page list.
 
 ```typescript
 const site = client.getSiteApi(siteId);
 const pages = await site.pages.getPages({ limit: 10, offset: 0 });
 ```
 
-Paths below sit on `/sites/{siteId}`.
+The layout is not on this object. It arrives as `PageVersionDataResponse.data`.
 
-A `Page` is the card: name, address, status. The layout arrives as `PageVersionDataResponse.data`.
+## `Page`
 
-## Page card
+| Field              | Type                 | Description                                                 |
+| ------------------ | -------------------- | ----------------------------------------------------------- |
+| `id`               | `number`             | Page id                                                     |
+| `versionId`        | `number \| null`     | Id of the current version                                   |
+| `editorVersionId`  | `number \| null`     | Last version opened in the editor. `null` on legacy pages   |
+| `type`             | `PageType`           | Kind of page. [`PageType`](#pagetype)                                  |
+| `status`           | `PageStatus`         | Status. [`PageStatus`](#pagestatus)                                        |
+| `name`             | `string`             | Name                                                        |
+| `uri`              | `string \| null`     | Address                                                     |
+| `language`         | `string`             | Page language                                               |
+| `folderId`         | `number`             | Folder                                                      |
+| `sortIndex`        | `number`             | Order in the list                                           |
+| `themeId`          | `number`             | Theme                                                       |
+| `updatedAt`        | `string`             | When the card was last changed                              |
+| `deletedAt`        | `string \| null`     | When it was deleted. `null` while the page is still there   |
+| `screenshot`       | `Screenshot \| null` | Preview. [`Screenshot`](#screenshot)                                       |
+| `meta`             | `PageMeta \| null`   | Page SEO. [`PageMeta`](#pagemeta)                                      |
 
-| Field               | Type               | Description                                                      |
-| ------------------- | ------------------ | ---------------------------------------------------------------- |
-| `id`                | `number`           | Page id                                                          |
-| `versionId`         | `number \| null`   | Id of the current version                                        |
-| `editorVersionId`   | `number \| null`   | Last version opened in the editor. `null` on legacy pages        |
-| `type`              | `PageType`         | Kind of page: regular, global, product, and the rest             |
-| `status`            | `PageStatus`       | `published`, `drafted`, `removed`, or `deleted`                  |
-| `name`              | `string`           | Name                                                             |
-| `uri`               | `string \| null`   | Address                                                          |
-| `language`          | `string`           | Page language                                                    |
-| `folderId`          | `number`           | Folder                                                           |
-| `sortIndex`         | `number`           | Order in the list                                                |
-| `themeId`           | `number`           | Theme                                                            |
-| `updatedAt`         | `string`           | When the card was last changed                                   |
-| `deletedAt`         | `string \| null`   | When it was deleted. `null` while the page is still there        |
-| `screenshot`        | object or `null`   | Preview                                                          |
-| `screenshot.id`     | `number \| null`   | Preview image id                                                 |
-| `screenshot.ext`    | `string`           | Extension                                                        |
-| `screenshot.url`    | `string \| null`   | Preview URL                                                      |
-| `meta`              | `PageMeta \| null` | Page SEO                                                         |
-| `meta.title`        | `string \| null`   | Title                                                            |
-| `meta.description`  | `string \| null`   | Description                                                      |
-| `meta.keywords`     | `string \| null`   | Keywords                                                         |
-| `meta.ogImage`      | `string \| null`   | Open Graph image                                                 |
-| `meta.ogTitle`      | `string \| null`   | Open Graph title                                                 |
-| `meta.ogDescription`| `string \| null`   | Open Graph description                                           |
-| `meta.noindex`      | `boolean`          | Keep the page out of the index                                   |
-| `meta.schemaMarkup` | object or `null`   | schema.org markup, optional                                      |
+## `Screenshot`
 
-`PageType`: `page`, `file`, `global`, `ai`, `cms`, `ecommerce_product`, `ecommerce_category`.
+| Field | Type             | Description      |
+| ----- | ---------------- | ---------------- |
+| `id`  | `number \| null` | Preview image id |
+| `ext` | `string`         | Extension        |
+| `url` | `string \| null` | Preview URL      |
 
-`PageStatus`: `published`, `drafted`, `removed`, `deleted`.
+## `PageType`
 
-`PageMeta`: `title`, `description`, `keywords`, `ogImage`, `ogTitle`, `ogDescription`, `noindex`, and optional `schemaMarkup` (`data`, `updatedAt`, optional `genProducts`).
+| Value                  | Description       |
+| ---------------------- | ----------------- |
+| `page`                 | Regular page      |
+| `file`                 | File              |
+| `global`               | Global page       |
+| `ai`                   | AI page           |
+| `cms`                  | CMS page          |
+| `ecommerce_product`    | Product page      |
+| `ecommerce_category`   | Category page     |
+
+## `PageStatus`
+
+| Value       | Description                                      |
+| ----------- | ------------------------------------------------ |
+| `published` | Published                                        |
+| `drafted`   | Draft                                            |
+| `removed`   | The user removed the page                        |
+| `deleted`   | The user deleted the page from the removed list  |
+
+## `PageMeta`
+
+| Field            | Type                         | Description                    |
+| ---------------- | ---------------------------- | ------------------------------ |
+| `title`          | `string \| null`             | Title                          |
+| `description`    | `string \| null`             | Description                    |
+| `keywords`       | `string \| null`             | Keywords                       |
+| `ogImage`        | `string \| null`             | Open Graph image               |
+| `ogTitle`        | `string \| null`             | Open Graph title               |
+| `ogDescription`  | `string \| null`             | Open Graph description         |
+| `noindex`        | `boolean`                    | Keep the page out of the index |
+| `schemaMarkup`   | `PageSchemaMarkup \| null`   | schema.org markup. Optional    |
+
+## `PageSchemaMarkup`
+
+| Field         | Type             | Description                              |
+| ------------- | ---------------- | ---------------------------------------- |
+| `data`        | `unknown`        | Markup body                              |
+| `updatedAt`   | `string \| null` | When the markup was updated              |
+| `genProducts` | `boolean`        | Generate product markup. Optional        |
 
 ## `getPages`
 
@@ -74,7 +105,7 @@ const pages = await site.pages.getPages({ offset: 0, limit: 20 });
 
 | Field               | Type     | Description                       |
 | ------------------- | -------- | --------------------------------- |
-| `list`              | `Page[]` | Pages. Fields in the table above  |
+| `list`              | `Page[]` | [`Page`](#page)  |
 | `pagination.limit`  | `number` | Page size                         |
 | `pagination.offset` | `number` | Offset                            |
 | `pagination.total`  | `number` | Total rows                        |
@@ -95,53 +126,51 @@ const page = await site.pages.getPage(pageId);
 | -------- | -------- | ----------- |
 | `pageId` | `number` | Page id     |
 
-**Response** `Page`. Fields in the table above.
+**Response** [`Page`](#page).
 
 ## `createPage`
 
-Creates a page. `type` may be `page` or `global`. Omit it, or pass `page`, to clone a template or a source page. Pass `global` to send the layout in the body.
+Creates a page or a global section.
 
 `POST /sites/{siteId}/pages`
 
 ```typescript
 const page = await site.pages.createPage({ templateId: 12, name: "About" });
+const section = await site.pages.createPage({
+  type: "global",
+  name: "Header",
+  blocks: [],
+});
 ```
 
-**Input**
+**Input when `type` is omitted or `page`**
 
-| Field          | Type             | Description                                      |
-| -------------- | ---------------- | ------------------------------------------------ |
-| `templateId`   | `number`         | Template to clone                                |
-| `sourcePageId` | `number`         | Page to clone                                    |
-| `name`         | `string`         | Name. Optional                                   |
-| `uri`          | `string`         | Address. Optional                                |
-| `folderId`     | `number \| null` | Folder                                           |
-| `themeId`      | `number \| null` | Theme                                            |
-| `is`           | `string`         | Layout entity type. Only with `type: 'global'`   |
-| `template_id`  | `string`         | Layout template. Only with `type: 'global'`      |
-| `blocks`       | array            | Layout blocks. Only with `type: 'global'`        |
-| `modals`       | array            | Layout modals. Only with `type: 'global'`        |
-| `widgets`      | array            | Layout widgets. Only with `type: 'global'`       |
+| Field          | Type             | Description                          |
+| -------------- | ---------------- | ------------------------------------ |
+| `type`         | `'page'`         | Regular page. Optional               |
+| `templateId`   | `number`         | Template to clone. Optional          |
+| `sourcePageId` | `number`         | Page to clone. Optional              |
+| `name`         | `string`         | Name. Optional                       |
+| `uri`          | `string`         | Address. Optional                    |
+| `folderId`     | `number \| null` | Folder. Optional                     |
 
-**Response** `Page`. Fields in the table above.
+Do not pass `templateId` and `sourcePageId` together. Omit both to create a blank page.
 
-## `createPageFromAi`
+**Input when `type` is `'global'`**
 
-Creates a page from a finished AI layout.
+| Field         | Type             | Description                    |
+| ------------- | ---------------- | ------------------------------ |
+| `type`        | `'global'`       | Global section                 |
+| `name`        | `string`         | Name. Optional                 |
+| `folderId`    | `number \| null` | Folder. Optional               |
+| `themeId`     | `number \| null` | Theme. Optional                |
+| `is`          | `string`         | Layout entity type. Optional   |
+| `template_id` | `string`         | Layout template. Optional      |
+| `blocks`      | array            | Layout blocks. Optional        |
+| `modals`      | array            | Layout modals. Optional        |
+| `widgets`     | array            | Layout widgets. Optional       |
 
-`POST /sites/{siteId}/pages/from-ai`
-
-```typescript
-const page = await site.pages.createPageFromAi({ pageUUID: "…" });
-```
-
-**Input**
-
-| Field      | Type     | Description        |
-| ---------- | -------- | ------------------ |
-| `pageUUID` | `string` | Id of the finished layout |
-
-**Response** `Page`. Fields in the table above.
+**Response** [`Page`](#page).
 
 ## `copyPage`
 
@@ -163,7 +192,7 @@ const copy = await site.pages.copyPage(pageId, { name: "Copy" });
 | `folderId`     | `number \| null` | Folder. Optional               |
 | `targetSiteId` | `number`         | Copy onto another site. Optional |
 
-**Response** `Page`. Fields in the table above.
+**Response** [`Page`](#page).
 
 ## `copyPages`
 
@@ -191,7 +220,7 @@ const copied = await site.pages.copyPages({ pageIds: [1, 2] });
 
 ## `updatePage`
 
-Updates a page.
+Updates the page parameters.
 
 `PUT /sites/{siteId}/pages/{pageId}`
 
@@ -206,7 +235,7 @@ const page = await site.pages.updatePage(pageId, { name: "New name" });
 | `pageId`          | `number`     | Page id                                                                                                                            |
 | `status`          | `PageStatus` | New status                                                                                                                         |
 | `versionId`       | `number`     | Makes that version current                                                                                                         |
-| `editorVersionId` | `number`     | Pins the editor pointer without publishing                                                                                         |
+| `editorVersionId` | `number`     | The version open in the editor                                                                                                     |
 | `name`            | `string`     | Name, up to 150 characters                                                                                                         |
 | `uri`             | `string`     | Address, up to 255 characters. The API normalizes a leading and trailing slash                                                     |
 | `language`        | `string`     | Page language                                                                                                                      |
@@ -214,7 +243,9 @@ const page = await site.pages.updatePage(pageId, { name: "New name" });
 | `sortIndex`       | `number`     | Order in the list                                                                                                                  |
 | `meta`            | `PageMeta`   | Partial. Title and Open Graph title: 200 characters. Description, keywords, and Open Graph description: 1000 characters            |
 
-**Response** `Page`. Fields in the table above.
+**Response** [`Page`](#page).
+
+To change page versions and page data, see [Page versions](page-versions.md) and [Page data](page-data.md).
 
 ## `deletePage`
 
@@ -231,10 +262,6 @@ await site.pages.deletePage(pageId);
 | Field    | Type     | Description |
 | -------- | -------- | ----------- |
 | `pageId` | `number` | Page id     |
-
-**Response**
-
-No body.
 
 ## `bulkUpdatePages`
 
@@ -377,10 +404,6 @@ await site.pages.deleteFolder(folderId);
 | ----- | -------- | ----------- |
 | `id`  | `number` | Folder id   |
 
-**Response**
-
-No body.
-
 ### `bulkUpdateFolders`
 
 Updates several folders. If every folder fails, the API responds with 400.
@@ -402,95 +425,9 @@ The body is the array itself. Each item is `{ id, name?, sortIndex? }`.
 | `updated` | `PageFolder[]`            | Folders that changed   |
 | `errors`  | `{ id, code, message }[]` | What did not change    |
 
-## Versions
+## Next
 
-### `getVersions`
-
-Returns the versions of a page.
-
-`GET /sites/{siteId}/pages/{pageId}/versions`
-
-```typescript
-const versions = await site.pages.getVersions(pageId);
-```
-
-**Input**
-
-| Field    | Type     | Description |
-| -------- | -------- | ----------- |
-| `pageId` | `number` | Page id     |
-
-**Response**
-
-| Field              | Type      | Description                              |
-| ------------------ | --------- | ---------------------------------------- |
-| `list`             | array     | Versions                                 |
-| `list[].id`        | `number`  | Version id                               |
-| `list[].createdAt` | `string`  | When it was created                      |
-| `list[].isDraft`   | `boolean` | The version has never been published     |
-
-### `getVersion`
-
-Returns one version together with the layout. `'published'` is the public version. `'editor'` is `editorVersionId`, or the published version when that pointer is missing.
-
-`GET /sites/{siteId}/pages/{pageId}/versions/{versionId}`
-
-```typescript
-const version = await site.pages.getVersion(pageId, "published");
-```
-
-**Input**
-
-| Field       | Type                                | Description                    |
-| ----------- | ----------------------------------- | ------------------------------ |
-| `pageId`    | `number`                            | Page id                        |
-| `versionId` | `number \| 'published' \| 'editor'` | Version id, or one of those two words |
-
-**Response**
-
-| Field       | Type                | Description                                      |
-| ----------- | ------------------- | ------------------------------------------------ |
-| `id`        | `number`            | Version id                                       |
-| `createdAt` | `string`            | When it was created                              |
-| `isDraft`   | `boolean`           | The version has never been published             |
-| `data`      | `PageDataStructure` | Layout. Shape in [Page data](page-data.md)       |
-| `abtests`   | array               | A/B tests of the version. Optional               |
-
-### `getPublishedVersion`
-
-Returns the published version. This is `getVersion(pageId, 'published')`.
-
-```typescript
-const version = await site.pages.getPublishedVersion(pageId);
-```
-
-**Input**
-
-| Field    | Type     | Description |
-| -------- | -------- | ----------- |
-| `pageId` | `number` | Page id     |
-
-**Response** the same as `getVersion`.
-
-### `createVersion`
-
-Creates a page version. When `publish` is omitted, the API publishes the version.
-
-`POST /sites/{siteId}/pages/{pageId}/versions`
-
-```typescript
-const version = await site.pages.createVersion(pageId, { data: layout });
-```
-
-**Input**
-
-| Field               | Type                | Description                                              |
-| ------------------- | ------------------- | -------------------------------------------------------- |
-| `pageId`            | `number`            | Page id                                                  |
-| `data`              | `PageDataStructure` | Layout JSON. Required                                    |
-| `assets.images`     | `number[]`          | Image ids used by the version                            |
-| `assets.files`      | `string[]`          | File paths used by the version                           |
-| `assets.screenshot` | `number \| null`    | Version preview id                                       |
-| `publish`           | `boolean`           | Publish immediately. When omitted, the API publishes     |
-
-**Response** the same as `getVersion`.
+| Section | Description |
+| ------- | ----------- |
+| [Page versions](page-versions.md) | Read and save versions |
+| [Page data](page-data.md) | Layout JSON |

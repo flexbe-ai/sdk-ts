@@ -1,13 +1,25 @@
-# site > Статистика
+# Сайт → Статистика
 
-`site.stat` читает один A/B-тест и создаёт один.
+`site.stat` — модуль для получения статистики проекта.
 
 ```typescript
 const test = await site.stat.createAbTest(pageId);
 const again = await site.stat.getAbTest(test.id);
 ```
 
-`AbTest` — это `{ id, pageId, createdAt, aCountView, aCountLead, bCountView, bCountLead }`. Id вариантов внутри JSON страницы — это `PageABTest` в разделе [Данные страницы](page-data.md). Счётчики здесь — просмотры и заявки этих вариантов.
+## `AbTest`
+
+A/B-тест страницы.
+
+| Поле | Тип | Описание |
+| --- | --- | --- |
+| `id` | `number` | Id теста |
+| `pageId` | `number` | Id страницы |
+| `createdAt` | `string` | Когда создали |
+| `aCountView` | `number` | Просмотры варианта A |
+| `aCountLead` | `number` | Заявки варианта A |
+| `bCountView` | `number` | Просмотры варианта B |
+| `bCountLead` | `number` | Заявки варианта B |
 
 ## `getAbTest`
 
@@ -25,7 +37,7 @@ const test = await site.stat.getAbTest(testId);
 | -------- | -------- | -------- |
 | `testId` | `number` | Id теста |
 
-**Ответ** `AbTest`. Поля в абзаце выше.
+**Ответ** [`AbTest`](#abtest).
 
 ## `createAbTest`
 
@@ -41,6 +53,6 @@ const test = await site.stat.createAbTest(pageId);
 
 | Поле     | Тип      | Описание   |
 | -------- | -------- | ---------- |
-| `pageId` | `number` | Id страницы. Тело — `{ pageId }` |
+| `pageId` | `number` | Id страницы |
 
-**Ответ** `AbTest`. Поля в абзаце выше.
+**Ответ** [`AbTest`](#abtest).

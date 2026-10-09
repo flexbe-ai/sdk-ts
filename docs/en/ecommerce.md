@@ -1,6 +1,6 @@
-# site > Ecommerce
+# Site → Ecommerce
 
-`site.ecommerce` is the catalog for one site: products, categories, and promotions. Every path starts at `/sites/{siteId}/ecommerce`.
+`site.ecommerce` is the catalog for one site: products and categories.
 
 ```typescript
 const catalog = site.ecommerce;
@@ -10,15 +10,143 @@ const products = await catalog.listProducts({
 });
 ```
 
-Delivery, tax, stock messages, and the shared cart are `site.settings`, on [Settings](settings.md). Applying a promotion to one lead is [Leads](leads.md).
-
-`visible`, `usePriceOld`, `isDefault`, and `notLimited` are `0` or `1`.
-
 ## Products
 
-`Product` includes `id`, `name`, `description`, `visible`, `taxable`, `available`, `images`, `categoryIds`, `options`, `variants`, `usePriceOld`, `displayImage`, `price` (`{ min, max }`), `variantsQuantity`, `defaultVariantId`, `settings`, `sortIndex`, `isDemo`, and `deletedAt`.
+### `Product`
 
-A variant includes `id`, `productId`, `name` (string array), `optionValues` (`{ optionId, valueId }`), `vendorCode`, `quantity`, `price`, `priceOld`, `images`, `defaultImageId`, `visible`, `isDefault`, `notLimited`, and `deletedAt`.
+A product card.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | Product id |
+| `name` | `string` | Name |
+| `description` | `string` | Description |
+| `visible` | `boolean` | Shown |
+| `taxable` | `boolean` | Tax applies |
+| `available` | `boolean` | Can be bought |
+| `images` | array | Images |
+| `categoryIds` | `number[]` | Categories |
+| `options` | [`ProductOption[]`](#productoption) | Options |
+| `variants` | [`ProductVariant[]`](#productvariant) | Variants |
+| `usePriceOld` | `boolean` | Show the previous price |
+| `displayImage` | `string` | Which image to show |
+| `price` | [`ProductPrice`](#productprice) | Price range |
+| `variantsQuantity` | `number` | Sum of positive stock |
+| `defaultVariantId` | `number` | Default variant id. `0` when there is none |
+| `settings` | object | Product settings |
+| `sortIndex` | `number` | Order |
+| `isDemo` | `boolean` | Demo product |
+| `deletedAt` | `string \| null` | When it was deleted |
+
+### `ProductOption`
+
+A product option.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | Option id |
+| `name` | `string` | Name |
+| `sortIndex` | `number` | Order |
+| `values` | [`ProductOptionValue[]`](#productoptionvalue) | Values |
+| `data` | object or `null` | Extra data |
+
+### `ProductOptionValue`
+
+An option value.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | Value id |
+| `name` | `string` | Name |
+| `data` | value | Extra data |
+| `sortIndex` | `number` | Order |
+
+### `ProductVariant`
+
+A product variant.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | Variant id |
+| `productId` | `number` | Product id |
+| `name` | `string[]` | Option value names |
+| `optionValues` | [`VariantOptionValueRef[]`](#variantoptionvalueref) | Links to option values |
+| `vendorCode` | `string` | SKU |
+| `quantity` | `number \| null` | Stock |
+| `price` | `number \| null` | Price |
+| `priceOld` | `number \| null` | Previous price |
+| `images` | array | Images |
+| `defaultImageId` | `string \| null` | Default image |
+| `visible` | `boolean` | Shown |
+| `isDefault` | `boolean` | Default variant |
+| `notLimited` | `boolean` | Stock is not limited |
+| `deletedAt` | `string \| null` | When it was deleted |
+
+### `VariantOptionValueRef`
+
+A link from a variant to an option value.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `optionId` | `number` | Option id |
+| `valueId` | `number` | Value id |
+
+### `ProductOptionInput`
+
+An option in the request body.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number \| string` | Option id, when it already exists. Optional |
+| `name` | `string` | Name |
+| `data` | object or `null` | Extra data. Optional |
+| `values` | [`ProductOptionValueInput[]`](#productoptionvalueinput) | Values |
+
+### `ProductOptionValueInput`
+
+An option value in the request body.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number \| string` | Value id. Optional |
+| `name` | `string` | Name |
+| `data` | value | Extra data. Optional |
+
+### `ProductVariantInput`
+
+A variant in the request body.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number \| string` | Variant id. Optional |
+| `optionValues` | [`optionValues`](#optionvalues)[] | Optional |
+| `vendorCode` | `string` | SKU. Optional |
+| `quantity` | `number \| null` | Stock. Optional |
+| `price` | `number \| null` | Price. Optional |
+| `priceOld` | `number \| null` | Previous price. Optional |
+| `images` | array | Images. Optional |
+| `defaultImageId` | `string \| null` | Default image. Optional |
+| `visible` | `boolean` | Shown. Optional |
+| `isDefault` | `boolean` | Default variant. Optional |
+| `notLimited` | `boolean` | Stock is not limited. Optional |
+
+### `optionValues`
+
+An option and value pair in the variant body.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `optionId` | `number \| string` | Option id |
+| `valueId` | `number \| string` | Value id |
+
+### `ProductPrice`
+
+Price range of the variants.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `min` | `number \| null` | Lowest price |
+| `max` | `number \| null` | Highest price |
 
 ### `listProducts`
 
@@ -47,7 +175,7 @@ const products = await site.ecommerce.listProducts({ limit: 20, status: "visible
 
 | Field               | Type        | Description                      |
 | ------------------- | ----------- | -------------------------------- |
-| `list`              | `Product[]` | Products. Fields in the paragraph above |
+| `list`              | [`Product[]`](#product) | Products |
 | `pagination.limit`  | `number`    | Page size                        |
 | `pagination.offset` | `number`    | Offset                           |
 | `pagination.total`  | `number`    | Total rows                       |
@@ -68,11 +196,29 @@ const product = await site.ecommerce.getProduct(productId);
 | ----------- | -------- | ----------- |
 | `productId` | `number` | Product id  |
 
-**Response** `Product`. Fields in the paragraph above.
+**Response** [`Product`](#product).
+
+### `ProductWriteParams`
+
+Fields for creating and updating a product.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `name` | `string` | Name. Required |
+| `description` | `string` | Description. Optional |
+| `visible` | `boolean` | Shown. Optional |
+| `taxable` | `boolean` | Tax applies. Optional |
+| `images` | array | Images. Optional |
+| `categoryIds` | `number[]` | Categories. Optional |
+| `usePriceOld` | `boolean` | Show the previous price. Optional |
+| `displayImage` | `string` | Which image to show. Optional |
+| `settings` | object | Product settings. Optional |
+| `options` | [`ProductOptionInput[]`](#productoptioninput) | Options. Optional |
+| `variants` | [`ProductVariantInput[]`](#productvariantinput) | Variants. Optional |
 
 ### `createProduct`
 
-Creates a product. Options and variants go in this body.
+Creates a product.
 
 `POST /sites/{siteId}/ecommerce/products`
 
@@ -80,45 +226,13 @@ Creates a product. Options and variants go in this body.
 const product = await site.ecommerce.createProduct({ name: "Mug" });
 ```
 
-**Input**
+**Input** [`ProductWriteParams`](#productwriteparams).
 
-| Field                       | Type               | Description                                      |
-| --------------------------- | ------------------ | ------------------------------------------------ |
-| `name`                      | `string`           | Name. Required                                   |
-| `description`               | `string`           | Description. Optional                            |
-| `visible`                   | `number`           | `0` or `1`. Optional                             |
-| `taxable`                   | `boolean`          | Tax applies. Optional                            |
-| `images`                    | array              | Images. Optional                                 |
-| `categoryIds`               | `number[]`         | Categories. Optional                             |
-| `usePriceOld`               | `number`           | `0` or `1`. Optional                             |
-| `displayImage`              | `string`           | Which image to show. Optional                    |
-| `settings`                  | object             | Product settings. Optional                       |
-| `options`                   | array              | Options. Optional                                |
-| `options[].id`              | `number \| string` | Option id, when it already exists. Optional      |
-| `options[].name`            | `string`           | Option name                                      |
-| `options[].data`            | object             | Extra data. Optional                             |
-| `options[].values`          | array              | Option values                                    |
-| `options[].values[].id`     | `number \| string` | Value id. Optional                               |
-| `options[].values[].name`   | `string`           | Value name                                       |
-| `options[].values[].data`   | value              | Extra value data. Optional                       |
-| `variants`                  | array              | Variants. Optional                               |
-| `variants[].id`             | `number \| string` | Variant id. Optional                             |
-| `variants[].optionValues`   | array              | `{ optionId, valueId }`, number or string        |
-| `variants[].vendorCode`     | `string`           | SKU. Optional                                    |
-| `variants[].quantity`       | `number \| null`   | Stock. Optional                                  |
-| `variants[].price`          | `number \| null`   | Price. Optional                                  |
-| `variants[].priceOld`       | `number \| null`   | Previous price. Optional                         |
-| `variants[].images`         | array              | Variant images. Optional                         |
-| `variants[].defaultImageId` | `string \| null`   | Default image. Optional                          |
-| `variants[].visible`        | `number`           | `0` or `1`. Optional                             |
-| `variants[].isDefault`      | `number`           | `0` or `1`. Optional                             |
-| `variants[].notLimited`     | `number`           | `0` or `1`. Optional                             |
-
-**Response** `Product`. Fields in the paragraph above.
+**Response** [`Product`](#product).
 
 ### `updateProduct`
 
-Updates a product. Same body as create, and `name` is required. A product from another site is left as it is.
+Updates a product. `name` is required. A product from another site is left as it is.
 
 `PATCH /sites/{siteId}/ecommerce/products/{productId}`
 
@@ -130,14 +244,14 @@ const product = await site.ecommerce.updateProduct(productId, { name: "New name"
 
 | Field       | Type     | Description                          |
 | ----------- | -------- | ------------------------------------ |
-| `productId` | `number` | Product id                           |
-| body        | object   | The same fields as `createProduct`   |
+| `productId` | `number` | Product id |
+| body        | [`ProductWriteParams`](#productwriteparams) | |
 
-**Response** `Product`. Fields in the paragraph above.
+**Response** [`Product`](#product).
 
 ### `upsertProducts`
 
-Creates and updates products in one batch. The body is `{ items }`. The API accepts up to 50 items. An item without `id` is created. An item with an `id` on this site is updated. One failed item does not stop the others.
+Creates and updates products in one batch. The API accepts up to 50 items. An item without `id` is created. An item with an `id` on this site is updated. One failed item does not stop the others.
 
 `POST /sites/{siteId}/ecommerce/products/batch`
 
@@ -147,27 +261,58 @@ const result = await site.ecommerce.upsertProducts([{ name: "Mug" }, { id: produ
 
 **Input**
 
-| Field   | Type                 | Description                                                                 |
-| ------- | -------------------- | --------------------------------------------------------------------------- |
-| `items` | `ProductUpsertItem[]`| Up to 50 items. Fields as in `createProduct`, plus an optional `id`         |
+| Field | Type | Description |
+| --- | --- | --- |
+| `items` | [`ProductUpsertItem[]`](#productupsertitem) | Up to 50 items |
 
-**Response**
+**Response** [`ProductUpsertResult`](#productupsertresult).
 
-| Field              | Type      | Description                    |
-| ------------------ | --------- | ------------------------------ |
-| `created`          | array     | What was created               |
-| `created[].index`  | `number`  | Index of the input item        |
-| `created[].product`| `Product` | Created product                |
-| `updated`          | array     | What was updated               |
-| `updated[].index`  | `number`  | Index of the input item        |
-| `updated[].product`| `Product` | Updated product                |
-| `errors`           | array     | What failed                    |
-| `errors[].index`   | `number`  | Index of the input item        |
-| `errors[].message` | `string`  | Error text                     |
+### `ProductUpsertItem`
+
+One batch item. Without `id` the product is created. With an `id` on this site it is updated.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | Product id. Optional |
+| `name` | `string` | Name. Required |
+| `description` | `string` | Description. Optional |
+| `visible` | `boolean` | Shown. Optional |
+| `taxable` | `boolean` | Tax applies. Optional |
+| `images` | array | Images. Optional |
+| `categoryIds` | `number[]` | Categories. Optional |
+| `usePriceOld` | `boolean` | Show the previous price. Optional |
+| `displayImage` | `string` | Which image to show. Optional |
+| `settings` | object | Product settings. Optional |
+| `options` | [`ProductOptionInput[]`](#productoptioninput) | Options. Optional |
+| `variants` | [`ProductVariantInput[]`](#productvariantinput) | Variants. Optional |
+
+### `ProductUpsertResult`
+
+Batch result.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `created` | [`ProductUpsertHit[]`](#productupserthit) | What was created |
+| `updated` | [`ProductUpsertHit[]`](#productupserthit) | What was updated |
+| `errors` | [`ProductUpsertError[]`](#productupserterror) | What failed |
+
+### `ProductUpsertHit`
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `index` | `number` | Index of the input item |
+| `product` | [`Product`](#product) | Product |
+
+### `ProductUpsertError`
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `index` | `number` | Index of the input item |
+| `message` | `string` | Error text |
 
 ### `bulkProducts`
 
-Hides, shows, removes, restores, or purges products. A product from another site is left as it is.
+Runs a bulk action on products.
 
 `POST /sites/{siteId}/ecommerce/products/bulk`
 
@@ -182,13 +327,20 @@ const result = await site.ecommerce.bulkProducts({ action: "hide", ids: [product
 | `action` | `'hide' \| 'show' \| 'remove' \| 'restore' \| 'purge'` | What to do  |
 | `ids`    | `number[]`                                             | Product ids |
 
-**Response**
+**Response** [`BulkProductsResult`](#bulkproductsresult).
 
-| Field              | Type     | Description     |
-| ------------------ | -------- | --------------- |
-| `results`          | array    | One row per id  |
-| `results[].id`     | `number` | Product id      |
-| `results[].result` | `true`   | The call worked |
+### `BulkProductsResult`
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `results` | [`BulkProductResult[]`](#bulkproductresult) | One row per id |
+
+### `BulkProductResult`
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | Product id |
+| `result` | `true` | The call worked |
 
 ### `moveProduct`
 
@@ -209,11 +361,13 @@ const moved = await site.ecommerce.moveProduct(productId, { afterId: 10 });
 | `beforeId`   | `number` | Place before this id. Optional      |
 | `afterId`    | `number` | Place after this id. Optional       |
 
-**Response**
+**Response** [`MoveProductResult`](#moveproductresult).
 
-| Field    | Type   | Description    |
-| -------- | ------ | -------------- |
-| `result` | `true` | Order changed  |
+### `MoveProductResult`
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `result` | `true` | Order changed |
 
 ### `bindProductCategories`
 
@@ -228,18 +382,20 @@ const result = await site.ecommerce.bindProductCategories({
 });
 ```
 
-**Input**
+**Input** [`ChangeProductCategoriesParams`](#changeproductcategoriesparams).
 
-| Field         | Type       | Description  |
-| ------------- | ---------- | ------------ |
-| `productIds`  | `number[]` | Product ids  |
+**Response** [`BulkProductsResult`](#bulkproductsresult).
+
+### `ChangeProductCategoriesParams`
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `productIds` | `number[]` | Product ids |
 | `categoryIds` | `number[]` | Category ids |
-
-**Response** the same `results` as `bulkProducts`.
 
 ### `unbindProductCategories`
 
-Unbinds products from categories. Same body as bind.
+Unbinds products from categories.
 
 `POST /sites/{siteId}/ecommerce/products/categories/unbind`
 
@@ -250,13 +406,13 @@ const result = await site.ecommerce.unbindProductCategories({
 });
 ```
 
-**Input** the same as `bindProductCategories`.
+**Input** [`ChangeProductCategoriesParams`](#changeproductcategoriesparams).
 
-**Response** the same `results` as `bulkProducts`.
+**Response** [`BulkProductsResult`](#bulkproductsresult).
 
 ### `queryVariants`
 
-Looks up variants by id. The body is `{ ids }`. Ids from another site are left out of the result.
+Looks up variants by id. Ids from another site are left out of the result.
 
 `POST /sites/{siteId}/ecommerce/variants/query`
 
@@ -270,21 +426,39 @@ const found = await site.ecommerce.queryVariants([variantId]);
 | ----- | ---------- | ------------ |
 | `ids` | `number[]` | Variant ids  |
 
-**Response** `VariantLookup[]`
+**Response** [`VariantLookup`](#variantlookup)[].
 
-| Field                  | Type     | Description                              |
-| ---------------------- | -------- | ---------------------------------------- |
-| `product`              | object   | Product slice                            |
-| `product.id`           | `number` | Product id                               |
-| `product.name`         | `string` | Name                                     |
-| `product.options`      | array    | Options                                  |
-| `product.images`       | array    | Images                                   |
-| `product.displayImage` | `string` | Which image to show                      |
-| `variant`              | object   | Variant. Fields in the paragraph above   |
+### `VariantLookup`
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `product` | [`VariantProduct`](#variantproduct) | Product slice |
+| `variant` | [`ProductVariant`](#productvariant) | Variant |
+
+### `VariantProduct`
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | Product id |
+| `name` | `string` | Name |
+| `options` | [`ProductOption[]`](#productoption) | Options |
+| `images` | array | Images |
+| `displayImage` | `string` | Which image to show |
 
 ## Categories
 
-`Category` is `{ id, name, sortIndex, visible, isDemo, productCount }`. A list response also has `total`, `productCount`, and `removedProductCount` for the whole catalog.
+### `Category`
+
+A catalog category.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | Category id |
+| `name` | `string` | Name |
+| `sortIndex` | `number` | Order |
+| `visible` | `boolean` | Shown |
+| `isDemo` | `boolean` | Demo category |
+| `productCount` | `number` | How many products are in the category |
 
 ### `listCategories`
 
@@ -306,14 +480,14 @@ const categories = await site.ecommerce.listCategories();
 
 | Field                 | Type         | Description                      |
 | --------------------- | ------------ | -------------------------------- |
-| `list`                | `Category[]` | Categories. Fields in the paragraph above |
+| `list`                | [`Category[]`](#category) | Categories |
 | `total`               | `number`     | How many categories the catalog has |
 | `productCount`        | `number`     | Products in the catalog          |
 | `removedProductCount` | `number`     | Removed products in the catalog  |
 
 ### `createCategory`
 
-Creates a category. Omit `visible` and the category is created visible (`1`).
+Creates a category. Omit `visible` and the category is created visible.
 
 `POST /sites/{siteId}/ecommerce/categories`
 
@@ -326,9 +500,9 @@ const category = await site.ecommerce.createCategory({ name: "Tableware" });
 | Field     | Type     | Description              |
 | --------- | -------- | ------------------------ |
 | `name`    | `string` | Name. Required           |
-| `visible` | `number` | `0` or `1`. Optional     |
+| `visible` | `boolean` | Show the category. Optional |
 
-**Response** `Category`. Fields in the paragraph above.
+**Response** [`Category`](#category).
 
 ### `updateCategory`
 
@@ -346,9 +520,9 @@ const category = await site.ecommerce.updateCategory(categoryId, { name: "New na
 | ------------ | -------- | --------------------- |
 | `categoryId` | `number` | Category id           |
 | `name`       | `string` | Name. Optional        |
-| `visible`    | `number` | `0` or `1`. Optional  |
+| `visible`    | `boolean` | Show the category. Optional |
 
-**Response** `Category`. Fields in the paragraph above.
+**Response** [`Category`](#category).
 
 ### `sortCategories`
 
@@ -367,7 +541,7 @@ const categories = await site.ecommerce.sortCategories({ categoryId, afterId: 3 
 | `categoryId` | `number` | Which category to move. Required |
 | `afterId`    | `number` | Place after this id. Optional  |
 
-**Response** `Category[]` in the new order.
+**Response** [`Category`](#category)[].
 
 ### `deleteCategory`
 
@@ -386,130 +560,11 @@ const deleted = await site.ecommerce.deleteCategory(categoryId, { deleteProducts
 | `categoryId`     | `number`  | Category id                                |
 | `deleteProducts` | `boolean` | Soft-delete products in the category. Optional |
 
-**Response**
+**Response** [`DeleteCategoryResult`](#deletecategoryresult).
 
-| Field    | Type   | Description        |
-| -------- | ------ | ------------------ |
-| `result` | `true` | Category deleted   |
+### `DeleteCategoryResult`
 
-## Promotions
+| Field | Type | Description |
+| --- | --- | --- |
+| `result` | `true` | Category deleted |
 
-`Promotion` is the catalog row: `id`, `type` (`discount` | `promocode`), `discountType` (`money` | `percent` | `delivery`), `code`, `discountAmount` (string), `deliveryFree`, `activeFrom`, `dateFrom`, `dateTo`, `availableCount`, `usageWithAnyDiscount`, `active`, `deletedAt`.
-
-`PromotionWriteParams` requires `type`, `discountType`, `discountAmount`, and `active` (`boolean` or `number`). Optional: `code`, `deliveryFree` (`boolean`, `number`, or `null`), `activeFrom`, `dateFrom`, `dateTo`, `availableCount`, `usageWithAnyDiscount`.
-
-### `listPromotions`
-
-Returns catalog promotions. Soft-deleted rows are omitted.
-
-`GET /sites/{siteId}/ecommerce/promotions`
-
-```typescript
-const promotions = await site.ecommerce.listPromotions();
-```
-
-**Input**
-
-No parameters.
-
-**Response**
-
-| Field  | Type          | Description                       |
-| ------ | ------------- | --------------------------------- |
-| `list` | `Promotion[]` | Promotions. Fields in the paragraph above |
-
-### `createPromotion`
-
-Creates a promotion.
-
-`POST /sites/{siteId}/ecommerce/promotions`
-
-```typescript
-const promotion = await site.ecommerce.createPromotion({
-  type: "promocode",
-  discountType: "percent",
-  discountAmount: "10",
-  active: true,
-  code: "SUMMER",
-});
-```
-
-**Input**
-
-| Field                  | Type                                 | Description                         |
-| ---------------------- | ------------------------------------ | ----------------------------------- |
-| `type`                 | `'discount' \| 'promocode'`          | Promotion kind. Required            |
-| `discountType`         | `'money' \| 'percent' \| 'delivery'` | How the discount is counted. Required |
-| `discountAmount`       | `string`                             | Discount size. Required             |
-| `active`               | `boolean \| number`                  | Whether it is on. Required          |
-| `code`                 | `string \| null`                     | Code. Optional                      |
-| `deliveryFree`         | `boolean \| number \| null`          | Free shipping. Optional             |
-| `activeFrom`           | `string \| null`                     | When it starts to apply. Optional   |
-| `dateFrom`             | `string \| null`                     | Start date. Optional                |
-| `dateTo`               | `string \| null`                     | End date. Optional                  |
-| `availableCount`       | `number \| null`                     | How many times it can be used. Optional |
-| `usageWithAnyDiscount` | `boolean \| number \| null`          | Together with other discounts. Optional |
-
-**Response** `Promotion`. Fields in the paragraph above.
-
-### `updatePromotion`
-
-Updates a promotion. A promotion from another site is left as it is.
-
-`PATCH /sites/{siteId}/ecommerce/promotions/{promotionId}`
-
-```typescript
-const promotion = await site.ecommerce.updatePromotion(promotionId, {
-  type: "promocode",
-  discountType: "percent",
-  discountAmount: "15",
-  active: true,
-});
-```
-
-**Input**
-
-| Field         | Type     | Description                          |
-| ------------- | -------- | ------------------------------------ |
-| `promotionId` | `number` | Promotion id                         |
-| body          | object   | The same fields as `createPromotion` |
-
-**Response** `Promotion`. Fields in the paragraph above.
-
-### `deletePromotion`
-
-Soft-deletes a promotion.
-
-`DELETE /sites/{siteId}/ecommerce/promotions/{promotionId}`
-
-```typescript
-await site.ecommerce.deletePromotion(promotionId);
-```
-
-**Input**
-
-| Field         | Type     | Description  |
-| ------------- | -------- | ------------ |
-| `promotionId` | `number` | Promotion id |
-
-**Response**
-
-No body.
-
-### `getPromotionByCode`
-
-Looks up a promotion that is still in the catalog. Pass the code as text, for example `SUMMER`. The client encodes it in the path.
-
-`GET /sites/{siteId}/ecommerce/promotions/code/{code}`
-
-```typescript
-const promotion = await site.ecommerce.getPromotionByCode("SUMMER");
-```
-
-**Input**
-
-| Field  | Type     | Description    |
-| ------ | -------- | -------------- |
-| `code` | `string` | Promotion code |
-
-**Response** `Promotion`. Fields in the paragraph above.

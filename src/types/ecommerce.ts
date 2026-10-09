@@ -35,9 +35,9 @@ export interface ProductVariant {
     priceOld: number | null;
     images: unknown[];
     defaultImageId: string | null;
-    visible: number;
-    isDefault: number;
-    notLimited: number;
+    visible: boolean;
+    isDefault: boolean;
+    notLimited: boolean;
     deletedAt: string | null;
 }
 
@@ -50,14 +50,14 @@ export interface Product {
     id: number;
     name: string;
     description: string;
-    visible: number;
+    visible: boolean;
     taxable: boolean;
     available: boolean;
     images: unknown[];
     categoryIds: number[];
     options: ProductOption[];
     variants: ProductVariant[];
-    usePriceOld: number;
+    usePriceOld: boolean;
     displayImage: string;
     price: ProductPrice;
     variantsQuantity: number;
@@ -92,7 +92,7 @@ export interface Category {
     id: number;
     name: string;
     sortIndex: number;
-    visible: number;
+    visible: boolean;
     isDemo: boolean;
     productCount: number;
 }
@@ -110,12 +110,12 @@ export interface ListCategoriesParams {
 
 export interface CreateCategoryParams {
     name: string;
-    visible?: number;
+    visible?: boolean;
 }
 
 export interface UpdateCategoryParams {
     name?: string;
-    visible?: number;
+    visible?: boolean;
 }
 
 export interface SortCategoriesParams {
@@ -153,19 +153,19 @@ export interface ProductVariantInput {
     priceOld?: number | null;
     images?: unknown[];
     defaultImageId?: string | null;
-    visible?: number;
-    isDefault?: number;
-    notLimited?: number;
+    visible?: boolean;
+    isDefault?: boolean;
+    notLimited?: boolean;
 }
 
 export interface ProductWriteParams {
     name: string;
     description?: string;
-    visible?: number;
+    visible?: boolean;
     taxable?: boolean;
     images?: unknown[];
     categoryIds?: number[];
-    usePriceOld?: number;
+    usePriceOld?: boolean;
     displayImage?: string;
     settings?: Record<string, unknown>;
     options?: ProductOptionInput[];

@@ -1,6 +1,6 @@
-# site > Файлы
+# Сайт → Файлы
 
-`site.files` загружает файлы одного сайта и копирует пути с другого аккаунта. Пути лежат на `/sites/{siteId}/files`.
+`site.files` загружает файлы одного сайта.
 
 ```typescript
 const file = await site.files.upload(bytes, "price.pdf", "application/pdf");
@@ -8,9 +8,29 @@ const file = await site.files.upload(bytes, "price.pdf", "application/pdf");
 
 `upload` возвращает запись файла. Сохраните этот объект.
 
-`FileAsset` — это `{ id, name, originalName?, ext, url }`.
+## `FileAsset`
 
-`UploadBinary` — это `Blob | File | Buffer | ArrayBuffer | Uint8Array`. Файл уходит как multipart-поле `file`.
+Загруженный файл сайта.
+
+| Поле | Тип | Описание |
+| --- | --- | --- |
+| `id` | `number` | Id файла |
+| `name` | `string` | Имя |
+| `originalName` | `string \| null` | Исходное имя. Необязательно |
+| `ext` | `string` | Расширение |
+| `url` | `string` | Публичный путь |
+
+## `UploadBinary`
+
+Байты, которые принимает загрузка.
+
+| Тип | Описание |
+| --- | --- |
+| `Blob` | Браузерный blob |
+| `File` | Файл из формы |
+| `Buffer` | Буфер Node.js |
+| `ArrayBuffer` | Сырые байты |
+| `Uint8Array` | Байты в виде массива |
 
 ## `upload`
 
@@ -30,7 +50,7 @@ const file = await site.files.upload(bytes, "price.pdf", "application/pdf");
 | `filename`    | `string`       | Имя файла. Обязательно                                |
 | `contentType` | `string`       | MIME-тип. По умолчанию `application/octet-stream`     |
 
-**Ответ** `FileAsset`. Поля в абзаце выше.
+**Ответ** [`FileAsset`](#fileasset).
 
 ## `uploadFromUrl`
 
@@ -48,33 +68,7 @@ const file = await site.files.uploadFromUrl({ url: "https://example.com/price.pd
 | ----- | -------- | -------- |
 | `url` | `string` | Адрес файла. Тело — JSON |
 
-**Ответ** `FileAsset`. Поля в абзаце выше.
-
-## `copy`
-
-Копирует файлы с другого аккаунта на этот сайт.
-
-`POST /sites/{siteId}/files/copy`
-
-```typescript
-const copied = await site.files.copy({
-  sourceAccountId: 10,
-  paths: ["/files/price.pdf"],
-});
-```
-
-**Вход**
-
-| Поле              | Тип        | Описание                   |
-| ----------------- | ---------- | -------------------------- |
-| `sourceAccountId` | `number`   | Аккаунт, где файлы уже лежат |
-| `paths`           | `string[]` | `/files/foo.mp4` или `foo.mp4` |
-
-**Ответ**
-
-| Поле     | Тип                     | Описание                                              |
-| -------- | ----------------------- | ----------------------------------------------------- |
-| `files`  | `(FileAsset \| null)[]` | В том же порядке, что `paths`. `null`, если путь не скопировался |
+**Ответ** [`FileAsset`](#fileasset).
 
 ## `remove`
 
@@ -91,7 +85,3 @@ await site.files.remove(fileId);
 | Поле     | Тип      | Описание |
 | -------- | -------- | -------- |
 | `fileId` | `number` | Id файла |
-
-**Ответ**
-
-Тела нет.

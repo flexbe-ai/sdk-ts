@@ -1,12 +1,29 @@
-# site > Images
+# Site → Images
 
-`site.images` uploads and reads images for one site. Paths sit on `/sites/{siteId}/images`.
+`site.images` uploads and reads images for one site.
 
 ```typescript
 const image = await site.images.upload(bytes, "cover.png", "image/png");
 ```
 
-`Image` is `{ id, ext, name, width, height, proportion, url, previewUrl?, average?, transparent?, animated?, border? }`. `transparent` and `animated` are booleans. The image stored inside a page version is `ImageObj`, on [Page data](page-data.md).
+## `Image`
+
+An uploaded site image.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | Image id |
+| `ext` | `string` | Extension |
+| `name` | `string` | File name |
+| `width` | `number` | Width in pixels |
+| `height` | `number` | Height in pixels |
+| `proportion` | `number` | Aspect ratio, width to height |
+| `url` | `string` | Public path |
+| `previewUrl` | `string \| null` | Preview. Optional |
+| `average` | `string \| null` | Average color. Optional |
+| `transparent` | `boolean` | Has transparency. Optional |
+| `animated` | `boolean` | Animated. Optional |
+| `border` | `string \| null` | Border color. Optional |
 
 ## `upload`
 
@@ -28,7 +45,7 @@ const image = await site.images.upload(bytes, "cover.png", "image/png");
 
 A value outside `UploadBinary` throws `TypeError` with `Unsupported upload binary type`.
 
-**Response** `Image`. Fields in the paragraph above.
+**Response** [`Image`](#image).
 
 ## `uploadFromUrl`
 
@@ -46,27 +63,7 @@ const image = await site.images.uploadFromUrl({ url: "https://example.com/cover.
 | ----- | -------- | ------------------------------ |
 | `url` | `string` | Image address. The body is JSON |
 
-**Response** `Image`. Fields in the paragraph above.
-
-## `claim`
-
-Attaches image ids that already exist, including images from another account.
-
-`POST /sites/{siteId}/images/claim`
-
-```typescript
-await site.images.claim({ imageIds: [1, 2] });
-```
-
-**Input**
-
-| Field      | Type       | Description |
-| ---------- | ---------- | ----------- |
-| `imageIds` | `number[]` | Image ids   |
-
-**Response**
-
-No body.
+**Response** [`Image`](#image).
 
 ## `get`
 
@@ -84,7 +81,7 @@ const image = await site.images.get(imageId);
 | --------- | -------- | ----------- |
 | `imageId` | `number` | Image id    |
 
-**Response** `Image`. Fields in the paragraph above.
+**Response** [`Image`](#image).
 
 ## `remove`
 
@@ -101,7 +98,3 @@ await site.images.remove(imageId);
 | Field     | Type     | Description |
 | --------- | -------- | ----------- |
 | `imageId` | `number` | Image id    |
-
-**Response**
-
-No body.
