@@ -1,5 +1,11 @@
 # @flexbe/sdk
 
+## 0.12.0
+
+### Minor Changes
+
+- 9f09049: Remove `site.sandbox`. The sandbox API is no longer part of Flexbe.
+
 ## 0.11.0
 
 ### Minor Changes
