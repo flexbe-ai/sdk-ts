@@ -1,5 +1,13 @@
 # @flexbe/sdk
 
+## 0.10.0
+
+### Minor Changes
+
+- 5231c53: Add `utilities` to `BuildHtmlResult` and `PageCode` for generated Tailwind CSS.
+- aa289c3: Add `client.sites.create()` for an empty project on the current account.
+  `Site` now includes `domainUrl`, `domainTitle`, and `domainIsTech`.
+
 ## 0.9.0
 
 ### Minor Changes
