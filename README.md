@@ -48,7 +48,11 @@ console.log(pages.list);
 
 ## MCP
 
-The server is `https://api.flexbe.com/mcp` (Streamable HTTP). Sign-in is OAuth: the client opens a browser. The API key is not used. In Russia the host is `https://api.flexbe.ru`.
+The server is `https://api.flexbe.com/mcp`. Transport is Streamable HTTP.
+
+Authorization is OAuth.
+
+In Russia the host is `https://api.flexbe.ru`.
 
 ```json
 {
@@ -61,6 +65,6 @@ The server is `https://api.flexbe.com/mcp` (Streamable HTTP). Sign-in is OAuth: 
 }
 ```
 
-[Add to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=flexbe&config=eyJ0eXBlIjoiaHR0cCIsInVybCI6Imh0dHBzOi8vYXBpLmZsZXhiZS5jb20vbWNwIn0%3D) · [Add to VS Code](https://vscode.dev/redirect/mcp/install?name=flexbe&config=%7B%22name%22%3A%22flexbe%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fapi.flexbe.com%2Fmcp%22%7D) · [Add to Claude Code](docs/en/mcp.md#claude-code) · [Add to Codex](docs/en/mcp.md#codex)
+[Add to Cursor](https://cursor.com/en/install-mcp?name=flexbe&config=eyJ0eXBlIjoiaHR0cCIsInVybCI6Imh0dHBzOi8vYXBpLmZsZXhiZS5jb20vbWNwIn0=) · [Add to VS Code](https://vscode.dev/redirect/mcp/install?name=flexbe&config=%7B%22name%22%3A%22flexbe%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fapi.flexbe.com%2Fmcp%22%7D) · [Add to Claude Code](docs/en/mcp.md#claude-code) · [Add to Codex](docs/en/mcp.md#codex)
 
 Claude Code, Codex, Cursor, and VS Code configs, and the plugins in this repo: [MCP](docs/en/mcp.md).
