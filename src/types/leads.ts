@@ -180,6 +180,14 @@ export interface SetLeadShippingParams {
     price: number;
     isCustomQuote?: boolean;
     type?: string;
+    address?: {
+        country?: string;
+        region?: string;
+        city?: string;
+        addressLine1?: string;
+        addressLine2?: string;
+        zipCode?: string;
+    };
 }
 
 export interface LeadReservation {
