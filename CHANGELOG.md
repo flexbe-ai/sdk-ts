@@ -1,5 +1,11 @@
 # @flexbe/sdk
 
+## 0.13.0
+
+### Minor Changes
+
+- bb9c7c2: Add `dependencies` to `BuildHtmlParams` and `chunks` to `BuildHtmlResult`. `dependencies` overrides the built-in package pins for one HTML build. `chunks` is the compiled package files, kept out of the island script. `external` is still accepted and does not change the build.
+
 ## 0.12.0
 
 ### Minor Changes
