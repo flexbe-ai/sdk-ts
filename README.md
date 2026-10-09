@@ -1,81 +1,58 @@
+**English** · [Русский](README.ru.md)
+
 # Flexbe TypeScript SDK
 
-A TypeScript SDK for interacting with the Flexbe API. Works in both Node.js and browser environments.
-
-## Installation
+TypeScript client for the Flexbe API. It runs in Node.js 20 or newer and in the browser, and calls the API with `fetch`.
 
 ```bash
 npm install @flexbe/sdk
 ```
 
-## Usage
-
 ```typescript
-import { FlexbeClient } from '@flexbe/sdk';
+import { FlexbeClient } from "@flexbe/sdk";
 
-// Initialize the client with API Key authentication
 const client = new FlexbeClient({
-    apiKey: 'your-api-key',
-    baseUrl: 'https://api.flexbe.com', // optional
-    timeout: 30000, // optional, defaults to 30 seconds
+  apiKey: "your-api-key",
 });
-const siteApi = client.getSiteApi(SITE_ID);
 
-// Using the Pages API for a specific site
-try {
-    // Get list of pages for site
-    const pages = await siteApi.pages.getPages({
-        limit: 10,
-        offset: 0,
-        type: 'page',
-        status: 'published',
-    });
-    console.log(pages.pages);
+const site = client.getSiteApi(123);
+const pages = await site.pages.getPages({
+  limit: 10,
+  offset: 0,
+  type: "page",
+  status: "published",
+});
 
-    // Get a single page from site
-    const page = await siteApi.pages.getPage(123);
-    console.log(page);
-}
-catch (error) {
-    console.error(error.message);
-}
-
+console.log(pages.list);
 ```
 
-## Features
+Replace `123` with your site id. `getPages` returns `{ list, pagination }`. Installation, `getMe()`, and an account are in [Get started](docs/en/getting-started.md).
 
-- TypeScript support with full type definitions
-- Multiple authentication methods:
-  - API Key authentication
-  - JWT Bearer token authentication with automatic token refresh (uses cookie-based authentication)
-- Automatic error handling
-- Configurable timeout and base URL
-- Native fetch API support (works in both Node.js and browser)
-- Multi-site support with site-specific API instances
-- Query parameter handling
-- Request timeout handling
-- Token sharing between browser tabs (for JWT authentication)
+## Documentation
 
-## Environment Variables
-
-The SDK supports the following environment variables:
-
-- `FLEXBE_API_KEY`: Your API key (required for API Key authentication)
-- `FLEXBE_API_URL`: Base URL (defaults to 'https://api.flexbe.com')
+1. [Get started](docs/en/getting-started.md) — install the package, create a client, open a site or an account
+2. [Authentication](docs/en/authentication.md) — API key and browser bearer tokens
+3. [Requests and errors](docs/en/requests.md) — headers, query strings, status codes, timeouts
+4. [Sites](docs/en/sites.md) — list and create projects, read and update one site, build HTML
+5. [Pages](docs/en/pages.md) — pages, folders, versions
+6. [Page data](docs/en/page-data.md) — version JSON: layout, entities, codes, animations
+7. [Leads](docs/en/leads.md) — lead cards, order lines, shipping, reservations
+8. [Ecommerce](docs/en/ecommerce.md) — products, categories, promotions
+9. [Images](docs/en/images.md)
+10. [Files](docs/en/files.md)
+11. [Domains](docs/en/domains.md) — domains on a site and on an account
+12. [Redirects](docs/en/redirects.md)
+13. [Settings](docs/en/settings.md)
+14. [Sandbox](docs/en/sandbox.md)
+15. [Statistics](docs/en/statistics.md) — A/B tests
+16. [Catalogs](docs/en/catalogs.md) — languages and currencies
 
 ## Development
 
 ```bash
-# Install dependencies
 npm install
-
-# Build the SDK
 npm run build
-
-# Run tests
 npm test
-
-# Lint code
 npm run lint
 ```
 
