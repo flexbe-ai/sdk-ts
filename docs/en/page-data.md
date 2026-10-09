@@ -1,8 +1,6 @@
-# site > Pages > Data
+# Site → Pages → Data
 
-`PageDataStructure` is the JSON stored on a page version. Read it from `getVersion` and send it to `createVersion`. Both calls are on [Pages](pages.md). The card around that JSON (`name`, `uri`, `status`) is a `Page`.
-
-When you write a version back, keep keys you do not use. A template can store more fields on `entity.data` and on the layout `data` object than the ones listed here. Which keys exist depends on `template_id`.
+When you write a version back, keep keys you do not use. A template can store more of them than the ones listed here.
 
 ## Layout
 
@@ -18,76 +16,158 @@ interface PageDataStructure {
   codes?: PageCodeWithMeta[];
   textStyles?: TextStyleItem[];
   data?: PageLayoutData;
-  /** @deprecated Use data.background */
-  background?: PageBackground;
-  /** @deprecated Use data.responsive */
-  responsive?: "auto" | false | boolean;
 }
 ```
 
-`PageABTest` is `{ id, a, b, isActive }`. `a` and `b` are strings.
+### `PageABTest`
 
-`PageLayoutData` is the layout `data` object: optional `background`, `responsive` (`'auto' | false`), `container`, and `visualGrid`, plus any other keys the template stored. Prefer `data.background` and `data.responsive`. The same two fields on the root of `PageDataStructure` are the older place for them.
+| Field      | Type      | Description    |
+| ---------- | --------- | -------------- |
+| `id`       | `number`  | Test id        |
+| `a`        | `string`  | Variant A id   |
+| `b`        | `string`  | Variant B id   |
+| `isActive` | `boolean` | The test is on |
 
-`PageBackground` is `{ image: ImageObj | null, styles }`. `styles` carries `backgroundColor`, `backgroundFixed`, `backgroundRepeat` (`repeat`, `repeat-x`, `repeat-y`, `no-repeat`), `backgroundPosition`, `backgroundSize` (`cover`, `contain`, `auto`), and `contrast` (`dark` | `light`).
+### `PageLayoutData`
 
-`ImageObj` is `{ id, ext, name?, average?, preview?, width?, height?, proportion?, border?, animated?, transparent? }`. `transparent` is a number. The uploaded image from [Images](images.md) is a separate type.
+| Field        | Type                    | Description |
+| ------------ | ----------------------- | ----------- |
+| `background` | `PageBackground`        | Optional    |
+| `responsive` | `'auto' \| false`       | Optional    |
+| `container`  | `PageContainerSettings` | Optional    |
+| `visualGrid` | `PageVisualGrid`        | Optional    |
 
-`container` has `desktop` and `mobile`. Each breakpoint is `{ width, gutter, minViewport, viewport, maxViewport }`. A viewport value is a number or `'auto'`.
+### `PageBackground`
 
-`visualGrid` is `{ color?, desktop, mobile }`. Each side is `{ columns, columnWidth, gap }`. `columnWidth` and `gap` are `number | null`.
+| Field    | Type                   | Description |
+| -------- | ---------------------- | ----------- |
+| `image`  | `ImageObj \| null`     | Image       |
+| `styles` | `PageBackgroundStyles` | Styles      |
+
+### `PageBackgroundStyles`
+
+| Field                | Type                                                   | Description                    |
+| -------------------- | ------------------------------------------------------ | ------------------------------ |
+| `backgroundColor`    | `string`                                               | CSS color or gradient          |
+| `backgroundFixed`    | `boolean`                                              | Background is fixed            |
+| `backgroundRepeat`   | `'repeat' \| 'repeat-x' \| 'repeat-y' \| 'no-repeat'`  | How the background repeats     |
+| `backgroundPosition` | `string`                                               | Background position            |
+| `backgroundSize`     | `'cover' \| 'contain' \| 'auto'`                       | Background size                |
+| `contrast`           | `'dark' \| 'light'`                                    | Contrast                       |
+
+### `ImageObj`
+
+The uploaded image from [Images](images.md) is a separate type.
+
+| Field         | Type                                           | Description |
+| ------------- | ---------------------------------------------- | ----------- |
+| `id`          | `number`                                       | Image id    |
+| `ext`         | `string`                                       | Extension   |
+| `name`        | `string`                                       | Optional    |
+| `average`     | `string`                                       | Optional    |
+| `preview`     | `string`                                       | Optional    |
+| `width`       | `number`                                       | Optional    |
+| `height`      | `number`                                       | Optional    |
+| `proportion`  | `number`                                       | Optional    |
+| `border`      | `'none' \| 'transparent' \| 'mixed' \| string` | Optional    |
+| `animated`    | `boolean`                                      | Optional    |
+| `transparent` | `number`                                       | Optional    |
+
+### `PageContainerSettings`
+
+| Field     | Type                      | Description |
+| --------- | ------------------------- | ----------- |
+| `desktop` | `PageContainerBreakpoint` | Desktop     |
+| `mobile`  | `PageContainerBreakpoint` | Mobile      |
+
+### `PageContainerBreakpoint`
+
+| Field         | Type               | Description      |
+| ------------- | ------------------ | ---------------- |
+| `width`       | `number`           | Width            |
+| `gutter`      | `number`           | Gutter           |
+| `minViewport` | `number \| 'auto'` | Minimum viewport |
+| `viewport`    | `number \| 'auto'` | Viewport         |
+| `maxViewport` | `number \| 'auto'` | Maximum viewport |
+
+### `PageVisualGrid`
+
+| Field     | Type                 | Description |
+| --------- | -------------------- | ----------- |
+| `color`   | `string`             | Optional    |
+| `desktop` | `PageVisualGridItem` | Desktop     |
+| `mobile`  | `PageVisualGridItem` | Mobile      |
+
+### `PageVisualGridItem`
+
+| Field         | Type             | Description  |
+| ------------- | ---------------- | ------------ |
+| `columns`     | `number`         | Columns      |
+| `columnWidth` | `number \| null` | Column width |
+| `gap`         | `number \| null` | Gap          |
 
 ## Entities
 
-`PageEntityType`: `block`, `modal`, `element`, `widget`, `layout`.
+### `PageEntityType`
 
-Every entity shares `PageEntity`:
+| Value     | Description |
+| --------- | ----------- |
+| `block`   | Block       |
+| `modal`   | Modal       |
+| `element` | Element     |
+| `widget`  | Widget      |
+| `layout`  | Layout      |
 
-| Field         | Type                                 | Description                                           |
-| ------------- | ------------------------------------ | ----------------------------------------------------- |
-| `id`          | `string`                             | Entity id                                             |
-| `is`          | `PageEntityType`                     | Kind: block, element, modal, widget, or layout        |
-| `template_id` | `string`                             | Template                                              |
-| `mod_id`      | `string`, optional                   | Template variant                                      |
-| `source_id`   | `string`, optional                   | Id of the source entity                               |
-| `update_time` | `number`                             | When the entity was last changed                      |
-| `data`        | object                               | Template payload and any other keys it stored         |
-| `p_id`        | `number`, optional                   | Parent id                                             |
-| `untouched`   | `boolean`, optional                  | Not edited since it was inserted                      |
-| `hidden`      | `'none' \| 'mobile' \| 'desktop'`    | Hidden nowhere, on mobile, or on desktop              |
-| `className`   | `string`, optional                   | CSS class                                             |
-| `modals`      | `PageModal[]`, optional              | Modals of this entity                                 |
-| `animation`   | `PageEntityAnimation`, optional      | Animation                                             |
-| `events`      | `PageEntityEvent[]`, optional        | Events                                                |
-| `multidata`   | `{ enabled, vars }`, optional        | Several data sets. A var has `data`                   |
+### `PageEntity`
 
-`hidden` is `'none'`, `'mobile'`, or `'desktop'`.
+| Field          | Type                                     | Description                                           |
+| -------------- | ---------------------------------------- | ----------------------------------------------------- |
+| `id`           | `string`                                 | Entity id                                             |
+| `is`           | `PageEntityType`                         | Kind: block, element, modal, widget, or layout        |
+| `template_id`  | `string`                                 | Template                                              |
+| `mod_id`       | `string`, optional                       | Template variant                                      |
+| `source_id`    | `string`, optional                       | Id of the source entity                               |
+| `update_time`  | `number`                                 | When the entity was last changed                      |
+| `data`         | object                                   | Template payload and any other keys it stored         |
+| `p_id`         | `number`, optional                       | Parent id                                             |
+| `untouched`    | `boolean`, optional                      | Not edited since it was inserted                      |
+| `hidden`       | `'none' \| 'mobile' \| 'desktop'`        | Hidden nowhere, on mobile, or on desktop. Optional    |
+| `className`    | `string`, optional                       | CSS class                                             |
+| `modals`       | `PageModal[]`, optional                  | Modals of this entity                                 |
+| `animation`    | `PageEntityAnimation`, optional          | Animation                                             |
+| `events`       | `PageEntityEvent[]`, optional            | Events                                                |
+| `multidata`    | `{ enabled, vars }`, optional            | Several data sets. A var has `data`                   |
+| `refPageId`    | `number`, optional                       | Block only. Page the block points at                  |
+| `aboveTheFold` | `boolean`, optional                      | Block and element only. The entity is in the first screen |
+| `children`     | array, optional                          | Block, element, widget, and modal only. Nested entities |
+| `multisection` | `{ enabled, main_var, vars }`, optional  | Block only. Section variants                          |
+| `geolanding`   | `{ enabled, vars }`, optional            | Block only. City variants. A var has `city`           |
+| `screenshot`   | `ImageObj \| null`                       | Modal only. Preview                                   |
 
-`PageEntityEvent` is `{ event, action, action_code, onlyFirst, state }`, and can carry other keys. `state` is `'all' | 'in' | 'out'`.
+### `PageEntityEvent`
 
-Specializations:
-
-| Field           | Where                         | Description                                      |
-| --------------- | ----------------------------- | ------------------------------------------------ |
-| `refPageId`     | block                         | Page the block points at                         |
-| `aboveTheFold`  | block, element                | The entity is in the first screen                |
-| `children`      | block, element, widget, modal | Nested entities                                  |
-| `multisection`  | block                         | Section variants: `{ enabled, main_var, vars }`  |
-| `geolanding`    | block                         | City variants: `{ enabled, vars }`. A var has `city` |
-| `screenshot`    | modal                         | Preview, `ImageObj` or `null`                    |
+| Field         | Type                     | Description     |
+| ------------- | ------------------------ | --------------- |
+| `event`       | `string`                 | Event           |
+| `action`      | `string`                 | Action          |
+| `action_code` | `string`                 | Action code     |
+| `onlyFirst`   | `boolean`                | First time only |
+| `state`       | `'all' \| 'in' \| 'out'` | State           |
 
 ## Codes
 
-`codes` items are `PageCodeWithMeta`: the meta fields plus `PageCode`.
+Contains code inserted on the page.
 
-| Field        | Description                       |
-| ------------ | --------------------------------- |
-| `id`         | Code id                           |
-| `name`       | Name                              |
-| `show_code`  | Show the code on the page         |
-| `is_body`    | Code at the end of body, not head |
+### `PageCodeWithMeta`
 
-`PageCode`:
+| Field       | Type      | Description                    |
+| ----------- | --------- | ------------------------------ |
+| `id`        | `string`  | Code id                        |
+| `name`      | `string`  | Name                           |
+| `show_code` | `boolean` | Show the code on the page      |
+| `is_body`   | `boolean` | Code at the end of body, not head |
+
+### `PageCode`
 
 | Field             | Type                         | Description                    |
 | ----------------- | ---------------------------- | ------------------------------ |
@@ -102,15 +182,48 @@ Specializations:
 | `sources.css`     | `string`                     | Source styles                  |
 | `sources.modules` | `{ id, path, content }[]`    | Modules                        |
 
-`PageCodeImage` is `{ type: 'img', id, name, ext, average, proportion }`. `PageCodeFile` is `{ type: 'file', id, name }`. A module is `{ id, path, content }`.
+### `PageCodeImage`
 
-`site.buildHtml` takes those source fields and returns `utilities` as a string. See [Sites](sites.md).
+| Field        | Type     | Description |
+| ------------ | -------- | ----------- |
+| `type`       | `'img'`  |             |
+| `id`         | `number` | Id          |
+| `name`       | `string` | Name        |
+| `ext`        | `string` | Extension   |
+| `average`    | `string` |             |
+| `proportion` | `number` |             |
+
+### `PageCodeFile`
+
+| Field  | Type     | Description |
+| ------ | -------- | ----------- |
+| `type` | `'file'` |             |
+| `id`   | `number` | Id          |
+| `name` | `string` | Name        |
+
+### `PageCodeModule`
+
+| Field     | Type     | Description |
+| --------- | -------- | ----------- |
+| `id`      | `string` | Id          |
+| `path`    | `string` | Path        |
+| `content` | `string` | Content     |
+
+To build the sources, see [Sites](sites.md#buildhtml).
 
 ## Text styles
 
-`TextStyleItem`: `uid`, `id` (a role such as content or title), `title`, optional `protected`, optional `source` (`'project' | 'page'`), `style`, and optional `mobile`.
+### `TextStyleItem`
 
-`mobile` may override `size`, `weight`, `line_height`, and `letter_spacing`.
+| Field       | Type                   | Description |
+| ----------- | ---------------------- | ----------- |
+| `uid`       | `string`               | Font id     |
+| `id`        | `string`               | Role, such as content or title |
+| `title`     | `string`               | Name        |
+| `protected` | `boolean`              | Optional    |
+| `source`    | `'project' \| 'page'`  | Optional    |
+| `style`     | `TextStyleProperties`  | Style       |
+| `mobile`    | object                 | Optional. May override `size`, `weight`, `line_height`, and `letter_spacing` |
 
 `TextStyleProperties`:
 
@@ -129,12 +242,73 @@ Specializations:
 
 ## Animation
 
-`PageEntityAnimation` is `{ id?, responsive }` and can include other keys. Keep them when you write the version back. `responsive.desktop` is a device config. `responsive.mobile` is a partial one.
+### `PageEntityAnimation`
 
-A device config is `{ enabled, inherit, animationType?, interactionType?, interactionSettings?, steps }`.
+| Field        | Type                            | Description          |
+| ------------ | ------------------------------- | -------------------- |
+| `id`         | `string \| number`              | Optional             |
+| `responsive` | `PageEntityAnimationResponsive` | Desktop and mobile   |
 
-`interactionType`: `none`, `screen`, `scroll`, `click`, `hover`, `hold`, `trigger`, `custom`.
+### `PageEntityAnimationResponsive`
 
-`interactionSettings` may set `intersectionLine` (`top`, `center`, `bottom`), `intersectionLineOffset`, `retriggerBehavior` (`reverse`, `restart`, `pause`, `reset`, `none`), `loop`, `playMode` (`normal`, `bounce`), `seekMode`, `seekAxis` (`x`, `y`), `seekSmoothing`, `triggerElements`, `triggerAnimationItem`, `triggerEvent` (`start`, `complete`, `loopstart`, `loopcomplete`, `pause`, `unpause`), and `fixed`.
+| Field     | Type                                       | Description                              |
+| --------- | ------------------------------------------ | ---------------------------------------- |
+| `desktop` | `PageEntityAnimationDeviceConfig`          | Desktop config. Optional                 |
+| `mobile`  | `Partial<PageEntityAnimationDeviceConfig>` | Partial mobile config. Optional          |
 
-A step is `{ id, name, distance, animationParams }`. `animationParams` may include `clipPath`, `clipPathEnabled`, `skewEnabled`, `seekEasing`, `opacity`, `duration`, `rotate`, `easing`, `translateX`, `translateY`, `scaleX`, `scaleY`, `skewX`, and `skewY`.
+### `PageEntityAnimationDeviceConfig`
+
+| Field                 | Type                                                                                       | Description                 |
+| --------------------- | ------------------------------------------------------------------------------------------ | --------------------------- |
+| `enabled`             | `boolean`                                                                                  | Enabled                     |
+| `inherit`             | `boolean \| string`                                                                        | Inheritance                 |
+| `animationType`       | `string`                                                                                   | Animation type. Optional    |
+| `interactionType`     | `'none' \| 'screen' \| 'scroll' \| 'click' \| 'hover' \| 'hold' \| 'trigger' \| 'custom'`  | How it starts. Optional     |
+| `interactionSettings` | `PageEntityAnimationInteractionSettings`                                                   | Start settings. Optional    |
+| `steps`               | `PageEntityAnimationStep[]`                                                                | Steps                       |
+
+### `PageEntityAnimationInteractionSettings`
+
+| Field                    | Type                                                                             | Description                    |
+| ------------------------ | -------------------------------------------------------------------------------- | ------------------------------ |
+| `intersectionLine`       | `'top' \| 'center' \| 'bottom'`                                                  | Intersection line. Optional    |
+| `intersectionLineOffset` | `string`                                                                         | Line offset. Optional          |
+| `retriggerBehavior`      | `'reverse' \| 'restart' \| 'pause' \| 'reset' \| 'none'`                         | Restart behavior. Optional     |
+| `loop`                   | `number`                                                                         | Repeat count. Optional         |
+| `playMode`               | `'normal' \| 'bounce'`                                                           | Play mode. Optional            |
+| `seekMode`               | `string`                                                                         | Seek mode. Optional            |
+| `seekAxis`               | `'x' \| 'y'`                                                                     | Seek axis. Optional            |
+| `seekSmoothing`          | `number`                                                                         | Smoothing. Optional            |
+| `triggerElements`        | `string[]`                                                                       | Trigger elements. Optional     |
+| `triggerAnimationItem`   | `string`                                                                         | Trigger animation. Optional    |
+| `triggerEvent`           | `'start' \| 'complete' \| 'loopstart' \| 'loopcomplete' \| 'pause' \| 'unpause'` | Trigger event. Optional        |
+| `fixed`                  | `boolean`                                                                        | Fixed. Optional                |
+
+### `PageEntityAnimationStep`
+
+| Field             | Type     | Description   |
+| ----------------- | -------- | ------------- |
+| `id`              | `string` | Id            |
+| `name`            | `string` | Name          |
+| `distance`        | `number` | Distance      |
+| `animationParams` | object   | Step settings |
+
+`animationParams` fields:
+
+| Field             | Type               | Description |
+| ----------------- | ------------------ | ----------- |
+| `clipPath`        | `string`           | Optional    |
+| `clipPathEnabled` | `boolean`          | Optional    |
+| `skewEnabled`     | `boolean`          | Optional    |
+| `seekEasing`      | `string`           | Optional    |
+| `opacity`         | `string \| number` | Optional    |
+| `duration`        | `number`           | Optional    |
+| `rotate`          | `number`           | Optional    |
+| `easing`          | `string`           | Optional    |
+| `translateX`      | `string`           | Optional    |
+| `translateY`      | `string`           | Optional    |
+| `scaleX`          | `number`           | Optional    |
+| `scaleY`          | `number`           | Optional    |
+| `skewX`           | `string`           | Optional    |
+| `skewY`           | `string`           | Optional    |
+

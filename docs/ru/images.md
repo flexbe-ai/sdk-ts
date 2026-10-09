@@ -1,12 +1,29 @@
-# site > Изображения
+# Сайт → Изображения
 
-`site.images` загружает и читает изображения одного сайта. Пути лежат на `/sites/{siteId}/images`.
+`site.images` загружает и читает изображения одного сайта.
 
 ```typescript
 const image = await site.images.upload(bytes, "cover.png", "image/png");
 ```
 
-`Image` — это `{ id, ext, name, width, height, proportion, url, previewUrl?, average?, transparent?, animated?, border? }`. `transparent` и `animated` — булевы значения. Картинка внутри версии страницы — это `ImageObj`, она описана в разделе [Данные страницы](page-data.md).
+## `Image`
+
+Загруженная картинка сайта.
+
+| Поле | Тип | Описание |
+| --- | --- | --- |
+| `id` | `number` | Id картинки |
+| `ext` | `string` | Расширение |
+| `name` | `string` | Имя файла |
+| `width` | `number` | Ширина в пикселях |
+| `height` | `number` | Высота в пикселях |
+| `proportion` | `number` | Соотношение сторон, ширина к высоте |
+| `url` | `string` | Публичный путь |
+| `previewUrl` | `string \| null` | Превью. Необязательно |
+| `average` | `string \| null` | Средний цвет. Необязательно |
+| `transparent` | `boolean` | Есть прозрачность. Необязательно |
+| `animated` | `boolean` | Анимация. Необязательно |
+| `border` | `string \| null` | Цвет рамки. Необязательно |
 
 ## `upload`
 
@@ -28,7 +45,7 @@ const image = await site.images.upload(bytes, "cover.png", "image/png");
 
 Значение вне `UploadBinary` бросает `TypeError` с текстом `Unsupported upload binary type`.
 
-**Ответ** `Image`. Поля в абзаце выше.
+**Ответ** [`Image`](#image).
 
 ## `uploadFromUrl`
 
@@ -46,27 +63,7 @@ const image = await site.images.uploadFromUrl({ url: "https://example.com/cover.
 | ----- | -------- | -------- |
 | `url` | `string` | Адрес картинки. Тело — JSON |
 
-**Ответ** `Image`. Поля в абзаце выше.
-
-## `claim`
-
-Привязывает к сайту id картинок, которые уже есть, в том числе картинки другого аккаунта.
-
-`POST /sites/{siteId}/images/claim`
-
-```typescript
-await site.images.claim({ imageIds: [1, 2] });
-```
-
-**Вход**
-
-| Поле       | Тип        | Описание        |
-| ---------- | ---------- | --------------- |
-| `imageIds` | `number[]` | Id картинок     |
-
-**Ответ**
-
-Тела нет.
+**Ответ** [`Image`](#image).
 
 ## `get`
 
@@ -84,7 +81,7 @@ const image = await site.images.get(imageId);
 | --------- | -------- | ----------- |
 | `imageId` | `number` | Id картинки |
 
-**Ответ** `Image`. Поля в абзаце выше.
+**Ответ** [`Image`](#image).
 
 ## `remove`
 
@@ -101,7 +98,3 @@ await site.images.remove(imageId);
 | Поле      | Тип      | Описание    |
 | --------- | -------- | ----------- |
 | `imageId` | `number` | Id картинки |
-
-**Ответ**
-
-Тела нет.

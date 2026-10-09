@@ -1,12 +1,236 @@
-# site > Settings
+# Site → Settings
 
-`site.settings` reads and updates the settings of one site.
+`site.settings` reads and updates site settings.
 
 ```typescript
 const settings = await site.settings.getSettings();
 ```
 
-Catalog products are [Ecommerce](ecommerce.md). Shipping and discounts on one lead are [Leads](leads.md).
+## `SiteSettings`
+
+Site settings.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `locale` | [`LocaleSettings`](#localesettings) | Language and region |
+| `branding` | [`BrandingSettings`](#brandingsettings) | Appearance |
+| `seo` | [`SeoSettings`](#seosettings) | SEO |
+| `privacy` | [`PrivacySettings`](#privacysettings) | Privacy |
+| `performance` | [`PerformanceSettings`](#performancesettings) | Performance |
+| `ecommerce` | [`EcommerceSettings`](#ecommercesettings) | Store |
+| `security` | [`SecuritySettings`](#securitysettings) | Security |
+| `notifications` | [`NotificationsSettings`](#notificationssettings) | Notifications |
+| `platform` | [`PlatformSettings`](#platformsettings) | Platform |
+
+## `LocaleSettings`
+
+Language and region.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `language` | `string` | Language |
+| `country` | `string` | Country |
+| `timezone` | `string` | Time zone |
+| `currency` | [`CurrencySettings`](#currencysettings) | Currency |
+
+## `CurrencySettings`
+
+Currency.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `code` | `string` | Code |
+| `symbol` | `string` | Symbol |
+| `data` | [`CurrencyDataSettings`](#currencydatasettings) | Currency data |
+| `format` | [`CurrencyFormatSettings`](#currencyformatsettings) | Format |
+
+## `CurrencyDataSettings`
+
+Currency data.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `code` | `string` | Code |
+| `symbol` | `string` | Symbol |
+| `decimals` | `number` | Decimal places |
+
+## `CurrencyFormatSettings`
+
+Currency format.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `str` | `string` | Template, for example `:symbol:value` |
+| `t` | `string` | Thousands separator |
+| `d` | `string` | Decimal separator |
+
+## `BrandingSettings`
+
+Appearance.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `fonts` | [`FontsSettings`](#fontssettings) | Fonts |
+| `seoFavicon` | value or `null` | Favicon |
+| `myColors` | [`myColors`](#mycolors) | Custom colors |
+| `copyright` | `string` | Copyright |
+| `blockAnimation` | [`blockAnimation`](#blockanimation) | Block animation |
+| `smoothingScroll` | [`smoothingScroll`](#smoothingscroll) | Smooth scroll |
+| `adaptiveView` | `number \| boolean` | Adaptive view |
+
+## `FontsSettings`
+
+Fonts.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `myFonts` | array | Custom fonts |
+| `set` | array | Font set |
+
+## `myColors`
+
+Custom colors.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `colors` | array | Colors |
+| `gradients` | array | Gradients |
+
+## `blockAnimation`
+
+Block animation.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `show` | `number \| null` | Display |
+| `style` | `string \| null` | Style |
+
+## `smoothingScroll`
+
+Smooth scroll.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `enabled` | `number` | On |
+
+## `SeoSettings`
+
+SEO.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `robotsTxt` | `string` | robots.txt contents |
+| `meta` | `string` | Meta tags |
+| `canonical` | `number` | Canonical address |
+| `trailingSlash` | `string` | Trailing slash |
+
+## `PrivacySettings`
+
+Privacy.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `cookiesWarning` | object | Cookie notice |
+| `policyPersonalData` | [`policyPersonalData`](#policypersonaldata) | Personal data policy |
+
+## `policyPersonalData`
+
+Personal data policy.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `show` | `number` | Show |
+| `file` | `string` | File |
+
+## `PerformanceSettings`
+
+Performance.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `images` | object | Images |
+| `optimization` | object | Optimization |
+| `injectCode` | [`injectCode`](#injectcode) | Injected code |
+
+## `injectCode`
+
+Code in head and body.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `head` | `string` | Code in head |
+| `body` | `string` | Code in body |
+
+## `EcommerceSettings`
+
+Store settings.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `delivery` | array | Shipping methods |
+| `pickups` | array | Pickup points |
+| `tax` | object | Tax |
+| `reserve` | object | Stock reservation |
+| `cart` | object | Cart |
+| `pricelessRule` | object | How to treat a product with no price |
+| `globalCart` | [`GlobalCartSettings`](#globalcartsettings) | Shared cart |
+| `outOfStockAction` | `string` | What to do when the item is out of stock |
+| `outOfStockStatus` | `string` | Out-of-stock status |
+| `inStockStatus` | `string` | In-stock status |
+| `zeroPrice` | `string` | How to show a zero price |
+
+## `GlobalCartSettings`
+
+Shared cart.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `enabled` | `boolean` | On |
+| `data` | object | Cart settings snapshot. The API stores it as sent |
+
+## `SecuritySettings`
+
+Security.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `flood` | object | Flood protection |
+| `googleMapsApiKey` | `string` | Google Maps key |
+| `yandexMapsApiKey` | `string` | Yandex Maps key |
+
+## `NotificationsSettings`
+
+Notifications.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `email` | [`email[]`](#email) | Notification addresses |
+| `notify` | array | Other notification targets |
+| `emailSendUtm` | `number \| boolean` | Add UTM to email |
+| `telegramSendUtm` | `boolean` | Add UTM to Telegram |
+| `maxSendUtm` | `boolean` | Add UTM to MAX |
+| `visitorMail` | object | Mail sent to the visitor |
+| `sms` | array | Deprecated. The field remains in the data |
+| `smsLight` | `boolean` | Deprecated. The field remains in the data |
+
+## `email`
+
+A notification address.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | Address id |
+| `email` | `string` | Address |
+
+## `PlatformSettings`
+
+Platform.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `ai` | object | AI |
+| `api` | object | API |
+| `pays` | object | Payment providers. The key is the provider id, for example `tinkoff` or `cash` |
 
 ## `getSettings`
 
@@ -22,11 +246,11 @@ const settings = await site.settings.getSettings();
 
 No parameters.
 
-**Response** `SiteSettings`. Sections below.
+**Response** [`SiteSettings`](#sitesettings).
 
 ## `updateSettings`
 
-Updates the settings. The body is a JSON merge-patch: a deep partial of `SiteSettings`. Array fields in the patch replace the stored array.
+Updates the fields you send. An array in the body replaces the stored array.
 
 `PATCH /sites/{siteId}/settings`
 
@@ -36,72 +260,6 @@ const settings = await site.settings.updateSettings({
 });
 ```
 
-**Input**
+**Input** a partial [`SiteSettings`](#sitesettings).
 
-Any `SiteSettings` fields, all optional. Section contents are below.
-
-**Response** `SiteSettings`. Sections below.
-
-## Sections
-
-### `locale`
-
-`language`, `country`, `timezone`, and `currency`.
-
-Currency is `{ code, symbol, data, format }`. `data` is `{ code, symbol, decimals }`. `format` is `{ str, t, d }`.
-
-### `branding`
-
-`fonts` (`myFonts` and `set`), `seoFavicon`, `myColors` (`colors` and `gradients`), `copyright`, `blockAnimation` (`show`, `style`), `smoothingScroll.enabled`, and `adaptiveView` (`number` or `boolean`).
-
-### `seo`
-
-`robotsTxt`, `meta`, `canonical` (number), `trailingSlash`.
-
-### `privacy`
-
-`cookiesWarning` is an object. `policyPersonalData` is `{ show, file }`.
-
-### `performance`
-
-`images` and `optimization` are objects. `injectCode` is `{ head, body }`.
-
-### `ecommerce`
-
-| Field                 | Type     | Description                                   |
-| --------------------- | -------- | --------------------------------------------- |
-| `delivery`            | array    | Shipping methods                              |
-| `pickups`             | array    | Pickup points                                 |
-| `tax`                 | object   | Tax                                           |
-| `reserve`             | object   | Stock reservation                             |
-| `cart`                | object   | Cart                                          |
-| `pricelessRule`       | object   | How to treat a product with no price          |
-| `globalCart.enabled`  | `boolean`| The shared cart is on                         |
-| `globalCart.data`     | object   | Cart settings snapshot. The API stores it as sent |
-| `outOfStockAction`    | `string` | What to do when the item is out of stock      |
-| `outOfStockStatus`    | `string` | Out-of-stock status                           |
-| `inStockStatus`       | `string` | In-stock status                               |
-| `zeroPrice`           | `string` | How to show a zero price                      |
-
-### `security`
-
-`flood` is an object. `googleMapsApiKey` and `yandexMapsApiKey` are strings.
-
-### `notifications`
-
-| Field             | Type                  | Description                                           |
-| ----------------- | --------------------- | ----------------------------------------------------- |
-| `email`           | `{ id, email }[]`     | Addresses that receive notifications                  |
-| `email[].id`      | `string`              | Address id                                            |
-| `email[].email`   | `string`              | The address                                           |
-| `notify`          | array                 | Other notification targets                            |
-| `emailSendUtm`    | `number` or `boolean` | Add UTM to email                                      |
-| `telegramSendUtm` | `boolean`             | Add UTM to Telegram                                   |
-| `maxSendUtm`      | `boolean`             | Add UTM to MAX                                        |
-| `visitorMail`     | object                | Mail sent to the visitor                              |
-| `sms`             | array                 | Deprecated. The SMS module is gone; the field remains |
-| `smsLight`        | `boolean`             | Deprecated. The SMS module is gone; the field remains |
-
-### `platform`
-
-`ai` and `api` are objects. `pays` is a map of payment providers, keyed by provider id, such as `tinkoff` or `cash`.
+**Response** [`SiteSettings`](#sitesettings).

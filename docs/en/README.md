@@ -43,19 +43,20 @@ A site-scoped key already has the site id you pass to `getSiteApi`. An account-s
 const site = client.getSiteApi(123);
 ```
 
-`getSiteApi(siteId)` is `client.sites.getApi(siteId)`.
+`123` is the site id.
 
-| Field        | Description                                              |
-| ------------ | -------------------------------------------------------- |
-| `pages`      | [Pages](pages.md)                                        |
-| `leads`      | [Leads](leads.md)                                        |
-| `ecommerce`  | [Ecommerce](ecommerce.md): products, categories, promotions |
-| `images`     | [Images](images.md)                                      |
-| `files`      | [Files](files.md)                                        |
-| `domains`    | [Domains](domains.md) of this site                       |
-| `redirects`  | [Redirects](redirects.md)                                |
-| `settings`   | [Settings](settings.md)                                  |
-| `stat`       | [Statistics](statistics.md): A/B tests                   |
+| Field       | Description                                                 |
+| ----------- | ----------------------------------------------------------- |
+| `pages`     | [Pages](pages.md)                                           |
+| `leads`     | [Leads](leads.md)                                           |
+| `ecommerce`  | [Ecommerce](ecommerce.md): products and categories |
+| promotions   | [Promotions](promotions.md)                        |
+| `images`    | [Images](images.md)                                         |
+| `files`     | [Files](files.md)                                           |
+| `domains`   | [Domains](domains.md) of this site                          |
+| `redirects` | [Redirects](redirects.md)                                   |
+| `settings`  | [Settings](settings.md)                                     |
+| `stat`      | [Statistics](statistics.md)                                 |
 
 ## Open an account
 
@@ -63,6 +64,12 @@ const site = client.getSiteApi(123);
 const account = client.account(456);
 ```
 
-| Field     | Description                    |
-| --------- | ------------------------------ |
+`456` is the account id.
+
+| Field     | Description                          |
+| --------- | ------------------------------------ |
 | `domains` | [Domains](domains.md) of the account |
+
+## Errors
+
+Status codes and the timeout are in [Requests and errors](requests.md).

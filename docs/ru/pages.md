@@ -1,52 +1,83 @@
-# site > Страницы
+# Сайт → Страницы
 
-`site.pages` закрывает карточки страниц, папки и версии. JSON макета внутри версии — в разделе [Данные страницы](page-data.md). HTML-блок собирает `site.buildHtml`, это описано в разделе [Сайты](sites.md).
+Модуль для работы со списком страниц.
 
 ```typescript
 const site = client.getSiteApi(siteId);
 const pages = await site.pages.getPages({ limit: 10, offset: 0 });
 ```
 
-Пути ниже лежат на `/sites/{siteId}`.
+Макет в этом объекте не лежит. Он приходит в `PageVersionDataResponse.data`.
 
-`Page` — это карточка: имя, адрес, статус. Макет приходит в `PageVersionDataResponse.data`.
+## `Page`
 
-## Карточка страницы
+| Поле               | Тип                  | Описание                                                        |
+| ------------------ | -------------------- | --------------------------------------------------------------- |
+| `id`               | `number`             | Id страницы                                                     |
+| `versionId`        | `number \| null`     | Id текущей версии                                               |
+| `editorVersionId`  | `number \| null`     | Последняя версия, открытая в редакторе. `null` у старых страниц |
+| `type`             | `PageType`           | Вид страницы. [`PageType`](#pagetype)                                     |
+| `status`           | `PageStatus`         | Статус. [`PageStatus`](#pagestatus)                                           |
+| `name`             | `string`             | Название                                                        |
+| `uri`              | `string \| null`     | Адрес                                                           |
+| `language`         | `string`             | Язык страницы                                                   |
+| `folderId`         | `number`             | Папка                                                           |
+| `sortIndex`        | `number`             | Порядок в списке                                                |
+| `themeId`          | `number`             | Тема                                                            |
+| `updatedAt`        | `string`             | Когда карточку меняли                                           |
+| `deletedAt`        | `string \| null`     | Когда удалили. `null`, если страница на месте                   |
+| `screenshot`       | `Screenshot \| null` | Превью. [`Screenshot`](#screenshot)                                               |
+| `meta`             | `PageMeta \| null`   | SEO страницы. [`PageMeta`](#pagemeta)                                         |
 
-| Поле                | Тип                         | Описание                                                         |
-| ------------------- | --------------------------- | ---------------------------------------------------------------- |
-| `id`                | `number`                    | Id страницы                                                      |
-| `versionId`         | `number \| null`            | Id текущей версии                                                |
-| `editorVersionId`   | `number \| null`            | Последняя версия, открытая в редакторе. `null` у старых страниц  |
-| `type`              | `PageType`                  | Вид страницы: обычная, глобальная, товар и другие                |
-| `status`            | `PageStatus`                | `published`, `drafted`, `removed` или `deleted`                  |
-| `name`              | `string`                    | Название                                                         |
-| `uri`               | `string \| null`            | Адрес                                                            |
-| `language`          | `string`                    | Язык страницы                                                    |
-| `folderId`          | `number`                    | Папка                                                            |
-| `sortIndex`         | `number`                    | Порядок в списке                                                 |
-| `themeId`           | `number`                    | Тема                                                             |
-| `updatedAt`         | `string`                    | Когда карточку меняли                                            |
-| `deletedAt`         | `string \| null`            | Когда удалили. `null`, если страница на месте                    |
-| `screenshot`        | объект или `null`           | Превью                                                           |
-| `screenshot.id`     | `number \| null`            | Id картинки превью                                               |
-| `screenshot.ext`    | `string`                    | Расширение                                                       |
-| `screenshot.url`    | `string \| null`            | Адрес превью                                                     |
-| `meta`              | `PageMeta \| null`          | SEO страницы                                                     |
-| `meta.title`        | `string \| null`            | Заголовок                                                        |
-| `meta.description`  | `string \| null`            | Описание                                                         |
-| `meta.keywords`     | `string \| null`            | Ключевые слова                                                   |
-| `meta.ogImage`      | `string \| null`            | Картинка Open Graph                                              |
-| `meta.ogTitle`      | `string \| null`            | Заголовок Open Graph                                             |
-| `meta.ogDescription`| `string \| null`            | Описание Open Graph                                              |
-| `meta.noindex`      | `boolean`                   | Закрыть страницу от индексации                                   |
-| `meta.schemaMarkup` | объект или `null`           | Разметка schema.org, необязательно                               |
+## `Screenshot`
 
-`PageType`: `page`, `file`, `global`, `ai`, `cms`, `ecommerce_product`, `ecommerce_category`.
+| Поле  | Тип              | Описание          |
+| ----- | ---------------- | ----------------- |
+| `id`  | `number \| null` | Id картинки превью |
+| `ext` | `string`         | Расширение        |
+| `url` | `string \| null` | Адрес превью      |
 
-`PageStatus`: `published`, `drafted`, `removed`, `deleted`.
+## `PageType`
 
-`PageMeta`: `title`, `description`, `keywords`, `ogImage`, `ogTitle`, `ogDescription`, `noindex` и необязательный `schemaMarkup` (`data`, `updatedAt`, необязательный `genProducts`).
+| Значение               | Описание            |
+| ---------------------- | ------------------- |
+| `page`                 | Обычная страница    |
+| `file`                 | Файл                |
+| `global`               | Глобальная страница |
+| `ai`                   | Страница AI         |
+| `cms`                  | Страница CMS        |
+| `ecommerce_product`    | Страница товара     |
+| `ecommerce_category`   | Страница категории  |
+
+## `PageStatus`
+
+| Значение    | Описание                                      |
+| ----------- | --------------------------------------------- |
+| `published` | Опубликована                                  |
+| `drafted`   | Черновик                                      |
+| `removed`   | Пользователь убрал страницу                   |
+| `deleted`   | Пользователь удалил страницу из удалённых     |
+
+## `PageMeta`
+
+| Поле             | Тип                            | Описание                         |
+| ---------------- | ------------------------------ | -------------------------------- |
+| `title`          | `string \| null`               | Заголовок                        |
+| `description`    | `string \| null`               | Описание                         |
+| `keywords`       | `string \| null`               | Ключевые слова                   |
+| `ogImage`        | `string \| null`               | Картинка Open Graph              |
+| `ogTitle`        | `string \| null`               | Заголовок Open Graph             |
+| `ogDescription`  | `string \| null`               | Описание Open Graph              |
+| `noindex`        | `boolean`                      | Закрыть страницу от индексации   |
+| `schemaMarkup`   | `PageSchemaMarkup \| null`     | Разметка schema.org. Необязательно |
+
+## `PageSchemaMarkup`
+
+| Поле          | Тип              | Описание                                      |
+| ------------- | ---------------- | --------------------------------------------- |
+| `data`        | `unknown`        | Тело разметки                                 |
+| `updatedAt`   | `string \| null` | Когда разметку обновляли                      |
+| `genProducts` | `boolean`        | Генерировать разметку товаров. Необязательно  |
 
 ## `getPages`
 
@@ -74,7 +105,7 @@ const pages = await site.pages.getPages({ offset: 0, limit: 20 });
 
 | Поле                | Тип      | Описание                    |
 | ------------------- | -------- | --------------------------- |
-| `list`              | `Page[]` | Страницы. Поля в таблице выше |
+| `list`              | `Page[]` | [`Page`](#page) |
 | `pagination.limit`  | `number` | Размер страницы             |
 | `pagination.offset` | `number` | Смещение                    |
 | `pagination.total`  | `number` | Всего записей               |
@@ -95,53 +126,51 @@ const page = await site.pages.getPage(pageId);
 | -------- | -------- | ----------- |
 | `pageId` | `number` | Id страницы |
 
-**Ответ** `Page`. Поля в таблице выше.
+**Ответ** [`Page`](#page).
 
 ## `createPage`
 
-Создаёт страницу. `type` может быть `page` или `global`. Не передавайте его или передайте `page`, чтобы склонировать шаблон или исходную страницу. Передайте `global`, чтобы отправить макет в теле.
+Создаёт страницу или глобальную секцию.
 
 `POST /sites/{siteId}/pages`
 
 ```typescript
 const page = await site.pages.createPage({ templateId: 12, name: "О нас" });
+const section = await site.pages.createPage({
+  type: "global",
+  name: "Шапка",
+  blocks: [],
+});
 ```
 
-**Вход**
+**Вход, `type` не передан или `page`**
 
-| Поле           | Тип              | Описание                                      |
-| -------------- | ---------------- | --------------------------------------------- |
-| `templateId`   | `number`         | Шаблон для клона                              |
-| `sourcePageId` | `number`         | Страница для клона                            |
-| `name`         | `string`         | Название. Необязательно                       |
-| `uri`          | `string`         | Адрес. Необязательно                          |
-| `folderId`     | `number \| null` | Папка                                         |
-| `themeId`      | `number \| null` | Тема                                          |
-| `is`           | `string`         | Тип сущности макета. Только при `type: 'global'` |
-| `template_id`  | `string`         | Шаблон макета. Только при `type: 'global'`    |
-| `blocks`       | массив           | Блоки макета. Только при `type: 'global'`     |
-| `modals`       | массив           | Модалки макета. Только при `type: 'global'`   |
-| `widgets`      | массив           | Виджеты макета. Только при `type: 'global'`   |
+| Поле           | Тип              | Описание                                              |
+| -------------- | ---------------- | ----------------------------------------------------- |
+| `type`         | `'page'`         | Обычная страница. Необязательно                       |
+| `templateId`   | `number`         | Шаблон для клона. Необязательно                       |
+| `sourcePageId` | `number`         | Страница для клона. Необязательно                     |
+| `name`         | `string`         | Название. Необязательно                               |
+| `uri`          | `string`         | Адрес. Необязательно                                  |
+| `folderId`     | `number \| null` | Папка. Необязательно                                  |
 
-**Ответ** `Page`. Поля в таблице выше.
+`templateId` и `sourcePageId` вместе не передаются. Если нет обоих, создаётся пустая страница.
 
-## `createPageFromAi`
+**Вход, `type: 'global'`**
 
-Создаёт страницу из уже готового AI-макета.
+| Поле          | Тип              | Описание                         |
+| ------------- | ---------------- | -------------------------------- |
+| `type`        | `'global'`       | Глобальная секция                |
+| `name`        | `string`         | Название. Необязательно          |
+| `folderId`    | `number \| null` | Папка. Необязательно             |
+| `themeId`     | `number \| null` | Тема. Необязательно              |
+| `is`          | `string`         | Тип сущности макета. Необязательно |
+| `template_id` | `string`         | Шаблон макета. Необязательно     |
+| `blocks`      | массив           | Блоки макета. Необязательно      |
+| `modals`      | массив           | Модалки макета. Необязательно    |
+| `widgets`     | массив           | Виджеты макета. Необязательно    |
 
-`POST /sites/{siteId}/pages/from-ai`
-
-```typescript
-const page = await site.pages.createPageFromAi({ pageUUID: "…" });
-```
-
-**Вход**
-
-| Поле       | Тип      | Описание          |
-| ---------- | -------- | ----------------- |
-| `pageUUID` | `string` | Id готового макета |
-
-**Ответ** `Page`. Поля в таблице выше.
+**Ответ** [`Page`](#page).
 
 ## `copyPage`
 
@@ -163,7 +192,7 @@ const copy = await site.pages.copyPage(pageId, { name: "Копия" });
 | `folderId`     | `number \| null` | Папка. Необязательно             |
 | `targetSiteId` | `number`         | Копия на другой сайт. Необязательно |
 
-**Ответ** `Page`. Поля в таблице выше.
+**Ответ** [`Page`](#page).
 
 ## `copyPages`
 
@@ -191,7 +220,7 @@ const copied = await site.pages.copyPages({ pageIds: [1, 2] });
 
 ## `updatePage`
 
-Меняет страницу.
+Меняет параметры страницы.
 
 `PUT /sites/{siteId}/pages/{pageId}`
 
@@ -206,7 +235,7 @@ const page = await site.pages.updatePage(pageId, { name: "Новое имя" });
 | `pageId`          | `number`     | Id страницы                                                                                                                     |
 | `status`          | `PageStatus` | Новый статус                                                                                                                    |
 | `versionId`       | `number`     | Делает эту версию текущей                                                                                                       |
-| `editorVersionId` | `number`     | Ставит указатель редактора и не публикует                                                                                       |
+| `editorVersionId` | `number`     | Версия, открытая в редакторе                                                                                                    |
 | `name`            | `string`     | Название, до 150 символов                                                                                                       |
 | `uri`             | `string`     | Адрес, до 255 символов. API нормализует слэш в начале и в конце                                                                 |
 | `language`        | `string`     | Язык страницы                                                                                                                   |
@@ -214,7 +243,9 @@ const page = await site.pages.updatePage(pageId, { name: "Новое имя" });
 | `sortIndex`       | `number`     | Порядок в списке                                                                                                                |
 | `meta`            | `PageMeta`   | Частичный. Заголовок и Open Graph title: 200 символов. Описание, keywords и Open Graph description: 1000 символов                |
 
-**Ответ** `Page`. Поля в таблице выше.
+**Ответ** [`Page`](#page).
+
+Чтобы менять версии и данные страницы, смотрите [Версии страниц](page-versions.md) и [Данные страницы](page-data.md).
 
 ## `deletePage`
 
@@ -231,10 +262,6 @@ await site.pages.deletePage(pageId);
 | Поле     | Тип      | Описание    |
 | -------- | -------- | ----------- |
 | `pageId` | `number` | Id страницы |
-
-**Ответ**
-
-Тела нет.
 
 ## `bulkUpdatePages`
 
@@ -377,10 +404,6 @@ await site.pages.deleteFolder(folderId);
 | ---- | -------- | -------- |
 | `id` | `number` | Id папки |
 
-**Ответ**
-
-Тела нет.
-
 ### `bulkUpdateFolders`
 
 Меняет несколько папок. Если не прошла ни одна, API отвечает 400.
@@ -402,95 +425,9 @@ const result = await site.pages.bulkUpdateFolders([{ id: folderId, name: "Нов
 | `updated` | `PageFolder[]`       | Папки, которые изменились |
 | `errors`  | `{ id, code, message }[]` | Что не изменилось   |
 
-## Версии
+## Что дальше
 
-### `getVersions`
-
-Возвращает версии страницы.
-
-`GET /sites/{siteId}/pages/{pageId}/versions`
-
-```typescript
-const versions = await site.pages.getVersions(pageId);
-```
-
-**Вход**
-
-| Поле     | Тип      | Описание    |
-| -------- | -------- | ----------- |
-| `pageId` | `number` | Id страницы |
-
-**Ответ**
-
-| Поле            | Тип       | Описание                                              |
-| --------------- | --------- | ----------------------------------------------------- |
-| `list`          | массив    | Версии                                                |
-| `list[].id`     | `number`  | Id версии                                             |
-| `list[].createdAt` | `string` | Когда создана                                      |
-| `list[].isDraft`| `boolean` | Версию ещё ни разу не публиковали                     |
-
-### `getVersion`
-
-Возвращает одну версию вместе с макетом. `'published'` — публичная версия. `'editor'` — это `editorVersionId`, а если указателя нет, публичная версия.
-
-`GET /sites/{siteId}/pages/{pageId}/versions/{versionId}`
-
-```typescript
-const version = await site.pages.getVersion(pageId, "published");
-```
-
-**Вход**
-
-| Поле        | Тип                              | Описание                          |
-| ----------- | -------------------------------- | --------------------------------- |
-| `pageId`    | `number`                         | Id страницы                       |
-| `versionId` | `number \| 'published' \| 'editor'` | Id версии или одно из двух слов |
-
-**Ответ**
-
-| Поле      | Тип                 | Описание                                              |
-| --------- | ------------------- | ----------------------------------------------------- |
-| `id`      | `number`            | Id версии                                             |
-| `createdAt` | `string`          | Когда создана                                         |
-| `isDraft` | `boolean`           | Версию ещё ни разу не публиковали                     |
-| `data`    | `PageDataStructure` | Макет. Форма в разделе [Данные страницы](page-data.md) |
-| `abtests` | массив              | A/B-тесты версии. Необязательно                       |
-
-### `getPublishedVersion`
-
-Возвращает публичную версию. Это `getVersion(pageId, 'published')`.
-
-```typescript
-const version = await site.pages.getPublishedVersion(pageId);
-```
-
-**Вход**
-
-| Поле     | Тип      | Описание    |
-| -------- | -------- | ----------- |
-| `pageId` | `number` | Id страницы |
-
-**Ответ** тот же, что у `getVersion`.
-
-### `createVersion`
-
-Создаёт версию страницы. Если `publish` не передан, API публикует версию.
-
-`POST /sites/{siteId}/pages/{pageId}/versions`
-
-```typescript
-const version = await site.pages.createVersion(pageId, { data: layout });
-```
-
-**Вход**
-
-| Поле                | Тип                 | Описание                                              |
-| ------------------- | ------------------- | ----------------------------------------------------- |
-| `pageId`            | `number`            | Id страницы                                           |
-| `data`              | `PageDataStructure` | JSON макета. Обязательно                              |
-| `assets.images`     | `number[]`          | Id картинок, которые использует версия                |
-| `assets.files`      | `string[]`          | Пути файлов версии                                    |
-| `assets.screenshot` | `number \| null`    | Id превью версии                                      |
-| `publish`           | `boolean`           | Опубликовать сразу. Если не передан, API публикует    |
-
-**Ответ** тот же, что у `getVersion`.
+| Раздел | Описание |
+| ------ | -------- |
+| [Версии страниц](page-versions.md) | Читать и сохранять версии |
+| [Данные страницы](page-data.md) | JSON макета |

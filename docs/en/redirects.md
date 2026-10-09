@@ -1,16 +1,54 @@
-# site > Redirects
+# Site → Redirects
 
-`site.redirects` lists and edits redirects for one site. Paths sit on `/sites/{siteId}/redirects`.
+`site.redirects` lists and edits redirects for one site.
 
 ```typescript
 const redirects = await site.redirects.getRedirects({ type: "standard" });
 ```
 
-`RedirectKind` is `'standard'` or `'geo'`. `RedirectTypeCode` is the number `301`, `302`, or `200`.
+## `RedirectKind`
 
-A `Redirect` is `{ id, type, enabled, fromAllPages, regularFromPage, fromPage, toPage, redirectType, saveQuery, sortIndex, country?, language? }`.
+| Value | Description |
+| --- | --- |
+| `standard` | Ordinary redirect |
+| `geo` | By country or language |
 
-A condition (`country` or `language`) is `{ enabled, exclude, list }`. `list` is an array of strings.
+## `RedirectTypeCode`
+
+| Value | Description |
+| --- | --- |
+| `301` | Permanent |
+| `302` | Temporary |
+| `200` | Transparent |
+
+## `RedirectCondition`
+
+A country or language condition.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `enabled` | `boolean` | The condition is on |
+| `exclude` | `boolean` | Exclude the values in `list` |
+| `list` | `string[]` | Countries or languages |
+
+## `Redirect`
+
+A site redirect.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | Redirect id |
+| `type` | [`RedirectKind`](#redirectkind) | Kind |
+| `enabled` | `boolean` | On |
+| `fromAllPages` | `boolean` | From every page |
+| `regularFromPage` | `boolean` | `fromPage` is a regular expression |
+| `fromPage` | `string` | Source |
+| `toPage` | `string` | Destination |
+| `redirectType` | [`RedirectTypeCode`](#redirecttypecode) | Status code |
+| `saveQuery` | `boolean` | Keep the query string |
+| `sortIndex` | `number` | Order |
+| `country` | [`RedirectCondition`](#redirectcondition) | Country condition. Optional |
+| `language` | [`RedirectCondition`](#redirectcondition) | Language condition. Optional |
 
 ## `getRedirects`
 
@@ -32,7 +70,7 @@ const redirects = await site.redirects.getRedirects({ type: "standard" });
 
 | Field  | Type         | Description                         |
 | ------ | ------------ | ----------------------------------- |
-| `list` | `Redirect[]` | Redirects. Fields in the paragraph above |
+| `list` | [`Redirect[]`](#redirect) | Redirects |
 
 ## `getRedirect`
 
@@ -50,7 +88,7 @@ const redirect = await site.redirects.getRedirect(redirectId);
 | ------------ | -------- | ------------- |
 | `redirectId` | `number` | Redirect id   |
 
-**Response** `Redirect`. Fields in the paragraph above.
+**Response** [`Redirect`](#redirect).
 
 ## `createRedirect`
 
@@ -77,10 +115,10 @@ const redirect = await site.redirects.createRedirect({
 | `fromPage`        | `string`               | Source. Optional                                 |
 | `redirectType`    | `301 \| 302 \| 200`    | Status code. Optional                            |
 | `saveQuery`       | `boolean`              | Keep the query string. Optional                  |
-| `country`         | `{ enabled, exclude, list }` | Country condition. Optional                |
-| `language`        | `{ enabled, exclude, list }` | Language condition. Optional               |
+| `country`         | [`RedirectCondition`](#redirectcondition) | Country condition. Optional |
+| `language`        | [`RedirectCondition`](#redirectcondition) | Language condition. Optional |
 
-**Response** `Redirect`. Fields in the paragraph above.
+**Response** [`Redirect`](#redirect).
 
 ## `updateRedirect`
 
@@ -99,7 +137,7 @@ const redirect = await site.redirects.updateRedirect(redirectId, { toPage: "/oth
 | `redirectId` | `number` | Redirect id                                |
 | patch        | object   | Any create fields. All optional            |
 
-**Response** `Redirect`. Fields in the paragraph above.
+**Response** [`Redirect`](#redirect).
 
 ## `deleteRedirect`
 
@@ -116,10 +154,6 @@ await site.redirects.deleteRedirect(redirectId);
 | Field        | Type     | Description |
 | ------------ | -------- | ----------- |
 | `redirectId` | `number` | Redirect id |
-
-**Response**
-
-No body.
 
 ## `replaceRedirects`
 
@@ -138,10 +172,10 @@ const redirects = await site.redirects.replaceRedirects("standard", [
 | Field   | Type                     | Description                                          |
 | ------- | ------------------------ | ---------------------------------------------------- |
 | `type`  | `'standard' \| 'geo'`    | Which list to replace                                |
-| `items` | `ReplaceRedirectItem[]`  | Redirects that should remain. The body is `{ items }` |
+| `items` | `ReplaceRedirectItem[]`  | Redirects that should remain |
 
 **Response**
 
 | Field  | Type         | Description              |
 | ------ | ------------ | ------------------------ |
-| `list` | `Redirect[]` | The list after replacement |
+| `list` | [`Redirect[]`](#redirect) | The list after replacement |

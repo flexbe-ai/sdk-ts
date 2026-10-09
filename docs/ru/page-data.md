@@ -1,8 +1,6 @@
-# site > Страницы > Данные
+# Сайт → Страницы → Данные
 
-`PageDataStructure` — JSON, который хранится в версии страницы. Его читают через `getVersion` и отправляют в `createVersion`. Оба вызова описаны в разделе [Страницы](pages.md). Карточка вокруг этого JSON (`name`, `uri`, `status`) — это `Page`.
-
-Когда отправляете версию обратно, оставляйте ключи, которые сами не используете. Шаблон может хранить в `entity.data` и в объекте `data` макета больше полей, чем перечислено здесь. Какие ключи есть, зависит от `template_id`.
+Когда отправляете версию обратно, оставляйте ключи, которые сами не используете. В шаблоне их может быть больше, чем перечислено здесь.
 
 ## Макет
 
@@ -18,76 +16,158 @@ interface PageDataStructure {
   codes?: PageCodeWithMeta[];
   textStyles?: TextStyleItem[];
   data?: PageLayoutData;
-  /** @deprecated Use data.background */
-  background?: PageBackground;
-  /** @deprecated Use data.responsive */
-  responsive?: "auto" | false | boolean;
 }
 ```
 
-`PageABTest` — это `{ id, a, b, isActive }`. `a` и `b` — строки.
+### `PageABTest`
 
-`PageLayoutData` — объект `data` макета: необязательные `background`, `responsive` (`'auto' | false`), `container` и `visualGrid`, плюс любые другие ключи, которые сохранил шаблон. Берите `data.background` и `data.responsive`. Те же два поля в корне `PageDataStructure` — старое место для них.
+| Поле       | Тип       | Описание        |
+| ---------- | --------- | --------------- |
+| `id`       | `number`  | Id теста        |
+| `a`        | `string`  | Id варианта A   |
+| `b`        | `string`  | Id варианта B   |
+| `isActive` | `boolean` | Тест включён    |
 
-`PageBackground` — это `{ image: ImageObj | null, styles }`. В `styles` лежат `backgroundColor`, `backgroundFixed`, `backgroundRepeat` (`repeat`, `repeat-x`, `repeat-y`, `no-repeat`), `backgroundPosition`, `backgroundSize` (`cover`, `contain`, `auto`) и `contrast` (`dark` | `light`).
+### `PageLayoutData`
 
-`ImageObj` — это `{ id, ext, name?, average?, preview?, width?, height?, proportion?, border?, animated?, transparent? }`. `transparent` — число. Загруженная картинка из раздела [Изображения](images.md) — отдельный тип.
+| Поле         | Тип                    | Описание        |
+| ------------ | ---------------------- | --------------- |
+| `background` | `PageBackground`       | Необязательно   |
+| `responsive` | `'auto' \| false`      | Необязательно   |
+| `container`  | `PageContainerSettings`| Необязательно   |
+| `visualGrid` | `PageVisualGrid`       | Необязательно   |
 
-У `container` есть `desktop` и `mobile`. Каждый брейкпоинт — `{ width, gutter, minViewport, viewport, maxViewport }`. Значение viewport — число или `'auto'`.
+### `PageBackground`
 
-`visualGrid` — это `{ color?, desktop, mobile }`. Каждая сторона — `{ columns, columnWidth, gap }`. `columnWidth` и `gap` имеют тип `number | null`.
+| Поле     | Тип                | Описание |
+| -------- | ------------------ | -------- |
+| `image`  | `ImageObj \| null` | Картинка |
+| `styles` | `PageBackgroundStyles` | Стили |
+
+### `PageBackgroundStyles`
+
+| Поле                 | Тип                                              | Описание              |
+| -------------------- | ------------------------------------------------ | --------------------- |
+| `backgroundColor`    | `string`                                         | Цвет или градиент CSS |
+| `backgroundFixed`    | `boolean`                                        | Фон зафиксирован      |
+| `backgroundRepeat`   | `'repeat' \| 'repeat-x' \| 'repeat-y' \| 'no-repeat'` | Повтор фона      |
+| `backgroundPosition` | `string`                                         | Позиция фона          |
+| `backgroundSize`     | `'cover' \| 'contain' \| 'auto'`                 | Размер фона           |
+| `contrast`           | `'dark' \| 'light'`                              | Контраст              |
+
+### `ImageObj`
+
+Загруженная картинка из раздела [Изображения](images.md) — отдельный тип.
+
+| Поле          | Тип                                              | Описание        |
+| ------------- | ------------------------------------------------ | --------------- |
+| `id`          | `number`                                         | Id картинки     |
+| `ext`         | `string`                                         | Расширение      |
+| `name`        | `string`                                         | Необязательно   |
+| `average`     | `string`                                         | Необязательно   |
+| `preview`     | `string`                                         | Необязательно   |
+| `width`       | `number`                                         | Необязательно   |
+| `height`      | `number`                                         | Необязательно   |
+| `proportion`  | `number`                                         | Необязательно   |
+| `border`      | `'none' \| 'transparent' \| 'mixed' \| string`   | Необязательно   |
+| `animated`    | `boolean`                                        | Необязательно   |
+| `transparent` | `number`                                         | Необязательно   |
+
+### `PageContainerSettings`
+
+| Поле      | Тип                       | Описание |
+| --------- | ------------------------- | -------- |
+| `desktop` | `PageContainerBreakpoint` | Десктоп  |
+| `mobile`  | `PageContainerBreakpoint` | Мобильный |
+
+### `PageContainerBreakpoint`
+
+| Поле          | Тип                | Описание |
+| ------------- | ------------------ | -------- |
+| `width`       | `number`           | Ширина   |
+| `gutter`      | `number`           | Отступ   |
+| `minViewport` | `number \| 'auto'` | Минимальный viewport |
+| `viewport`    | `number \| 'auto'` | Viewport             |
+| `maxViewport` | `number \| 'auto'` | Максимальный viewport |
+
+### `PageVisualGrid`
+
+| Поле      | Тип                   | Описание      |
+| --------- | --------------------- | ------------- |
+| `color`   | `string`              | Необязательно |
+| `desktop` | `PageVisualGridItem`  | Десктоп       |
+| `mobile`  | `PageVisualGridItem`  | Мобильный     |
+
+### `PageVisualGridItem`
+
+| Поле          | Тип              | Описание |
+| ------------- | ---------------- | -------- |
+| `columns`     | `number`         | Колонки          |
+| `columnWidth` | `number \| null` | Ширина колонки   |
+| `gap`         | `number \| null` | Промежуток       |
 
 ## Сущности
 
-`PageEntityType`: `block`, `modal`, `element`, `widget`, `layout`.
+### `PageEntityType`
 
-У каждой сущности общая база `PageEntity`:
+| Значение    | Описание |
+| ----------- | -------- |
+| `block`     | Блок     |
+| `modal`     | Модалка  |
+| `element`   | Элемент  |
+| `widget`    | Виджет   |
+| `layout`    | Макет    |
 
-| Поле          | Тип                                      | Описание                                              |
-| ------------- | ---------------------------------------- | ----------------------------------------------------- |
-| `id`          | `string`                                 | Id сущности                                           |
-| `is`          | `PageEntityType`                         | Вид: блок, элемент, модалка, виджет или макет         |
-| `template_id` | `string`                                 | Шаблон                                                |
-| `mod_id`      | `string`, необязательно                  | Вариант шаблона                                       |
-| `source_id`   | `string`, необязательно                  | Id исходной сущности                                  |
-| `update_time` | `number`                                 | Когда сущность меняли                                 |
-| `data`        | объект                                   | Данные шаблона и другие ключи, которые он сохранил    |
-| `p_id`        | `number`, необязательно                  | Id родителя                                           |
-| `untouched`   | `boolean`, необязательно                 | Сущность ещё не редактировали после вставки           |
-| `hidden`      | `'none' \| 'mobile' \| 'desktop'`        | Где скрыта: нигде, на мобильном или на десктопе       |
-| `className`   | `string`, необязательно                  | CSS-класс                                             |
-| `modals`      | `PageModal[]`, необязательно             | Модалки этой сущности                                 |
-| `animation`   | `PageEntityAnimation`, необязательно     | Анимация                                              |
-| `events`      | `PageEntityEvent[]`, необязательно       | События                                               |
-| `multidata`   | `{ enabled, vars }`, необязательно       | Несколько наборов данных. У переменной есть `data`    |
+### `PageEntity`
 
-`hidden` принимает `'none'`, `'mobile'` или `'desktop'`.
+| Поле           | Тип                                      | Описание                                              |
+| -------------- | ---------------------------------------- | ----------------------------------------------------- |
+| `id`           | `string`                                 | Id сущности                                           |
+| `is`           | `PageEntityType`                         | Вид: блок, элемент, модалка, виджет или макет         |
+| `template_id`  | `string`                                 | Шаблон                                                |
+| `mod_id`       | `string`, необязательно                  | Вариант шаблона                                       |
+| `source_id`    | `string`, необязательно                  | Id исходной сущности                                  |
+| `update_time`  | `number`                                 | Когда сущность меняли                                 |
+| `data`         | объект                                   | Данные шаблона и другие ключи, которые он сохранил    |
+| `p_id`         | `number`, необязательно                  | Id родителя                                           |
+| `untouched`    | `boolean`, необязательно                 | Сущность ещё не редактировали после вставки           |
+| `hidden`       | `'none' \| 'mobile' \| 'desktop'`        | Где скрыта: нигде, на мобильном или на десктопе. Необязательно |
+| `className`    | `string`, необязательно                  | CSS-класс                                             |
+| `modals`       | `PageModal[]`, необязательно             | Модалки этой сущности                                 |
+| `animation`    | `PageEntityAnimation`, необязательно     | Анимация                                              |
+| `events`       | `PageEntityEvent[]`, необязательно       | События                                               |
+| `multidata`    | `{ enabled, vars }`, необязательно       | Несколько наборов данных. У переменной есть `data`    |
+| `refPageId`    | `number`, необязательно                  | Только у блока. Страница, на которую ссылается блок   |
+| `aboveTheFold` | `boolean`, необязательно                 | Только у блока и элемента. Сущность в первом экране   |
+| `children`     | массив, необязательно                    | Только у блока, элемента, виджета и модалки. Вложенные сущности |
+| `multisection` | `{ enabled, main_var, vars }`, необязательно | Только у блока. Варианты секции                  |
+| `geolanding`   | `{ enabled, vars }`, необязательно       | Только у блока. Варианты по городу. У переменной есть `city` |
+| `screenshot`   | `ImageObj \| null`                       | Только у модалки. Превью                              |
 
-`PageEntityEvent` — это `{ event, action, action_code, onlyFirst, state }`, и у него могут быть другие ключи. `state` — `'all' | 'in' | 'out'`.
+### `PageEntityEvent`
 
-Специализации:
-
-| Поле            | Где                    | Описание                                      |
-| --------------- | ---------------------- | --------------------------------------------- |
-| `refPageId`     | блок                   | Страница, на которую ссылается блок           |
-| `aboveTheFold`  | блок, элемент          | Сущность в первом экране                      |
-| `children`      | блок, элемент, виджет, модалка | Вложенные сущности                  |
-| `multisection`  | блок                   | Варианты секции: `{ enabled, main_var, vars }` |
-| `geolanding`    | блок                   | Варианты по городу: `{ enabled, vars }`, у переменной есть `city` |
-| `screenshot`    | модалка                | Превью, `ImageObj` или `null`                 |
+| Поле          | Тип                      | Описание        |
+| ------------- | ------------------------ | --------------- |
+| `event`       | `string`                 | Событие         |
+| `action`      | `string`                 | Действие        |
+| `action_code` | `string`                 | Код действия    |
+| `onlyFirst`   | `boolean`                | Только первый раз |
+| `state`       | `'all' \| 'in' \| 'out'` | Состояние       |
 
 ## Коды
 
-Элементы `codes` имеют тип `PageCodeWithMeta`: мета-поля плюс `PageCode`.
+Содержит код, вставленный на страницу.
 
-| Поле         | Описание                          |
-| ------------ | --------------------------------- |
-| `id`         | Id кода                           |
-| `name`       | Название                          |
-| `show_code`  | Показывать код на странице        |
-| `is_body`    | Код в конце body, а не в head     |
+### `PageCodeWithMeta`
 
-`PageCode`:
+| Поле        | Тип       | Описание                       |
+| ----------- | --------- | ------------------------------ |
+| `id`        | `string`  | Id кода                        |
+| `name`      | `string`  | Название                       |
+| `show_code` | `boolean` | Показывать код на странице     |
+| `is_body`   | `boolean` | Код в конце body, а не в head  |
+
+### `PageCode`
 
 | Поле              | Тип                          | Описание                          |
 | ----------------- | ---------------------------- | --------------------------------- |
@@ -102,15 +182,48 @@ interface PageDataStructure {
 | `sources.css`     | `string`                     | Исходные стили                    |
 | `sources.modules` | `{ id, path, content }[]`    | Модули                            |
 
-`PageCodeImage` — это `{ type: 'img', id, name, ext, average, proportion }`. `PageCodeFile` — это `{ type: 'file', id, name }`. Модуль — `{ id, path, content }`.
+### `PageCodeImage`
 
-`site.buildHtml` принимает эти поля исходников и возвращает `utilities` строкой. См. [Сайты](sites.md).
+| Поле         | Тип      | Описание   |
+| ------------ | -------- | ---------- |
+| `type`       | `'img'`  |            |
+| `id`         | `number` | Id         |
+| `name`       | `string` | Название   |
+| `ext`        | `string` | Расширение |
+| `average`    | `string` |            |
+| `proportion` | `number` |            |
+
+### `PageCodeFile`
+
+| Поле   | Тип      | Описание |
+| ------ | -------- | -------- |
+| `type` | `'file'` |          |
+| `id`   | `number` | Id       |
+| `name` | `string` | Название |
+
+### `PageCodeModule`
+
+| Поле      | Тип      | Описание   |
+| --------- | -------- | ---------- |
+| `id`      | `string` | Id         |
+| `path`    | `string` | Путь       |
+| `content` | `string` | Содержимое |
+
+Для сборки исходников смотрите [Сайты](sites.md#buildhtml).
 
 ## Текстовые стили
 
-`TextStyleItem`: `uid`, `id` (роль вроде content или title), `title`, необязательный `protected`, необязательный `source` (`'project' | 'page'`), `style` и необязательный `mobile`.
+### `TextStyleItem`
 
-`mobile` может переопределить `size`, `weight`, `line_height` и `letter_spacing`.
+| Поле        | Тип                                      | Описание                                      |
+| ----------- | ---------------------------------------- | --------------------------------------------- |
+| `uid`       | `string`                                 | Id шрифта                                     |
+| `id`        | `string`                                 | Роль, например content или title              |
+| `title`     | `string`                                 | Название                                      |
+| `protected` | `boolean`                                | Необязательно                                 |
+| `source`    | `'project' \| 'page'`                    | Необязательно                                 |
+| `style`     | `TextStyleProperties`                    | Стиль                                         |
+| `mobile`    | объект                                   | Необязательно. Может переопределить `size`, `weight`, `line_height` и `letter_spacing` |
 
 `TextStyleProperties`:
 
@@ -129,12 +242,73 @@ interface PageDataStructure {
 
 ## Анимация
 
-`PageEntityAnimation` — это `{ id?, responsive }`, и у него могут быть другие ключи. Оставляйте их, когда отправляете версию обратно. `responsive.desktop` — конфиг устройства. `responsive.mobile` — его частичный вариант.
+### `PageEntityAnimation`
 
-Конфиг устройства — `{ enabled, inherit, animationType?, interactionType?, interactionSettings?, steps }`.
+| Поле         | Тип                             | Описание      |
+| ------------ | ------------------------------- | ------------- |
+| `id`         | `string \| number`              | Необязательно |
+| `responsive` | `PageEntityAnimationResponsive` | Десктоп и мобильный |
 
-`interactionType`: `none`, `screen`, `scroll`, `click`, `hover`, `hold`, `trigger`, `custom`.
+### `PageEntityAnimationResponsive`
 
-В `interactionSettings` могут быть `intersectionLine` (`top`, `center`, `bottom`), `intersectionLineOffset`, `retriggerBehavior` (`reverse`, `restart`, `pause`, `reset`, `none`), `loop`, `playMode` (`normal`, `bounce`), `seekMode`, `seekAxis` (`x`, `y`), `seekSmoothing`, `triggerElements`, `triggerAnimationItem`, `triggerEvent` (`start`, `complete`, `loopstart`, `loopcomplete`, `pause`, `unpause`) и `fixed`.
+| Поле      | Тип                                        | Описание                                      |
+| --------- | ------------------------------------------ | --------------------------------------------- |
+| `desktop` | `PageEntityAnimationDeviceConfig`          | Конфиг десктопа. Необязательно                |
+| `mobile`  | `Partial<PageEntityAnimationDeviceConfig>` | Частичный конфиг мобильного. Необязательно    |
 
-Шаг — `{ id, name, distance, animationParams }`. В `animationParams` могут быть `clipPath`, `clipPathEnabled`, `skewEnabled`, `seekEasing`, `opacity`, `duration`, `rotate`, `easing`, `translateX`, `translateY`, `scaleX`, `scaleY`, `skewX` и `skewY`.
+### `PageEntityAnimationDeviceConfig`
+
+| Поле                  | Тип                                                                                          | Описание                    |
+| --------------------- | -------------------------------------------------------------------------------------------- | --------------------------- |
+| `enabled`             | `boolean`                                                                                    | Включена                    |
+| `inherit`             | `boolean \| string`                                                                          | Наследование                |
+| `animationType`       | `string`                                                                                     | Тип анимации. Необязательно |
+| `interactionType`     | `'none' \| 'screen' \| 'scroll' \| 'click' \| 'hover' \| 'hold' \| 'trigger' \| 'custom'`    | Как запускается. Необязательно |
+| `interactionSettings` | `PageEntityAnimationInteractionSettings`                                                     | Настройки запуска. Необязательно |
+| `steps`               | `PageEntityAnimationStep[]`                                                                  | Шаги                        |
+
+### `PageEntityAnimationInteractionSettings`
+
+| Поле                     | Тип                                                                              | Описание                         |
+| ------------------------ | -------------------------------------------------------------------------------- | -------------------------------- |
+| `intersectionLine`       | `'top' \| 'center' \| 'bottom'`                                                  | Линия пересечения. Необязательно |
+| `intersectionLineOffset` | `string`                                                                         | Смещение линии. Необязательно    |
+| `retriggerBehavior`      | `'reverse' \| 'restart' \| 'pause' \| 'reset' \| 'none'`                         | Повторный запуск. Необязательно  |
+| `loop`                   | `number`                                                                         | Число повторов. Необязательно    |
+| `playMode`               | `'normal' \| 'bounce'`                                                           | Режим воспроизведения. Необязательно |
+| `seekMode`               | `string`                                                                         | Режим прокрутки. Необязательно   |
+| `seekAxis`               | `'x' \| 'y'`                                                                     | Ось прокрутки. Необязательно     |
+| `seekSmoothing`          | `number`                                                                         | Сглаживание. Необязательно       |
+| `triggerElements`        | `string[]`                                                                       | Элементы-триггеры. Необязательно |
+| `triggerAnimationItem`   | `string`                                                                         | Анимация-триггер. Необязательно  |
+| `triggerEvent`           | `'start' \| 'complete' \| 'loopstart' \| 'loopcomplete' \| 'pause' \| 'unpause'` | Событие триггера. Необязательно  |
+| `fixed`                  | `boolean`                                                                        | Зафиксирована. Необязательно     |
+
+### `PageEntityAnimationStep`
+
+| Поле              | Тип                    | Описание |
+| ----------------- | ---------------------- | -------- |
+| `id`              | `string`               | Id       |
+| `name`            | `string`               | Название |
+| `distance`        | `number`               | Дистанция |
+| `animationParams` | объект                 | Параметры шага |
+
+Поля `animationParams`:
+
+| Поле              | Тип                | Описание      |
+| ----------------- | ------------------ | ------------- |
+| `clipPath`        | `string`           | Необязательно |
+| `clipPathEnabled` | `boolean`          | Необязательно |
+| `skewEnabled`     | `boolean`          | Необязательно |
+| `seekEasing`      | `string`           | Необязательно |
+| `opacity`         | `string \| number` | Необязательно |
+| `duration`        | `number`           | Необязательно |
+| `rotate`          | `number`           | Необязательно |
+| `easing`          | `string`           | Необязательно |
+| `translateX`      | `string`           | Необязательно |
+| `translateY`      | `string`           | Необязательно |
+| `scaleX`          | `number`           | Необязательно |
+| `scaleY`          | `number`           | Необязательно |
+| `skewX`           | `string`           | Необязательно |
+| `skewY`           | `string`           | Необязательно |
+

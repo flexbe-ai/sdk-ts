@@ -1,10 +1,8 @@
 # Домены
 
-## site > Домены
+## Сайт → Домены
 
-`SiteDomains`. Пути лежат на `/sites/{siteId}/domains`.
-
-`SiteDomain`:
+### `SiteDomain`
 
 | Поле                           | Тип                              | Описание                                                                 |
 | ------------------------------ | -------------------------------- | ------------------------------------------------------------------------ |
@@ -42,7 +40,7 @@ const domains = await site.domains.list({ offset: 0, limit: 20 });
 
 | Поле                 | Тип            | Описание                         |
 | -------------------- | -------------- | -------------------------------- |
-| `list`               | `SiteDomain[]` | Домены. Поля в таблице выше      |
+| `list`               | `SiteDomain[]` | [`SiteDomain`](#sitedomain)      |
 | `pagination.limit`   | `number`       | Размер страницы                  |
 | `pagination.offset`  | `number`       | Смещение                         |
 | `pagination.total`   | `number`       | Всего записей                    |
@@ -67,7 +65,7 @@ const domain = await site.domains.bind({ name: "shop.example.com" });
 
 | Поле   | Тип          | Описание                              |
 | ------ | ------------ | ------------------------------------- |
-| ответ  | `SiteDomain` | Привязанный домен. Поля в таблице выше |
+| ответ  | `SiteDomain` | Привязанный домен. [`SiteDomain`](#sitedomain) |
 
 ### `remove`
 
@@ -85,15 +83,11 @@ await site.domains.remove(domainId);
 | ---------- | -------- | -------- |
 | `domainId` | `number` | Id домена |
 
-**Ответ**
+Домен, зарегистрированный через Flexbe, остаётся на аккаунте и только теряет привязку к сайту. Сторонний домен удаляется.
 
-Тела нет. Домен, зарегистрированный через Flexbe, остаётся на аккаунте и только теряет привязку к сайту. Сторонний домен удаляется.
+## account → Домены
 
-## account > Домены
-
-`AccountDomains`. Пути лежат на `/account/{accountId}/domains`.
-
-`AccountDomain`:
+### `AccountDomain`
 
 | Поле                  | Тип                                                                    | Описание                                                          |
 | --------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------- |
@@ -151,7 +145,7 @@ const domains = await client.account(accountId).domains.list({
 
 | Поле                | Тип               | Описание                    |
 | ------------------- | ----------------- | --------------------------- |
-| `list`              | `AccountDomain[]` | Домены и заявки. Поля выше  |
+| `list`              | `AccountDomain[]` | Домены и заявки. [`AccountDomain`](#accountdomain)  |
 | `pagination.limit`  | `number`          | Размер страницы             |
 | `pagination.offset` | `number`          | Смещение                    |
 | `pagination.total`  | `number`          | Всего записей               |
@@ -176,7 +170,7 @@ const domain = await client.account(accountId).domains.get(regId);
 
 | Поле  | Тип             | Описание                   |
 | ----- | --------------- | -------------------------- |
-| ответ | `AccountDomain` | Домен. Поля в таблице выше |
+| ответ | `AccountDomain` | [`AccountDomain`](#accountdomain) |
 
 ### `unbindSite`
 
@@ -193,7 +187,3 @@ await client.account(accountId).domains.unbindSite(regId);
 | Поле    | Тип      | Описание       |
 | ------- | -------- | -------------- |
 | `regId` | `number` | Id регистрации |
-
-**Ответ**
-
-Тела нет.

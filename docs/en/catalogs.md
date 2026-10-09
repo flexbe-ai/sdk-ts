@@ -1,4 +1,4 @@
-# client > Meta
+# client → Meta
 
 `client.meta` returns three reference lists: site languages, user-interface languages, and currencies. The lists are global. They do not take a site id or an account id.
 

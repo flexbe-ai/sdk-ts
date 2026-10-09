@@ -43,19 +43,20 @@ const me = await client.getMe();
 const site = client.getSiteApi(123);
 ```
 
-`getSiteApi(siteId)` — это `client.sites.getApi(siteId)`.
+`123` — id сайта.
 
-| Поле         | Описание                                          |
-| ------------ | ------------------------------------------------- |
-| `pages`      | [Страницы](pages.md)                              |
-| `leads`      | [Заявки](leads.md)                                |
-| `ecommerce`  | [Магазин](ecommerce.md): товары, категории и акции |
-| `images`     | [Изображения](images.md)                          |
-| `files`      | [Файлы](files.md)                                 |
-| `domains`    | [Домены](domains.md) этого сайта                  |
-| `redirects`  | [Редиректы](redirects.md)                         |
-| `settings`   | [Настройки](settings.md)                          |
-| `stat`       | [Статистика](statistics.md): A/B-тесты            |
+| Поле        | Описание                                           |
+| ----------- | -------------------------------------------------- |
+| `pages`     | [Страницы](pages.md)                               |
+| `leads`     | [Заявки](leads.md)                                 |
+| `ecommerce` | [Магазин](ecommerce.md): товары и категории |
+| акции       | [Акции](promotions.md)                             |
+| `images`    | [Изображения](images.md)                           |
+| `files`     | [Файлы](files.md)                                  |
+| `domains`   | [Домены](domains.md) этого сайта                   |
+| `redirects` | [Редиректы](redirects.md)                          |
+| `settings`  | [Настройки](settings.md)                           |
+| `stat`      | [Статистика](statistics.md)                        |
 
 ## Открыть аккаунт
 
@@ -63,6 +64,12 @@ const site = client.getSiteApi(123);
 const account = client.account(456);
 ```
 
-| Поле      | Описание                         |
-| --------- | -------------------------------- |
-| `domains` | [Домены](domains.md) аккаунта    |
+`456` — id аккаунта.
+
+| Поле      | Описание                      |
+| --------- | ----------------------------- |
+| `domains` | [Домены](domains.md) аккаунта |
+
+## Ошибки
+
+Коды ответа и таймаут описаны в разделе [Запросы и ошибки](requests.md).

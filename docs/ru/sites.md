@@ -1,12 +1,29 @@
-# client > Сайты
+# client → Сайты
 
-Сайт — это проект. `client.sites` показывает и создаёт проекты. `client.getSiteApi(siteId)` открывает один проект и даёт его ресурсы. Как создать клиент — в разделе [С чего начать](getting-started.md).
+Сайт — это проект. `client.sites` показывает и создаёт проекты. `client.getSiteApi(siteId)` открывает один проект и даёт его ресурсы. Как создать клиент — в разделе [С чего начать](README.md).
 
 ```typescript
 const client = new FlexbeClient({ apiKey: "your-api-key" });
 const sites = await client.sites.list();
 const site = client.getSiteApi(sites.list[0].id);
 ```
+
+## `Site`
+
+Проект.
+
+| Поле           | Тип                                                   | Описание                                      |
+| -------------- | ----------------------------------------------------- | --------------------------------------------- |
+| `id`           | `number`                                              | Id проекта                                    |
+| `accountId`    | `number`                                              | Аккаунт владельца                             |
+| `name`         | `string \| null`                                      | Название                                      |
+| `isDraft`      | `boolean`                                             | Черновик                                      |
+| `createdAt`    | `string`                                              | Когда создан                                  |
+| `role`         | `'owner' \| 'admin' \| 'editor' \| 'manager' \| null` | Роль текущего пользователя на сайте           |
+| `access`       | `'owner' \| 'share'`                                  | Свой сайт или доступ по шарингу               |
+| `domainUrl`    | `string \| null`                                      | URL основного домена                          |
+| `domainTitle`  | `string \| null`                                      | Имя основного домена для показа               |
+| `domainIsTech` | `boolean \| null`                                     | Основной домен технический                    |
 
 ## `Sites`
 
@@ -33,7 +50,7 @@ const sites = await client.sites.list({ offset: 0, limit: 20 });
 
 | Поле               | Тип      | Описание                         |
 | ------------------ | -------- | -------------------------------- |
-| `list`             | `Site[]` | Проекты. Поля в таблице ниже     |
+| `list`             | `Site[]` | [`Site`](#site)     |
 | `pagination.limit` | `number` | Размер страницы                  |
 | `pagination.offset`| `number` | Смещение                         |
 | `pagination.total` | `number` | Всего записей                    |
@@ -55,7 +72,7 @@ const created = await client.sites.create({ name: "Магазин", isDraft: tru
 | `name`    | `string`  | Название. Необязательно      |
 | `isDraft` | `boolean` | Создать черновиком. Необязательно |
 
-**Ответ** `Site`. Поля в таблице ниже.
+**Ответ** [`Site`](#site).
 
 ### `getApi`
 
@@ -73,21 +90,6 @@ const site = client.sites.getApi(siteId);
 
 **Ответ** `SiteApi`. Объект с ресурсами сайта: страницы, домены, заявки и остальные разделы.
 
-## `Site`
-
-| Поле           | Тип                                                   | Описание                                      |
-| -------------- | ----------------------------------------------------- | --------------------------------------------- |
-| `id`           | `number`                                              | Id проекта                                    |
-| `accountId`    | `number`                                              | Аккаунт владельца                             |
-| `name`         | `string \| null`                                      | Название                                      |
-| `isDraft`      | `boolean`                                             | Черновик                                      |
-| `createdAt`    | `string`                                              | Когда создан                                  |
-| `role`         | `'owner' \| 'admin' \| 'editor' \| 'manager' \| null` | Роль текущего пользователя на сайте           |
-| `access`       | `'owner' \| 'share'`                                  | Свой сайт или доступ по шарингу               |
-| `domainUrl`    | `string \| null`                                      | URL основного домена                          |
-| `domainTitle`  | `string \| null`                                      | Имя основного домена для показа               |
-| `domainIsTech` | `boolean \| null`                                     | Основной домен технический                    |
-
 ## site
 
 ### `get`
@@ -104,7 +106,7 @@ const project = await site.get();
 
 Параметров нет.
 
-**Ответ** `Site`. Поля в таблице выше.
+**Ответ** [`Site`](#site).
 
 ### `update`
 
@@ -123,7 +125,7 @@ const project = await site.update({ name: "Новое имя" });
 | `name`    | `string`  | Название. Необязательно |
 | `isDraft` | `boolean` | Черновик. Необязательно |
 
-**Ответ** `Site`. Поля в таблице выше.
+**Ответ** [`Site`](#site).
 
 ### `buildHtml`
 

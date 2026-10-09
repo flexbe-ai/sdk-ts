@@ -1,4 +1,4 @@
-# site > Leads
+# Site → Leads
 
 `site.leads` reads and updates leads for one site.
 
@@ -9,69 +9,158 @@ const page = await site.leads.list({ limit: 20, status: LeadStatus.NEW });
 const lead = page.list[0];
 ```
 
-`site.leads.get(id)` loads one card. Paths sit on `/sites/{siteId}` unless a method says otherwise.
+## `Lead`
 
-Shop delivery, tax, and the shared cart are on [Settings](settings.md). Catalog discounts are on [Ecommerce](ecommerce.md). A discount stored on a lead is the snapshot from the moment it was applied (`LeadOrderDiscount`).
+| Field            | Type                           | Description                    |
+| ---------------- | ------------------------------ | ------------------------------ |
+| `id`             | `number`                       | Lead id                        |
+| `sequence`       | `number`                       | Lead number on the site        |
+| `siteId`         | `number`                       | Site id                        |
+| `status`         | `LeadStatus`                   | Lead status                    |
+| `isRead`         | `boolean`                      | Someone has opened the lead    |
+| `formName`       | `string`                       | Form name                      |
+| `customer`       | `LeadCustomer`                 | Customer                       |
+| `formFields`     | `LeadFormField[] \| null`      | Form answers                   |
+| `orderItems`     | `LeadOrderItem[] \| null`      | Order lines                    |
+| `orderShipping`  | `LeadShipping \| null`         | Shipping                       |
+| `orderDiscounts` | `LeadOrderDiscount[] \| null`  | Discount snapshots             |
+| `payment`        | `LeadPayment \| null`          | Payment                        |
+| `taxSnapshot`    | object or `null`               | Tax at the time of the lead    |
+| `notes`          | `string \| null`               | Note                           |
+| `custom`         | object or `null`               | Custom data                    |
+| `tracking`       | `LeadTracking \| null`         | Where the lead came from       |
+| `trackingExtra`  | object or `null`               | Extra visit tags               |
+| `createdAt`      | `string`                       | When it was created            |
+| `updatedAt`      | `string`                       | When it was changed. Optional  |
 
-## Lead card
+### `LeadStatus`
 
-| Field                             | Type                      | Description                                |
-| --------------------------------- | ------------------------- | ------------------------------------------ |
-| `id`                              | `number`                  | Lead id                                    |
-| `sequence`                        | `number`                  | Lead number on the site                    |
-| `siteId`                          | `number`                  | Site id                                    |
-| `status`                          | `LeadStatus`              | Lead status                                |
-| `isRead`                          | `boolean`                 | Someone has opened the lead                |
-| `formName`                        | `string`                  | Form name                                  |
-| `customer.name`                   | `string`                  | Name                                       |
-| `customer.phone`                  | `string`                  | Phone                                      |
-| `customer.email`                  | `string \| null`          | Email                                      |
-| `formFields`                      | array or `null`           | Form answers                               |
-| `formFields[].id`                 | `number \| string`        | Field id                                   |
-| `formFields[].name`               | `string`                  | Field label                                |
-| `formFields[].value`              | `string \| null`          | Answer                                     |
-| `formFields[].type`               | `string`                  | Field type                                 |
-| `orderItems`                      | array or `null`           | Order lines                                |
-| `orderItems[].id`                 | `string`                  | Line id                                    |
-| `orderItems[].productId`          | `number`                  | Product id                                 |
-| `orderItems[].variantId`          | `number`                  | Variant id                                 |
-| `orderItems[].name`               | `string`                  | Name at order time                         |
-| `orderItems[].quantity`           | `number`                  | Quantity                                   |
-| `orderItems[].price`              | `LeadMoney`               | Unit price                                 |
-| `orderItems[].rowTotal`           | `LeadMoney`               | Line total                                 |
-| `orderItems[].image.id`           | `number`                  | Image id                                   |
-| `orderItems[].image.ext`          | `string`                  | Image extension                            |
-| `orderItems[].reservation`        | object or `null`          | Reservation for this line, when there is one |
-| `orderItems[].reservation.id`     | `number`                  | Reservation id                             |
-| `orderItems[].reservation.quantity` | `number`                | Reserved quantity                          |
-| `orderShipping`                   | `LeadShipping` or `null`  | Shipping                                   |
-| `orderDiscounts`                  | array or `null`           | Discount snapshots from when they were applied |
-| `payment`                         | `LeadPayment` or `null`   | Payment                                    |
-| `payment.id`                      | `number`                  | Payment id                                 |
-| `payment.amount`                  | `LeadMoney`               | Amount                                     |
-| `payment.status`                  | `LeadPaymentStatus`       | Payment status                             |
-| `payment.paymentProvider`         | `string`                  | Provider                                   |
-| `payment.isTestPayment`           | `boolean`                 | Test payment                               |
-| `payment.completedAt`             | `string`, optional        | When the payment finished                  |
-| `taxSnapshot`                     | object or `null`          | Tax as it was when the lead was created    |
-| `notes`                           | `string` or `null`        | Note                                       |
-| `tracking`                        | object or `null`          | Where the lead came from                   |
-| `tracking.ip`                     | `string`                  | IP                                         |
-| `tracking.deviceType`             | `string`                  | Device type                                |
-| `tracking.userAgent`              | `string`                  | User-Agent                                 |
-| `tracking.visitorId`              | `string`                  | Visitor id                                 |
-| `tracking.pageId`                 | `number`                  | Page that submitted the form               |
-| `trackingExtra`                   | object or `null`          | Extra visit tags                           |
-| `createdAt`                       | `string`                  | When it was created                        |
-| `updatedAt`                       | `string`, optional        | When it was changed                        |
+| Value         | Description |
+| ------------- | ----------- |
+| `new`         | New         |
+| `in_progress` | In progress |
+| `completed`   | Completed   |
+| `canceled`    | Canceled    |
+| `deleted`     | Deleted     |
 
-`LeadStatus`: `new`, `in_progress`, `completed`, `canceled`, `deleted`.
+### `LeadPaymentStatus`
 
-`LeadPaymentStatus`: `pending`, `in_progress`, `paid`, `error`.
+| Value         | Description |
+| ------------- | ----------- |
+| `pending`     | Pending     |
+| `in_progress` | In progress |
+| `paid`        | Paid        |
+| `error`       | Error       |
 
-`LeadMoney` is `value` (number), `unit` (currency), and `string` (display text, may be `null`).
+### `LeadMoney`
 
-`orderShipping.fields` are the shipping-method fields. `orderShipping.address` is `addressLine1`, optional `addressLine2`, `region`, `city`, `zipCode`. The body for `setShipping` is below, under that method.
+| Field    | Type             | Description  |
+| -------- | ---------------- | ------------ |
+| `value`  | `number`         | Number       |
+| `unit`   | `string`         | Currency     |
+| `string` | `string \| null` | Display text |
+
+### `LeadCustomer`
+
+| Field   | Type             | Description |
+| ------- | ---------------- | ----------- |
+| `name`  | `string`         | Name        |
+| `phone` | `string`         | Phone       |
+| `email` | `string \| null` | Email       |
+
+### `LeadFormField`
+
+| Field   | Type               | Description |
+| ------- | ------------------ | ----------- |
+| `id`    | `number \| string` | Field id    |
+| `name`  | `string`           | Field label |
+| `value` | `string \| null`   | Answer      |
+| `type`  | `string`           | Field type  |
+
+### `LeadOrderItem`
+
+| Field         | Type                       | Description                    |
+| ------------- | -------------------------- | ------------------------------ |
+| `id`          | `string`                   | Line id                        |
+| `productId`   | `number`                   | Product id                     |
+| `variantId`   | `number`                   | Variant id                     |
+| `name`        | `string`                   | Name at order time             |
+| `quantity`    | `number`                   | Quantity                       |
+| `price`       | `LeadMoney`                | Unit price                     |
+| `rowTotal`    | `LeadMoney`                | Line total                     |
+| `image`       | `{ id, ext }`              | Line image                     |
+| `reservation` | `{ id, quantity } \| null` | Line reservation. Optional     |
+
+### `image`
+
+| Field | Type     | Description     |
+| ----- | -------- | --------------- |
+| `id`  | `number` | Image id        |
+| `ext` | `string` | Image extension |
+
+### `reservation`
+
+| Field      | Type     | Description        |
+| ---------- | -------- | ------------------ |
+| `id`       | `number` | Reservation id     |
+| `quantity` | `number` | Reserved quantity  |
+
+### `LeadShipping`
+
+| Field           | Type        | Description              |
+| --------------- | ----------- | ------------------------ |
+| `id`            | `string`    | Shipping method id       |
+| `name`          | `string`    | Name                     |
+| `price`         | `LeadMoney` | Price                    |
+| `isCustomQuote` | `boolean`   | Custom price             |
+| `type`          | `string`    | Shipping type            |
+| `fields`        | `unknown[]` | Shipping method fields   |
+| `address`       | `address`   | Address                  |
+
+### `address`
+
+| Field          | Type     | Description |
+| -------------- | -------- | ----------- |
+| `addressLine1` | `string` | Address     |
+| `addressLine2` | `string` | Optional    |
+| `region`       | `string` | Region      |
+| `city`         | `string` | City        |
+| `zipCode`      | `string` | Postal code |
+
+### `LeadOrderDiscount`
+
+| Field            | Type                        | Description      |
+| ---------------- | --------------------------- | ---------------- |
+| `id`             | `number`                    | Discount id      |
+| `type`           | `'discount' \| 'promocode'` | Discount kind    |
+| `discountType`   | `'percent' \| 'money'`      | How it is counted |
+| `discountAmount` | `string`                    | Discount amount  |
+| `deliveryFree`   | `boolean \| null`           | Free delivery    |
+| `code`           | `string \| null`            | Promo code       |
+
+### `LeadPayment`
+
+| Field             | Type                | Description                         |
+| ----------------- | ------------------- | ----------------------------------- |
+| `id`              | `number`            | Payment id                          |
+| `amount`          | `LeadMoney`         | Amount                              |
+| `status`          | `LeadPaymentStatus` | Payment status                      |
+| `paymentProvider` | `string`            | Provider                            |
+| `isTestPayment`   | `boolean`           | Test payment                        |
+| `description`     | `string \| null`    | Description                         |
+| `createdAt`       | `string \| null`    | When it was created                 |
+| `payLink`         | `string \| null`    | Payment link                        |
+| `completedAt`     | `string`            | When the payment finished. Optional |
+
+### `LeadTracking`
+
+| Field        | Type     | Description                  |
+| ------------ | -------- | ---------------------------- |
+| `ip`         | `string` | IP                           |
+| `deviceType` | `string` | Device type                  |
+| `userAgent`  | `string` | User-Agent                   |
+| `visitorId`  | `string` | Visitor id                   |
+| `pageId`     | `number` | Page that submitted the form |
 
 ## `list`
 
@@ -108,7 +197,7 @@ const leads = await site.leads.list({ page: 1, limit: 20 });
 
 | Field               | Type     | Description                    |
 | ------------------- | -------- | ------------------------------ |
-| `list`              | `Lead[]` | Leads. Fields in the table above |
+| `list`              | `Lead[]` | [`Lead`](#lead) |
 | `pagination.limit`  | `number` | Page size                      |
 | `pagination.offset` | `number` | Offset                         |
 | `pagination.total`  | `number` | Total rows                     |
@@ -129,7 +218,7 @@ const lead = await site.leads.get(leadId);
 | -------- | -------- | ----------- |
 | `leadId` | `number` | Lead id     |
 
-**Response** `Lead`. Fields in the table above.
+**Response** [`Lead`](#lead).
 
 ## `update`
 
@@ -155,11 +244,11 @@ const lead = await site.leads.update(leadId, { status: "completed", isRead: true
 | `payment.status`      | `LeadPaymentStatus` | Payment status                 |
 | `payment.description` | `string \| null`    | Payment note. Optional         |
 
-**Response** `Lead`. Fields in the table above.
+**Response** [`Lead`](#lead).
 
 ## `updateMany`
 
-Updates several leads with the same fields as `update`. The body is `{ ids, ...data }`.
+Updates several leads with the same fields as `update`.
 
 `POST /sites/{siteId}/leads/bulk`
 
@@ -192,7 +281,7 @@ const lead = await site.leads.remove(leadId);
 | -------- | -------- | ----------- |
 | `leadId` | `number` | Lead id     |
 
-**Response** `Lead` with status `deleted`.
+**Response** [`Lead`](#lead) with status `deleted`.
 
 ## `replaceProducts`
 
@@ -218,7 +307,7 @@ const lead = await site.leads.replaceProducts(leadId, {
 | `items[].quantity`   | `number` | Quantity    |
 | `items[].price`      | `number` | Price       |
 
-**Response** `Lead`. Fields in the table above.
+**Response** [`Lead`](#lead).
 
 ## `applyPromotion`
 
@@ -237,7 +326,7 @@ const lead = await site.leads.applyPromotion(leadId, { id: promotionId });
 | `leadId` | `number` | Lead id        |
 | `id`     | `number` | Promotion id   |
 
-**Response** `Lead`. Fields in the table above.
+**Response** [`Lead`](#lead).
 
 ## `removePromotion`
 
@@ -256,7 +345,7 @@ const lead = await site.leads.removePromotion(leadId, "promocode");
 | `leadId` | `number`                     | Lead id     |
 | `type`   | `'discount' \| 'promocode'`  | What to remove |
 
-**Response** `Lead`. Fields in the table above.
+**Response** [`Lead`](#lead).
 
 ## `setShipping`
 
@@ -290,13 +379,13 @@ const lead = await site.leads.setShipping(leadId, {
 | `address.addressLine2` | `string`  | Apartment. Optional                  |
 | `address.zipCode`      | `string`  | Postal code. Optional                |
 
-**Response** `Lead`. Fields in the table above.
+**Response** [`Lead`](#lead).
 
 ## Reservations
 
 ### `createReservations`
 
-Reserves every product line. A later call returns the current rows and does not reserve more.
+Reserves every product line. A later call returns the reservations that already exist.
 
 `POST /sites/{siteId}/leads/{leadId}/reservations`
 
