@@ -6,7 +6,7 @@
 const settings = await site.settings.getSettings();
 ```
 
-## `SiteSettings`
+### `SiteSettings`
 
 Site settings.
 
@@ -22,7 +22,7 @@ Site settings.
 | `notifications` | [`NotificationsSettings`](#notificationssettings) | Notifications |
 | `platform` | [`PlatformSettings`](#platformsettings) | Platform |
 
-## `LocaleSettings`
+### `LocaleSettings`
 
 Language and region.
 
@@ -33,7 +33,7 @@ Language and region.
 | `timezone` | `string` | Time zone |
 | `currency` | [`CurrencySettings`](#currencysettings) | Currency |
 
-## `CurrencySettings`
+### `CurrencySettings`
 
 Currency.
 
@@ -44,7 +44,7 @@ Currency.
 | `data` | [`CurrencyDataSettings`](#currencydatasettings) | Currency data |
 | `format` | [`CurrencyFormatSettings`](#currencyformatsettings) | Format |
 
-## `CurrencyDataSettings`
+### `CurrencyDataSettings`
 
 Currency data.
 
@@ -54,7 +54,7 @@ Currency data.
 | `symbol` | `string` | Symbol |
 | `decimals` | `number` | Decimal places |
 
-## `CurrencyFormatSettings`
+### `CurrencyFormatSettings`
 
 Currency format.
 
@@ -64,7 +64,7 @@ Currency format.
 | `t` | `string` | Thousands separator |
 | `d` | `string` | Decimal separator |
 
-## `BrandingSettings`
+### `BrandingSettings`
 
 Appearance.
 
@@ -78,7 +78,7 @@ Appearance.
 | `smoothingScroll` | [`smoothingScroll`](#smoothingscroll) | Smooth scroll |
 | `adaptiveView` | `number \| boolean` | Adaptive view |
 
-## `FontsSettings`
+### `FontsSettings`
 
 Fonts.
 
@@ -87,7 +87,7 @@ Fonts.
 | `myFonts` | array | Custom fonts |
 | `set` | array | Font set |
 
-## `myColors`
+### `myColors`
 
 Custom colors.
 
@@ -96,7 +96,7 @@ Custom colors.
 | `colors` | array | Colors |
 | `gradients` | array | Gradients |
 
-## `blockAnimation`
+### `blockAnimation`
 
 Block animation.
 
@@ -105,7 +105,7 @@ Block animation.
 | `show` | `number \| null` | Display |
 | `style` | `string \| null` | Style |
 
-## `smoothingScroll`
+### `smoothingScroll`
 
 Smooth scroll.
 
@@ -113,7 +113,7 @@ Smooth scroll.
 | --- | --- | --- |
 | `enabled` | `number` | On |
 
-## `SeoSettings`
+### `SeoSettings`
 
 SEO.
 
@@ -124,7 +124,7 @@ SEO.
 | `canonical` | `number` | Canonical address |
 | `trailingSlash` | `string` | Trailing slash |
 
-## `PrivacySettings`
+### `PrivacySettings`
 
 Privacy.
 
@@ -133,7 +133,7 @@ Privacy.
 | `cookiesWarning` | object | Cookie notice |
 | `policyPersonalData` | [`policyPersonalData`](#policypersonaldata) | Personal data policy |
 
-## `policyPersonalData`
+### `policyPersonalData`
 
 Personal data policy.
 
@@ -142,7 +142,7 @@ Personal data policy.
 | `show` | `number` | Show |
 | `file` | `string` | File |
 
-## `PerformanceSettings`
+### `PerformanceSettings`
 
 Performance.
 
@@ -152,7 +152,7 @@ Performance.
 | `optimization` | object | Optimization |
 | `injectCode` | [`injectCode`](#injectcode) | Injected code |
 
-## `injectCode`
+### `injectCode`
 
 Code in head and body.
 
@@ -161,7 +161,7 @@ Code in head and body.
 | `head` | `string` | Code in head |
 | `body` | `string` | Code in body |
 
-## `EcommerceSettings`
+### `EcommerceSettings`
 
 Store settings.
 
@@ -179,7 +179,7 @@ Store settings.
 | `inStockStatus` | `string` | In-stock status |
 | `zeroPrice` | `string` | How to show a zero price |
 
-## `GlobalCartSettings`
+### `GlobalCartSettings`
 
 Shared cart.
 
@@ -188,7 +188,7 @@ Shared cart.
 | `enabled` | `boolean` | On |
 | `data` | object | Cart settings snapshot. The API stores it as sent |
 
-## `SecuritySettings`
+### `SecuritySettings`
 
 Security.
 
@@ -198,7 +198,7 @@ Security.
 | `googleMapsApiKey` | `string` | Google Maps key |
 | `yandexMapsApiKey` | `string` | Yandex Maps key |
 
-## `NotificationsSettings`
+### `NotificationsSettings`
 
 Notifications.
 
@@ -213,7 +213,7 @@ Notifications.
 | `sms` | array | Deprecated. The field remains in the data |
 | `smsLight` | `boolean` | Deprecated. The field remains in the data |
 
-## `email`
+### `email`
 
 A notification address.
 
@@ -222,7 +222,7 @@ A notification address.
 | `id` | `string` | Address id |
 | `email` | `string` | Address |
 
-## `PlatformSettings`
+### `PlatformSettings`
 
 Platform.
 
@@ -231,6 +231,8 @@ Platform.
 | `ai` | object | AI |
 | `api` | object | API |
 | `pays` | object | Payment providers. The key is the provider id, for example `tinkoff` or `cash` |
+
+---
 
 ## `getSettings`
 

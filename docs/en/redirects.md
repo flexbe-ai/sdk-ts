@@ -1,54 +1,56 @@
 # Site → Redirects
 
-`site.redirects` lists and edits redirects for one site.
+`site.redirects` lists and edits redirects for the site.
 
 ```typescript
 const redirects = await site.redirects.getRedirects({ type: "standard" });
 ```
 
-## `RedirectKind`
+### `RedirectKind`
+
+| Value      | Description            |
+| ---------- | ---------------------- |
+| `standard` | Ordinary redirect      |
+| `geo`      | By country or language |
+
+### `RedirectTypeCode`
 
 | Value | Description |
-| --- | --- |
-| `standard` | Ordinary redirect |
-| `geo` | By country or language |
-
-## `RedirectTypeCode`
-
-| Value | Description |
-| --- | --- |
-| `301` | Permanent |
-| `302` | Temporary |
+| ----- | ----------- |
+| `301` | Permanent   |
+| `302` | Temporary   |
 | `200` | Transparent |
 
-## `RedirectCondition`
+### `RedirectCondition`
 
 A country or language condition.
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `enabled` | `boolean` | The condition is on |
-| `exclude` | `boolean` | Exclude the values in `list` |
-| `list` | `string[]` | Countries or languages |
+| Field     | Type       | Description                  |
+| --------- | ---------- | ---------------------------- |
+| `enabled` | `boolean`  | The condition is on          |
+| `exclude` | `boolean`  | Exclude the values in `list` |
+| `list`    | `string[]` | Countries or languages       |
 
-## `Redirect`
+### `Redirect`
 
 A site redirect.
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `id` | `number` | Redirect id |
-| `type` | [`RedirectKind`](#redirectkind) | Kind |
-| `enabled` | `boolean` | On |
-| `fromAllPages` | `boolean` | From every page |
-| `regularFromPage` | `boolean` | `fromPage` is a regular expression |
-| `fromPage` | `string` | Source |
-| `toPage` | `string` | Destination |
-| `redirectType` | [`RedirectTypeCode`](#redirecttypecode) | Status code |
-| `saveQuery` | `boolean` | Keep the query string |
-| `sortIndex` | `number` | Order |
-| `country` | [`RedirectCondition`](#redirectcondition) | Country condition. Optional |
-| `language` | [`RedirectCondition`](#redirectcondition) | Language condition. Optional |
+| Field             | Type                                      | Description                        |
+| ----------------- | ----------------------------------------- | ---------------------------------- |
+| `id`              | `number`                                  | Redirect id                        |
+| `type`            | [`RedirectKind`](#redirectkind)           | Kind                               |
+| `enabled`         | `boolean`                                 | On                                 |
+| `fromAllPages`    | `boolean`                                 | From every page                    |
+| `regularFromPage` | `boolean`                                 | `fromPage` is a regular expression |
+| `fromPage`        | `string`                                  | Source                             |
+| `toPage`          | `string`                                  | Destination                        |
+| `redirectType`    | [`RedirectTypeCode`](#redirecttypecode)   | Status code                        |
+| `saveQuery`       | `boolean`                                 | Keep the query string              |
+| `sortIndex`       | `number`                                  | Order                              |
+| `country`         | [`RedirectCondition`](#redirectcondition) | Country condition. Optional        |
+| `language`        | [`RedirectCondition`](#redirectcondition) | Language condition. Optional       |
+
+---
 
 ## `getRedirects`
 
@@ -62,15 +64,15 @@ const redirects = await site.redirects.getRedirects({ type: "standard" });
 
 **Input**
 
-| Field  | Type                   | Description                         |
-| ------ | ---------------------- | ----------------------------------- |
-| `type` | `'standard' \| 'geo'`  | Which redirects to return. Optional |
+| Field  | Type                  | Description                         |
+| ------ | --------------------- | ----------------------------------- |
+| `type` | `'standard' \| 'geo'` | Which redirects to return. Optional |
 
 **Response**
 
-| Field  | Type         | Description                         |
-| ------ | ------------ | ----------------------------------- |
-| `list` | [`Redirect[]`](#redirect) | Redirects |
+| Field  | Type                      | Description |
+| ------ | ------------------------- | ----------- |
+| `list` | [`Redirect[]`](#redirect) | Redirects   |
 
 ## `getRedirect`
 
@@ -84,9 +86,9 @@ const redirect = await site.redirects.getRedirect(redirectId);
 
 **Input**
 
-| Field        | Type     | Description   |
-| ------------ | -------- | ------------- |
-| `redirectId` | `number` | Redirect id   |
+| Field        | Type     | Description |
+| ------------ | -------- | ----------- |
+| `redirectId` | `number` | Redirect id |
 
 **Response** [`Redirect`](#redirect).
 
@@ -105,18 +107,18 @@ const redirect = await site.redirects.createRedirect({
 
 **Input**
 
-| Field             | Type                   | Description                                      |
-| ----------------- | ---------------------- | ------------------------------------------------ |
-| `type`            | `'standard' \| 'geo'`  | Redirect kind. Required                          |
-| `toPage`          | `string`               | Destination. Required                            |
-| `enabled`         | `boolean`              | Whether it is on. Optional                       |
-| `fromAllPages`    | `boolean`              | From every page. Optional                        |
-| `regularFromPage` | `boolean`              | `fromPage` is a regular expression. Optional     |
-| `fromPage`        | `string`               | Source. Optional                                 |
-| `redirectType`    | `301 \| 302 \| 200`    | Status code. Optional                            |
-| `saveQuery`       | `boolean`              | Keep the query string. Optional                  |
-| `country`         | [`RedirectCondition`](#redirectcondition) | Country condition. Optional |
-| `language`        | [`RedirectCondition`](#redirectcondition) | Language condition. Optional |
+| Field             | Type                                      | Description                                  |
+| ----------------- | ----------------------------------------- | -------------------------------------------- |
+| `type`            | `'standard' \| 'geo'`                     | Redirect kind. Required                      |
+| `toPage`          | `string`                                  | Destination. Required                        |
+| `enabled`         | `boolean`                                 | Whether it is on. Optional                   |
+| `fromAllPages`    | `boolean`                                 | From every page. Optional                    |
+| `regularFromPage` | `boolean`                                 | `fromPage` is a regular expression. Optional |
+| `fromPage`        | `string`                                  | Source. Optional                             |
+| `redirectType`    | `301 \| 302 \| 200`                       | Status code. Optional                        |
+| `saveQuery`       | `boolean`                                 | Keep the query string. Optional              |
+| `country`         | [`RedirectCondition`](#redirectcondition) | Country condition. Optional                  |
+| `language`        | [`RedirectCondition`](#redirectcondition) | Language condition. Optional                 |
 
 **Response** [`Redirect`](#redirect).
 
@@ -127,15 +129,17 @@ Updates a redirect. Every create field is optional on the patch, including `type
 `PATCH /sites/{siteId}/redirects/{redirectId}`
 
 ```typescript
-const redirect = await site.redirects.updateRedirect(redirectId, { toPage: "/other" });
+const redirect = await site.redirects.updateRedirect(redirectId, {
+  toPage: "/other",
+});
 ```
 
 **Input**
 
-| Field        | Type     | Description                                |
-| ------------ | -------- | ------------------------------------------ |
-| `redirectId` | `number` | Redirect id                                |
-| patch        | object   | Any create fields. All optional            |
+| Field        | Type     | Description                     |
+| ------------ | -------- | ------------------------------- |
+| `redirectId` | `number` | Redirect id                     |
+| patch        | object   | Any create fields. All optional |
 
 **Response** [`Redirect`](#redirect).
 
@@ -169,13 +173,13 @@ const redirects = await site.redirects.replaceRedirects("standard", [
 
 **Input**
 
-| Field   | Type                     | Description                                          |
-| ------- | ------------------------ | ---------------------------------------------------- |
-| `type`  | `'standard' \| 'geo'`    | Which list to replace                                |
-| `items` | `ReplaceRedirectItem[]`  | Redirects that should remain |
+| Field   | Type                    | Description                  |
+| ------- | ----------------------- | ---------------------------- |
+| `type`  | `'standard' \| 'geo'`   | Which list to replace        |
+| `items` | `ReplaceRedirectItem[]` | Redirects that should remain |
 
 **Response**
 
-| Field  | Type         | Description              |
-| ------ | ------------ | ------------------------ |
+| Field  | Type                      | Description                |
+| ------ | ------------------------- | -------------------------- |
 | `list` | [`Redirect[]`](#redirect) | The list after replacement |

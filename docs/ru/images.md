@@ -1,29 +1,31 @@
 # Сайт → Изображения
 
-`site.images` загружает и читает изображения одного сайта.
+`site.images` загружает и читает изображения сайта.
 
 ```typescript
 const image = await site.images.upload(bytes, "cover.png", "image/png");
 ```
 
-## `Image`
+### `Image`
 
 Загруженная картинка сайта.
 
-| Поле | Тип | Описание |
-| --- | --- | --- |
-| `id` | `number` | Id картинки |
-| `ext` | `string` | Расширение |
-| `name` | `string` | Имя файла |
-| `width` | `number` | Ширина в пикселях |
-| `height` | `number` | Высота в пикселях |
-| `proportion` | `number` | Соотношение сторон, ширина к высоте |
-| `url` | `string` | Публичный путь |
-| `previewUrl` | `string \| null` | Превью. Необязательно |
-| `average` | `string \| null` | Средний цвет. Необязательно |
-| `transparent` | `boolean` | Есть прозрачность. Необязательно |
-| `animated` | `boolean` | Анимация. Необязательно |
-| `border` | `string \| null` | Цвет рамки. Необязательно |
+| Поле          | Тип              | Описание                            |
+| ------------- | ---------------- | ----------------------------------- |
+| `id`          | `number`         | Id картинки                         |
+| `ext`         | `string`         | Расширение                          |
+| `name`        | `string`         | Имя файла                           |
+| `width`       | `number`         | Ширина в пикселях                   |
+| `height`      | `number`         | Высота в пикселях                   |
+| `proportion`  | `number`         | Соотношение сторон, ширина к высоте |
+| `url`         | `string`         | Публичный путь                      |
+| `previewUrl`  | `string \| null` | Превью. Необязательно               |
+| `average`     | `string \| null` | Средний цвет. Необязательно         |
+| `transparent` | `boolean`        | Есть прозрачность. Необязательно    |
+| `animated`    | `boolean`        | Анимация. Необязательно             |
+| `border`      | `string \| null` | Цвет рамки. Необязательно           |
+
+---
 
 ## `upload`
 
@@ -37,11 +39,11 @@ const image = await site.images.upload(bytes, "cover.png", "image/png");
 
 **Вход**
 
-| Поле          | Тип            | Описание                                                                 |
-| ------------- | -------------- | ------------------------------------------------------------------------ |
+| Поле          | Тип            | Описание                                                                                   |
+| ------------- | -------------- | ------------------------------------------------------------------------------------------ |
 | `file`        | `UploadBinary` | `Blob`, `File`, `Buffer`, `ArrayBuffer` или `Uint8Array`. Уходит как multipart-поле `file` |
-| `filename`    | `string`       | Имя файла. По умолчанию `image.bin`                                      |
-| `contentType` | `string`       | MIME-тип. Необязательно                                                  |
+| `filename`    | `string`       | Имя файла. По умолчанию `image.bin`                                                        |
+| `contentType` | `string`       | MIME-тип. Необязательно                                                                    |
 
 Значение вне `UploadBinary` бросает `TypeError` с текстом `Unsupported upload binary type`.
 
@@ -54,13 +56,15 @@ const image = await site.images.upload(bytes, "cover.png", "image/png");
 `POST /sites/{siteId}/images/from-url`
 
 ```typescript
-const image = await site.images.uploadFromUrl({ url: "https://example.com/cover.png" });
+const image = await site.images.uploadFromUrl({
+  url: "https://example.com/cover.png",
+});
 ```
 
 **Вход**
 
-| Поле  | Тип      | Описание |
-| ----- | -------- | -------- |
+| Поле  | Тип      | Описание                    |
+| ----- | -------- | --------------------------- |
 | `url` | `string` | Адрес картинки. Тело — JSON |
 
 **Ответ** [`Image`](#image).

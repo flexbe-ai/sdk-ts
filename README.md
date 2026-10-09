@@ -26,13 +26,11 @@ const pages = await site.pages.getPages({
 console.log(pages.list);
 ```
 
-Replace `123` with your site id. `getPages` returns `{ list, pagination }`. Installation, `getMe()`, and an account are in [Get started](docs/en/README.md).
-
 ## Documentation
 
-1. [Get started](docs/en/README.md) — install the package, create a client, open a site or an account
+1. [Get started](docs/en/README.md) — install the package, create a client, work with a site or an account
 2. [Requests and errors](docs/en/requests.md) — headers, query strings, status codes, timeouts
-3. [Sites](docs/en/sites.md) — list and create projects, read and update one site, build HTML
+3. [Sites](docs/en/sites.md) — list and create projects, read and update the site, build HTML
 4. [Pages](docs/en/pages.md) — pages and folders
 5. [Page versions](docs/en/page-versions.md) — read and save versions
 6. [Page data](docs/en/page-data.md) — version JSON: layout, entities, codes, animations

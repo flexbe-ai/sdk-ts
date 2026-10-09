@@ -26,8 +26,6 @@ const pages = await site.pages.getPages({
 console.log(pages.list);
 ```
 
-Подставьте свой id сайта вместо `123`. `getPages` возвращает `{ list, pagination }`. Установка, `getMe()` и аккаунт описаны в разделе [С чего начать](docs/ru/README.md).
-
 ## Документация
 
 1. [С чего начать](docs/ru/README.md) — установка, клиент, сайт или аккаунт

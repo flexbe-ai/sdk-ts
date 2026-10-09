@@ -9,7 +9,7 @@ const pages = await site.pages.getPages({ limit: 10, offset: 0 });
 
 Макет в этом объекте не лежит. Он приходит в `PageVersionDataResponse.data`.
 
-## `Page`
+### `Page`
 
 | Поле               | Тип                  | Описание                                                        |
 | ------------------ | -------------------- | --------------------------------------------------------------- |
@@ -29,7 +29,7 @@ const pages = await site.pages.getPages({ limit: 10, offset: 0 });
 | `screenshot`       | `Screenshot \| null` | Превью. [`Screenshot`](#screenshot)                                               |
 | `meta`             | `PageMeta \| null`   | SEO страницы. [`PageMeta`](#pagemeta)                                         |
 
-## `Screenshot`
+### `Screenshot`
 
 | Поле  | Тип              | Описание          |
 | ----- | ---------------- | ----------------- |
@@ -37,7 +37,7 @@ const pages = await site.pages.getPages({ limit: 10, offset: 0 });
 | `ext` | `string`         | Расширение        |
 | `url` | `string \| null` | Адрес превью      |
 
-## `PageType`
+### `PageType`
 
 | Значение               | Описание            |
 | ---------------------- | ------------------- |
@@ -49,7 +49,7 @@ const pages = await site.pages.getPages({ limit: 10, offset: 0 });
 | `ecommerce_product`    | Страница товара     |
 | `ecommerce_category`   | Страница категории  |
 
-## `PageStatus`
+### `PageStatus`
 
 | Значение    | Описание                                      |
 | ----------- | --------------------------------------------- |
@@ -58,7 +58,7 @@ const pages = await site.pages.getPages({ limit: 10, offset: 0 });
 | `removed`   | Пользователь убрал страницу                   |
 | `deleted`   | Пользователь удалил страницу из удалённых     |
 
-## `PageMeta`
+### `PageMeta`
 
 | Поле             | Тип                            | Описание                         |
 | ---------------- | ------------------------------ | -------------------------------- |
@@ -71,13 +71,15 @@ const pages = await site.pages.getPages({ limit: 10, offset: 0 });
 | `noindex`        | `boolean`                      | Закрыть страницу от индексации   |
 | `schemaMarkup`   | `PageSchemaMarkup \| null`     | Разметка schema.org. Необязательно |
 
-## `PageSchemaMarkup`
+### `PageSchemaMarkup`
 
 | Поле          | Тип              | Описание                                      |
 | ------------- | ---------------- | --------------------------------------------- |
 | `data`        | `unknown`        | Тело разметки                                 |
 | `updatedAt`   | `string \| null` | Когда разметку обновляли                      |
 | `genProducts` | `boolean`        | Генерировать разметку товаров. Необязательно  |
+
+---
 
 ## `getPages`
 
@@ -311,7 +313,7 @@ const result = await site.pages.bulkDeletePages([pageId]);
 
 Папка — `{ id, name, sortIndex }`.
 
-### `getFolders`
+## `getFolders`
 
 Возвращает папки сайта.
 
@@ -331,7 +333,7 @@ const folders = await site.pages.getFolders();
 | ------ | -------------- | -------- |
 | `list` | `PageFolder[]` | Папки. У папки `id`, `name`, `sortIndex` |
 
-### `getFolder`
+## `getFolder`
 
 Возвращает одну папку.
 
@@ -349,7 +351,7 @@ const folder = await site.pages.getFolder(folderId);
 
 **Ответ** `PageFolder`: `id`, `name`, `sortIndex`.
 
-### `createFolder`
+## `createFolder`
 
 Создаёт папку.
 
@@ -368,7 +370,7 @@ const folder = await site.pages.createFolder({ name: "Услуги" });
 
 **Ответ** `PageFolder`: `id`, `name`, `sortIndex`.
 
-### `updateFolder`
+## `updateFolder`
 
 Меняет папку. `name` и `sortIndex` оба необязательны.
 
@@ -388,7 +390,7 @@ const folder = await site.pages.updateFolder(folderId, { name: "Новое им�
 
 **Ответ** `PageFolder`: `id`, `name`, `sortIndex`.
 
-### `deleteFolder`
+## `deleteFolder`
 
 Удаляет папку и её содержимое.
 
@@ -404,7 +406,7 @@ await site.pages.deleteFolder(folderId);
 | ---- | -------- | -------- |
 | `id` | `number` | Id папки |
 
-### `bulkUpdateFolders`
+## `bulkUpdateFolders`
 
 Меняет несколько папок. Если не прошла ни одна, API отвечает 400.
 

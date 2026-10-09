@@ -37,7 +37,7 @@ const me = await client.getMe();
 
 A site-scoped key already has the site id you pass to `getSiteApi`. An account-scoped key has the id you pass to `account`.
 
-## Open a site
+## Site
 
 ```typescript
 const site = client.getSiteApi(123);
@@ -45,20 +45,20 @@ const site = client.getSiteApi(123);
 
 `123` is the site id.
 
-| Field       | Description                                                 |
-| ----------- | ----------------------------------------------------------- |
-| `pages`     | [Pages](pages.md)                                           |
-| `leads`     | [Leads](leads.md)                                           |
+| Field        | Description                                        |
+| ------------ | -------------------------------------------------- |
+| `pages`      | [Pages](pages.md)                                  |
+| `leads`      | [Leads](leads.md)                                  |
 | `ecommerce`  | [Ecommerce](ecommerce.md): products and categories |
-| promotions   | [Promotions](promotions.md)                        |
-| `images`    | [Images](images.md)                                         |
-| `files`     | [Files](files.md)                                           |
-| `domains`   | [Domains](domains.md) of this site                          |
-| `redirects` | [Redirects](redirects.md)                                   |
-| `settings`  | [Settings](settings.md)                                     |
-| `stat`      | [Statistics](statistics.md)                                 |
+| `promotions` | [Promotions](promotions.md)                        |
+| `images`     | [Images](images.md)                                |
+| `files`      | [Files](files.md)                                  |
+| `domains`    | [Domains](domains.md) of the site                  |
+| `redirects`  | [Redirects](redirects.md)                          |
+| `settings`   | [Settings](settings.md)                            |
+| `stat`       | [Statistics](statistics.md)                        |
 
-## Open an account
+## Account
 
 ```typescript
 const account = client.account(456);

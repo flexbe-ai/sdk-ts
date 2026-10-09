@@ -1,6 +1,6 @@
 # Site → Page versions
 
-Methods for page versions. The layout JSON is in [Page data](page-data.md). The page card is in [Pages](pages.md).
+The module for working with page saves and versions.
 
 ## `getVersions`
 

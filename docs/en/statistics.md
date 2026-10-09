@@ -7,7 +7,7 @@ const test = await site.stat.createAbTest(pageId);
 const again = await site.stat.getAbTest(test.id);
 ```
 
-## `AbTest`
+### `AbTest`
 
 An A/B test of a page.
 
@@ -20,6 +20,8 @@ An A/B test of a page.
 | `aCountLead` | `number` | Leads of variant A |
 | `bCountView` | `number` | Views of variant B |
 | `bCountLead` | `number` | Leads of variant B |
+
+---
 
 ## `getAbTest`
 

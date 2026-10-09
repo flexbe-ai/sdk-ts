@@ -2,7 +2,7 @@
 
 The methods are on `site.ecommerce`.
 
-## `Promotion`
+### `Promotion`
 
 A catalog promotion.
 
@@ -21,6 +21,8 @@ A catalog promotion.
 | `usageWithAnyDiscount` | `boolean \| null` | Together with other discounts |
 | `active` | `boolean` | Enabled |
 | `deletedAt` | `string \| null` | When it was deleted |
+
+---
 
 ## `listPromotions`
 
@@ -42,7 +44,7 @@ No parameters.
 | ------ | ------------- | --------------------------------- |
 | `list` | [`Promotion[]`](#promotion) | Promotions |
 
-## `PromotionWriteParams`
+### `PromotionWriteParams`
 
 Fields for creating and updating a promotion.
 

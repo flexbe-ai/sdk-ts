@@ -37,7 +37,7 @@ const me = await client.getMe();
 
 У ключа сайта уже есть id, который вы передаёте в `getSiteApi`. У ключа аккаунта — id для `account`.
 
-## Открыть сайт
+## Сайт
 
 ```typescript
 const site = client.getSiteApi(123);
@@ -45,20 +45,20 @@ const site = client.getSiteApi(123);
 
 `123` — id сайта.
 
-| Поле        | Описание                                           |
-| ----------- | -------------------------------------------------- |
-| `pages`     | [Страницы](pages.md)                               |
-| `leads`     | [Заявки](leads.md)                                 |
-| `ecommerce` | [Магазин](ecommerce.md): товары и категории |
-| акции       | [Акции](promotions.md)                             |
-| `images`    | [Изображения](images.md)                           |
-| `files`     | [Файлы](files.md)                                  |
-| `domains`   | [Домены](domains.md) этого сайта                   |
-| `redirects` | [Редиректы](redirects.md)                          |
-| `settings`  | [Настройки](settings.md)                           |
-| `stat`      | [Статистика](statistics.md)                        |
+| Поле         | Описание                                    |
+| ------------ | ------------------------------------------- |
+| `pages`      | [Страницы](pages.md)                        |
+| `leads`      | [Заявки](leads.md)                          |
+| `ecommerce`  | [Магазин](ecommerce.md): товары и категории |
+| `promotions` | [Акции](promotions.md)                      |
+| `images`     | [Изображения](images.md)                    |
+| `files`      | [Файлы](files.md)                           |
+| `domains`    | [Домены](domains.md) сайта                  |
+| `redirects`  | [Редиректы](redirects.md)                   |
+| `settings`   | [Настройки](settings.md)                    |
+| `stat`       | [Статистика](statistics.md)                 |
 
-## Открыть аккаунт
+## Аккаунт
 
 ```typescript
 const account = client.account(456);
