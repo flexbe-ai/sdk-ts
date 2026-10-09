@@ -13,12 +13,12 @@ import { FlexbeAuthType, FlexbeClient } from "@flexbe/sdk";
 
 const client = new FlexbeClient({
   apiKey: "your-api-key",
-  baseUrl: "https://api.flexbe.com",
+  baseUrl: "https://api.flexbe.ru",
   authType: FlexbeAuthType.API_KEY,
 });
 ```
 
-`apiKey` и `baseUrl` по умолчанию берутся из `FLEXBE_API_KEY` и `FLEXBE_API_URL`. Если `FLEXBE_API_URL` не задана, базовый URL — `https://api.flexbe.com`. Таймаут по умолчанию — `30000` миллисекунд. Режим аутентификации по умолчанию — API-ключ.
+`apiKey` и `baseUrl` по умолчанию берутся из `FLEXBE_API_KEY` и `FLEXBE_API_URL`. Для России базовый URL — `https://api.flexbe.ru`. Таймаут по умолчанию — `30000` миллисекунд. Режим аутентификации по умолчанию — API-ключ.
 
 ## Проверка ключа
 

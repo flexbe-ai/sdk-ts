@@ -2,7 +2,7 @@
 
 # Flexbe TypeScript SDK
 
-TypeScript-клиент к API Flexbe. Работает в Node.js 20 и новее и в браузере, ходит в API через `fetch`.
+TypeScript-клиент к API Flexbe.
 
 ```bash
 npm install @flexbe/sdk
@@ -44,16 +44,23 @@ console.log(pages.list);
 14. [Настройки](docs/ru/settings.md)
 15. [Статистика](docs/ru/statistics.md)
 16. [Справочники](docs/ru/catalogs.md) — языки и валюты
+17. [MCP](docs/ru/mcp.md) — подключение сервера MCP
 
-## Разработка
+## MCP
 
-```bash
-npm install
-npm run build
-npm test
-npm run lint
+Сервер — `https://api.flexbe.ru/mcp` (Streamable HTTP). Вход через OAuth: клиент открывает браузер. Ключ API не используется. Для остальных регионов хост — `https://api.flexbe.com`.
+
+```json
+{
+  "mcpServers": {
+    "flexbe": {
+      "type": "http",
+      "url": "https://api.flexbe.ru/mcp"
+    }
+  }
+}
 ```
 
-## Лицензия
+[Добавить в Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=flexbe&config=eyJ0eXBlIjoiaHR0cCIsInVybCI6Imh0dHBzOi8vYXBpLmZsZXhiZS5ydS9tY3AifQ%3D%3D) · [Добавить в VS Code](https://vscode.dev/redirect/mcp/install?name=flexbe&config=%7B%22name%22%3A%22flexbe%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fapi.flexbe.ru%2Fmcp%22%7D) · [Добавить в Claude Code](docs/ru/mcp.md#claude-code) · [Добавить в Codex](docs/ru/mcp.md#codex)
 
-MIT
+Конфиги Claude Code, Codex, Cursor и VS Code и плагины в этом репозитории: [MCP](docs/ru/mcp.md).

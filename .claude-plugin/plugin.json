@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "flexbe",
+  "displayName": "Flexbe",
+  "version": "0.1.0",
+  "description": "Flexbe MCP for sites, pages, catalog, media, and layout.",
+  "author": {
+    "name": "Flexbe",
+    "url": "https://github.com/flexbe-ai"
+  },
+  "homepage": "https://github.com/flexbe-ai/sdk-ts/blob/main/docs/en/mcp.md",
+  "repository": "https://github.com/flexbe-ai/sdk-ts",
+  "license": "MIT",
+  "keywords": ["flexbe", "mcp"],
+  "mcpServers": "./.mcp.json"
+}
