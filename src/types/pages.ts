@@ -33,7 +33,8 @@ export enum PageType {
     AI = 'ai',
     CMS = 'cms',
     ECOMMERCE_PRODUCT = 'ecommerce_product',
-    ECOMMERCE_CATEGORY = 'ecommerce_category'
+    ECOMMERCE_CATEGORY = 'ecommerce_category',
+    CART = 'cart'
 }
 
 export enum PageStatus {
