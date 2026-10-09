@@ -82,6 +82,9 @@ export interface LeadPayment {
     status: LeadPaymentStatus;
     paymentProvider: string;
     isTestPayment: boolean;
+    description: string | null;
+    createdAt: string | null;
+    payLink: string | null;
     completedAt?: string;
 }
 
@@ -108,6 +111,7 @@ export interface Lead {
     payment: LeadPayment | null;
     taxSnapshot: Record<string, unknown> | null;
     notes: string | null;
+    custom: Record<string, unknown> | null;
     tracking: LeadTracking | null;
     trackingExtra: Record<string, unknown> | null;
     createdAt: string;
@@ -157,6 +161,7 @@ export interface UpdateLeadParams {
     customer?: Partial<LeadCustomer>;
     payment?: {
         status?: LeadPaymentStatus;
+        description?: string | null;
     };
 }
 
