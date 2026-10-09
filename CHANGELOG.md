@@ -1,5 +1,11 @@
 # @flexbe/sdk
 
+## 0.9.0
+
+### Minor Changes
+
+- 7536c88: Add `ecommerce.globalCart` with `enabled` and `pageId`, and `PageType.CART` for the unified cart page.
+
 ## 0.8.0
 
 ### Minor Changes
