@@ -29,7 +29,7 @@ console.log(pages.list);
 ## Documentation
 
 1. [Get started](docs/en/README.md) — install the package, create a client, work with a site or an account
-2. [Requests and errors](docs/en/requests.md) — headers, query strings, status codes, timeouts
+2. [Requests and errors](docs/en/requests.md) — headers, query strings, status codes, timeouts, plain HTTP
 3. [Sites](docs/en/sites.md) — list and create projects, read and update the site, build HTML
 4. [Pages](docs/en/pages.md) — pages and folders
 5. [Page versions](docs/en/page-versions.md) — read and save versions
@@ -51,8 +51,6 @@ console.log(pages.list);
 The server is `https://api.flexbe.com/mcp`. Transport is Streamable HTTP.
 
 Authorization is OAuth.
-
-In Russia the host is `https://api.flexbe.ru`.
 
 ```json
 {

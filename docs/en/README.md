@@ -72,4 +72,4 @@ const account = client.account(456);
 
 ## Errors
 
-Status codes and the timeout are in [Requests and errors](requests.md).
+Status codes, the timeout, and the same paths as plain HTTP are in [Requests and errors](requests.md).

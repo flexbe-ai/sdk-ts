@@ -2,6 +2,17 @@
 
 Методы ресурсов возвращают JSON-тело.
 
+## Прямой HTTP
+
+Строка под методом — это запрос. Хост — `https://api.flexbe.ru`. Ключ передаётся в заголовке `x-api-key`. `POST`, `PUT` и `PATCH` отправляют `Content-Type: application/json`.
+
+```bash
+curl "https://api.flexbe.ru/sites/123/pages?limit=10" \
+  -H "x-api-key: your-api-key"
+```
+
+Для остальных регионов хост — `https://api.flexbe.com`.
+
 ## Query
 
 Значения `null` и `undefined` в query не отправляются. Всё остальное уходит строкой.
