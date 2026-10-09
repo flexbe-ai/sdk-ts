@@ -29,7 +29,7 @@ A failed response is parsed as JSON. If the body is not JSON, `message` and `err
 | HTTP status        | Thrown value                                            |
 | ------------------ | ------------------------------------------------------- |
 | 400                | `BadRequestException`                                   |
-| 401                | `UnauthorizedException`, then `hooks.onUnauthorized`    |
+| 401                | `UnauthorizedException`                                 |
 | 403                | `ForbiddenException`                                    |
 | 404                | `NotFoundException`                                     |
 | 500, 502, 503, 504 | `ServerException` (`statusCode` is the response status) |
