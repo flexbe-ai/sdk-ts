@@ -1,4 +1,4 @@
-# Files
+# site > Files
 
 `site.files` uploads files for one site and copies paths from another account. Paths sit on `/sites/{siteId}/files`.
 
@@ -14,47 +14,84 @@ const file = await site.files.upload(bytes, "price.pdf", "application/pdf");
 
 ## `upload`
 
+Uploads a file and returns the `FileAsset` record. Keep that object.
+
 `POST /sites/{siteId}/files`
 
 ```typescript
-upload(
-    file: UploadBinary,
-    filename: string,
-    contentType?: string
-): Promise<FileAsset>
+const file = await site.files.upload(bytes, "price.pdf", "application/pdf");
 ```
 
-`filename` is required. `contentType` defaults to `'application/octet-stream'`.
+**Input**
+
+| Field         | Type           | Description                                          |
+| ------------- | -------------- | ---------------------------------------------------- |
+| `file`        | `UploadBinary` | File bytes. Sent as multipart field `file`           |
+| `filename`    | `string`       | File name. Required                                  |
+| `contentType` | `string`       | MIME type. Defaults to `application/octet-stream`    |
+
+**Response** `FileAsset`. Fields in the paragraph above.
 
 ## `uploadFromUrl`
+
+Downloads a file from a URL and returns the `FileAsset` record.
 
 `POST /sites/{siteId}/files/from-url`
 
 ```typescript
-uploadFromUrl(params: { url: string }): Promise<FileAsset>
+const file = await site.files.uploadFromUrl({ url: "https://example.com/price.pdf" });
 ```
 
-The body is JSON.
+**Input**
+
+| Field | Type     | Description                   |
+| ----- | -------- | ----------------------------- |
+| `url` | `string` | File address. The body is JSON |
+
+**Response** `FileAsset`. Fields in the paragraph above.
 
 ## `copy`
+
+Copies files from another account onto this site.
 
 `POST /sites/{siteId}/files/copy`
 
 ```typescript
-copy(params: CopyFilesParams): Promise<CopyFilesResponse>
+const copied = await site.files.copy({
+  sourceAccountId: 10,
+  paths: ["/files/price.pdf"],
+});
 ```
 
-| Field             | Type       | Notes                                |
+**Input**
+
+| Field             | Type       | Description                          |
 | ----------------- | ---------- | ------------------------------------ |
 | `sourceAccountId` | `number`   | Account that already holds the files |
 | `paths`           | `string[]` | `/files/foo.mp4` or `foo.mp4`        |
 
-Returns `{ files }`, in the same order as `paths`. An entry is `null` when that path was not copied.
+**Response**
+
+| Field   | Type                    | Description                                                    |
+| ------- | ----------------------- | -------------------------------------------------------------- |
+| `files` | `(FileAsset \| null)[]` | Same order as `paths`. `null` when that path was not copied    |
 
 ## `remove`
+
+Deletes a site file.
 
 `DELETE /sites/{siteId}/files/{fileId}`
 
 ```typescript
-remove(fileId: number): Promise<void>
+await site.files.remove(fileId);
 ```
+
+**Input**
+
+| Field    | Type     | Description |
+| -------- | -------- | ----------- |
+| `fileId` | `number` | File id     |
+
+**Response**
+
+No body.

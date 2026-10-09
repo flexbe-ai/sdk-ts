@@ -3,7 +3,6 @@ import { Leads } from './leads';
 import { Files, Images } from './media';
 import { Pages } from './pages';
 import { Redirects } from './redirects';
-import { Sandbox } from './sandbox';
 import { Settings } from './settings';
 import { SiteDomains } from './site-domains';
 import { Stat } from './stat';
@@ -18,7 +17,6 @@ export class SiteApi {
     public readonly pages: Pages;
     public readonly domains: SiteDomains;
     public readonly redirects: Redirects;
-    public readonly sandbox: Sandbox;
     public readonly settings: Settings;
     public readonly stat: Stat;
     public readonly images: Images;
@@ -33,7 +31,6 @@ export class SiteApi {
         this.pages = new Pages(api, siteId);
         this.domains = new SiteDomains(api, siteId);
         this.redirects = new Redirects(api, siteId);
-        this.sandbox = new Sandbox(api, siteId);
         this.settings = new Settings(api, siteId);
         this.stat = new Stat(api, siteId);
         this.images = new Images(api, siteId);

@@ -1,4 +1,4 @@
-# Catalogs
+# client > Meta
 
 `client.meta` returns three reference lists: site languages, user-interface languages, and currencies. The lists are global. They do not take a site id or an account id.
 
@@ -9,30 +9,62 @@ const currencies = await client.meta.getSiteCurrencies();
 
 ## `getSiteLanguages`
 
+Returns the languages a site can use.
+
 `GET /meta/site-languages`
 
 ```typescript
-getSiteLanguages(): Promise<SiteLanguage[]>
+const languages = await client.meta.getSiteLanguages();
 ```
 
-`SiteLanguage` is `{ code, nameEn, nameNative }`.
+**Input**
+
+No parameters.
+
+**Response** `SiteLanguage[]`
+
+| Field        | Type     | Description          |
+| ------------ | -------- | -------------------- |
+| `code`       | `string` | Language code        |
+| `nameEn`     | `string` | English name         |
+| `nameNative` | `string` | Name in that language |
 
 ## `getUserLanguages`
+
+Returns interface languages.
 
 `GET /meta/user-languages`
 
 ```typescript
-getUserLanguages(): Promise<UserLanguage[]>
+const languages = await client.meta.getUserLanguages();
 ```
 
-`UserLanguage` has the same three fields.
+**Input**
+
+No parameters.
+
+**Response** `UserLanguage[]`. The same three fields as a site language: `code`, `nameEn`, `nameNative`.
 
 ## `getSiteCurrencies`
+
+Returns site currencies.
 
 `GET /meta/site-currencies`
 
 ```typescript
-getSiteCurrencies(): Promise<SiteCurrency[]>
+const currencies = await client.meta.getSiteCurrencies();
 ```
 
-`SiteCurrency` is `{ code, name, symbol, symbolVariants?, decimals }`. `symbolVariants` is an optional string array.
+**Input**
+
+No parameters.
+
+**Response** `SiteCurrency[]`
+
+| Field             | Type       | Description                    |
+| ----------------- | ---------- | ------------------------------ |
+| `code`            | `string`   | Currency code                  |
+| `name`            | `string`   | Name                           |
+| `symbol`          | `string`   | Symbol                         |
+| `symbolVariants`  | `string[]` | Other spellings of the symbol. Optional |
+| `decimals`        | `number`   | Digits after the decimal point |

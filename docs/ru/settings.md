@@ -1,4 +1,4 @@
-# Настройки
+# site > Настройки
 
 `site.settings` читает и обновляет настройки одного сайта.
 
@@ -10,21 +10,37 @@ const settings = await site.settings.getSettings();
 
 ## `getSettings`
 
+Возвращает настройки сайта.
+
 `GET /sites/{siteId}/settings`
 
 ```typescript
-getSettings(): Promise<SiteSettings>
+const settings = await site.settings.getSettings();
 ```
 
+**Вход**
+
+Параметров нет.
+
+**Ответ** `SiteSettings`. Разделы ниже.
+
 ## `updateSettings`
+
+Обновляет настройки. Тело — JSON merge-patch: глубокий partial от `SiteSettings`. Поля-массивы в патче заменяют сохранённый массив.
 
 `PATCH /sites/{siteId}/settings`
 
 ```typescript
-updateSettings(patch: UpdateSiteSettingsParams): Promise<SiteSettings>
+const settings = await site.settings.updateSettings({
+  locale: { language: "ru" },
+});
 ```
 
-Тело — JSON merge-patch: глубокий partial от `SiteSettings`. Поля-массивы в патче заменяют сохранённый массив.
+**Вход**
+
+Любые поля `SiteSettings`, все необязательны. Состав разделов ниже.
+
+**Ответ** `SiteSettings`. Разделы ниже.
 
 ## Разделы
 
@@ -52,12 +68,20 @@ updateSettings(patch: UpdateSiteSettingsParams): Promise<SiteSettings>
 
 ### `ecommerce`
 
-| Поле                                                                 | Тип                          |
-| -------------------------------------------------------------------- | ---------------------------- |
-| `delivery`, `pickups`                                                | массивы                      |
-| `tax`, `reserve`, `cart`, `pricelessRule`                            | объекты                      |
-| `globalCart`                                                         | `{ enabled: boolean; data }` |
-| `outOfStockAction`, `outOfStockStatus`, `inStockStatus`, `zeroPrice` | `string`                     |
+| Поле                | Тип                          | Описание                                      |
+| ------------------- | ---------------------------- | --------------------------------------------- |
+| `delivery`          | массив                       | Способы доставки                              |
+| `pickups`           | массив                       | Пункты выдачи                                 |
+| `tax`               | объект                       | Налог                                         |
+| `reserve`           | объект                       | Резерв товара                                 |
+| `cart`              | объект                       | Корзина                                       |
+| `pricelessRule`     | объект                       | Как считать товар без цены                    |
+| `globalCart.enabled`| `boolean`                    | Общая корзина включена                        |
+| `globalCart.data`   | объект                       | Снимок настроек корзины. API его не меняет    |
+| `outOfStockAction`  | `string`                     | Что делать, когда товара нет                  |
+| `outOfStockStatus`  | `string`                     | Статус «нет в наличии»                        |
+| `inStockStatus`     | `string`                     | Статус «в наличии»                            |
+| `zeroPrice`         | `string`                     | Как показывать нулевую цену                   |
 
 ### `security`
 
@@ -65,15 +89,18 @@ updateSettings(patch: UpdateSiteSettingsParams): Promise<SiteSettings>
 
 ### `notifications`
 
-| Поле                            | Тип                    |
-| ------------------------------- | ---------------------- |
-| `email`                         | `{ id, email }[]`      |
-| `notify`                        | массив                 |
-| `emailSendUtm`                  | `number` или `boolean` |
-| `telegramSendUtm`, `maxSendUtm` | `boolean`              |
-| `visitorMail`                   | объект                 |
-| `sms`                           | массив, устарело       |
-| `smsLight`                      | `boolean`, устарело    |
+| Поле              | Тип                    | Описание                                              |
+| ----------------- | ---------------------- | ----------------------------------------------------- |
+| `email`           | `{ id, email }[]`      | Адреса, на которые уходят уведомления                 |
+| `email[].id`      | `string`               | Id адреса                                             |
+| `email[].email`   | `string`               | Сам адрес                                             |
+| `notify`          | массив                 | Куда ещё слать уведомления                            |
+| `emailSendUtm`    | `number` или `boolean` | Добавлять UTM в письма                                |
+| `telegramSendUtm` | `boolean`              | Добавлять UTM в Telegram                              |
+| `maxSendUtm`      | `boolean`              | Добавлять UTM в MAX                                   |
+| `visitorMail`     | объект                 | Письмо посетителю                                     |
+| `sms`             | массив                 | Устарело. Модуль SMS снят, поле осталось в данных     |
+| `smsLight`        | `boolean`              | Устарело. Модуль SMS снят, поле осталось в данных     |
 
 ### `platform`
 

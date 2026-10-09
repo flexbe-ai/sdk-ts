@@ -1,4 +1,4 @@
-# Page data
+# site > Pages > Data
 
 `PageDataStructure` is the JSON stored on a page version. Read it from `getVersion` and send it to `createVersion`. Both calls are on [Pages](pages.md). The card around that JSON (`name`, `uri`, `status`) is a `Page`.
 
@@ -43,22 +43,23 @@ interface PageDataStructure {
 
 Every entity shares `PageEntity`:
 
-| Field                 | Type                                                      |
-| --------------------- | --------------------------------------------------------- |
-| `id`                  | `string`                                                  |
-| `is`                  | `PageEntityType`                                          |
-| `template_id`         | `string`                                                  |
-| `mod_id`, `source_id` | optional `string`                                         |
-| `update_time`         | `number`                                                  |
-| `data`                | template payload, plus any other keys the template stored |
-| `p_id`                | optional `number`                                         |
-| `untouched`           | optional `boolean`                                        |
-| `hidden`              | optional `'none' \| 'mobile' \| 'desktop'`                |
-| `className`           | optional `string`                                         |
-| `modals`              | optional `PageModal[]`                                    |
-| `animation`           | optional `PageEntityAnimation`                            |
-| `events`              | optional `PageEntityEvent[]`                              |
-| `multidata`           | optional `{ enabled, vars }`. Each var is `{ data }`      |
+| Field         | Type                                 | Description                                           |
+| ------------- | ------------------------------------ | ----------------------------------------------------- |
+| `id`          | `string`                             | Entity id                                             |
+| `is`          | `PageEntityType`                     | Kind: block, element, modal, widget, or layout        |
+| `template_id` | `string`                             | Template                                              |
+| `mod_id`      | `string`, optional                   | Template variant                                      |
+| `source_id`   | `string`, optional                   | Id of the source entity                               |
+| `update_time` | `number`                             | When the entity was last changed                      |
+| `data`        | object                               | Template payload and any other keys it stored         |
+| `p_id`        | `number`, optional                   | Parent id                                             |
+| `untouched`   | `boolean`, optional                  | Not edited since it was inserted                      |
+| `hidden`      | `'none' \| 'mobile' \| 'desktop'`    | Hidden nowhere, on mobile, or on desktop              |
+| `className`   | `string`, optional                   | CSS class                                             |
+| `modals`      | `PageModal[]`, optional              | Modals of this entity                                 |
+| `animation`   | `PageEntityAnimation`, optional      | Animation                                             |
+| `events`      | `PageEntityEvent[]`, optional        | Events                                                |
+| `multidata`   | `{ enabled, vars }`, optional        | Several data sets. A var has `data`                   |
 
 `hidden` is `'none'`, `'mobile'`, or `'desktop'`.
 
@@ -66,29 +67,40 @@ Every entity shares `PageEntity`:
 
 Specializations:
 
-| Type          | `is`        | Extra fields                                                                                              |
-| ------------- | ----------- | --------------------------------------------------------------------------------------------------------- |
-| `PageBlock`   | `'block'`   | `refPageId?`, `aboveTheFold?`, `children?` (`PageBlock` or `PageElement`), `multisection?`, `geolanding?` |
-| `PageElement` | `'element'` | `aboveTheFold?`, `children?` (`PageElement[]`)                                                            |
-| `PageWidget`  | `'widget'`  | `children?` (`PageElement[]`)                                                                             |
-| `PageModal`   | `'modal'`   | `screenshot` (`ImageObj \| null`), `children?` (`PageElement[]`)                                          |
-
-`multisection` is `{ enabled, main_var, vars }`. `geolanding` is `{ enabled, vars }`, and each var adds `city` next to `data`.
+| Field           | Where                         | Description                                      |
+| --------------- | ----------------------------- | ------------------------------------------------ |
+| `refPageId`     | block                         | Page the block points at                         |
+| `aboveTheFold`  | block, element                | The entity is in the first screen                |
+| `children`      | block, element, widget, modal | Nested entities                                  |
+| `multisection`  | block                         | Section variants: `{ enabled, main_var, vars }`  |
+| `geolanding`    | block                         | City variants: `{ enabled, vars }`. A var has `city` |
+| `screenshot`    | modal                         | Preview, `ImageObj` or `null`                    |
 
 ## Codes
 
 `codes` items are `PageCodeWithMeta`: the meta fields plus `PageCode`.
 
-Meta: `id`, `name`, `show_code`, `is_body`.
+| Field        | Description                       |
+| ------------ | --------------------------------- |
+| `id`         | Code id                           |
+| `name`       | Name                              |
+| `show_code`  | Show the code on the page         |
+| `is_body`    | Code at the end of body, not head |
 
 `PageCode`:
 
-| Field               | Type                              |
-| ------------------- | --------------------------------- |
-| `html`, `js`, `css` | `string`                          |
-| `utilities`         | optional `string`                 |
-| `files`             | `PageCodeImage` or `PageCodeFile` |
-| `sources`           | `{ html, js, css, modules }`      |
+| Field             | Type                         | Description                    |
+| ----------------- | ---------------------------- | ------------------------------ |
+| `html`            | `string`                     | Markup                         |
+| `js`              | `string`                     | Script                         |
+| `css`             | `string`                     | Styles                         |
+| `utilities`       | `string`, optional           | Utility classes after the build |
+| `files`           | `PageCodeImage` or `PageCodeFile` | An image or a file embedded in the code |
+| `sources`         | object                       | Sources before the build       |
+| `sources.html`    | `string`                     | Source HTML                    |
+| `sources.js`      | `string`                     | Source script                  |
+| `sources.css`     | `string`                     | Source styles                  |
+| `sources.modules` | `{ id, path, content }[]`    | Modules                        |
 
 `PageCodeImage` is `{ type: 'img', id, name, ext, average, proportion }`. `PageCodeFile` is `{ type: 'file', id, name }`. A module is `{ id, path, content }`.
 
@@ -104,7 +116,8 @@ Meta: `id`, `name`, `show_code`, `is_body`.
 
 | Field               | Values                                                                            |
 | ------------------- | --------------------------------------------------------------------------------- |
-| `fontId`, `family`  | optional strings                                                                  |
+| `fontId`            | Font id, optional                                                                 |
+| `family`            | Font family, optional                                                             |
 | `size`              | `'inherit'`, a number, or a string such as `'16px'`. A bare number means pixels   |
 | `weight`            | `'inherit'` or `100` through `900`                                                |
 | `line_height`       | `'inherit'` or a number. The number is a percent: `150` means 1.5                 |

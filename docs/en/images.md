@@ -1,4 +1,4 @@
-# Images
+# site > Images
 
 `site.images` uploads and reads images for one site. Paths sit on `/sites/{siteId}/images`.
 
@@ -10,52 +10,98 @@ const image = await site.images.upload(bytes, "cover.png", "image/png");
 
 ## `upload`
 
+Uploads an image file and returns the `Image` record.
+
 `POST /sites/{siteId}/images`
 
 ```typescript
-upload(
-    file: UploadBinary,
-    filename?: string,
-    contentType?: string
-): Promise<Image>
+const image = await site.images.upload(bytes, "cover.png", "image/png");
 ```
 
-`filename` defaults to `'image.bin'`. `contentType` is optional.
+**Input**
 
-`UploadBinary` is `Blob | File | Buffer | ArrayBuffer | Uint8Array`. The file is sent as multipart field `file`. A value outside that union throws `TypeError` with `Unsupported upload binary type`.
+| Field         | Type           | Description                                                                 |
+| ------------- | -------------- | --------------------------------------------------------------------------- |
+| `file`        | `UploadBinary` | `Blob`, `File`, `Buffer`, `ArrayBuffer`, or `Uint8Array`. Sent as multipart field `file` |
+| `filename`    | `string`       | File name. Defaults to `image.bin`                                          |
+| `contentType` | `string`       | MIME type. Optional                                                         |
+
+A value outside `UploadBinary` throws `TypeError` with `Unsupported upload binary type`.
+
+**Response** `Image`. Fields in the paragraph above.
 
 ## `uploadFromUrl`
+
+Downloads an image from a URL and returns the `Image` record.
 
 `POST /sites/{siteId}/images/from-url`
 
 ```typescript
-uploadFromUrl(params: UploadFromUrlParams): Promise<Image>
+const image = await site.images.uploadFromUrl({ url: "https://example.com/cover.png" });
 ```
 
-`UploadFromUrlParams` is `{ url: string }`. The body is JSON.
+**Input**
+
+| Field | Type     | Description                    |
+| ----- | -------- | ------------------------------ |
+| `url` | `string` | Image address. The body is JSON |
+
+**Response** `Image`. Fields in the paragraph above.
 
 ## `claim`
+
+Attaches image ids that already exist, including images from another account.
 
 `POST /sites/{siteId}/images/claim`
 
 ```typescript
-claim(params: ClaimImagesParams): Promise<void>
+await site.images.claim({ imageIds: [1, 2] });
 ```
 
-`ClaimImagesParams` is `{ imageIds: number[] }`. Attaches image ids that already exist, including images from another account.
+**Input**
+
+| Field      | Type       | Description |
+| ---------- | ---------- | ----------- |
+| `imageIds` | `number[]` | Image ids   |
+
+**Response**
+
+No body.
 
 ## `get`
+
+Returns one site image.
 
 `GET /sites/{siteId}/images/{imageId}`
 
 ```typescript
-get(imageId: number): Promise<Image>
+const image = await site.images.get(imageId);
 ```
 
+**Input**
+
+| Field     | Type     | Description |
+| --------- | -------- | ----------- |
+| `imageId` | `number` | Image id    |
+
+**Response** `Image`. Fields in the paragraph above.
+
 ## `remove`
+
+Deletes a site image.
 
 `DELETE /sites/{siteId}/images/{imageId}`
 
 ```typescript
-remove(imageId: number): Promise<void>
+await site.images.remove(imageId);
 ```
+
+**Input**
+
+| Field     | Type     | Description |
+| --------- | -------- | ----------- |
+| `imageId` | `number` | Image id    |
+
+**Response**
+
+No body.

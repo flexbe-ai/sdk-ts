@@ -3,7 +3,6 @@ export * from './client/ecommerce';
 export * from './client/leads';
 export * from './client/pages';
 export * from './client/redirects';
-export * from './client/sandbox';
 export * from './client/media';
 export * from './client/sites';
 export * from './client/account-domains';

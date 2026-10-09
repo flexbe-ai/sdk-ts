@@ -1,115 +1,199 @@
 # Домены
 
-Домены сайта и домены аккаунта — два клиента. `site.domains` — список, привязанный к одному сайту. `client.account(accountId).domains` — регистрации и заявки аккаунта. Как открыть любой из объектов — в разделе [С чего начать](getting-started.md).
-
-`bind` прикрепляет имя, которое у вас уже есть. Домен он не регистрирует.
-
-## Домены сайта
+## site > Домены
 
 `SiteDomains`. Пути лежат на `/sites/{siteId}/domains`.
 
 `SiteDomain`:
 
-| Поле                           | Тип                                                          |
-| ------------------------------ | ------------------------------------------------------------ |
-| `id`                           | `number`                                                     |
-| `name`, `nameDecoded`          | `string`                                                     |
-| `type`                         | `'primary' \| 'alias' \| 'tech'`                             |
-| `isRedirectToPrimary`          | `boolean`                                                    |
-| `status.code`                  | `string`                                                     |
-| `registration.regId`           | `number`. Id регистрации Flexbe, или `0` у стороннего домена |
-| `registration.isFree`          | `boolean`                                                    |
-| `registration.expireTimestamp` | `number \| null`                                             |
-| `registration.expireAt`        | `string \| null`                                             |
-| `ssl.active`, `ssl.enabled`    | `boolean`                                                    |
+| Поле                           | Тип                              | Описание                                                                 |
+| ------------------------------ | -------------------------------- | ------------------------------------------------------------------------ |
+| `id`                           | `number`                         | Id домена                                                                |
+| `name`                         | `string`                         | Имя в ASCII, punycode                                                    |
+| `nameDecoded`                  | `string`                         | То же имя в Unicode, для показа                                          |
+| `type`                         | `'primary' \| 'alias' \| 'tech'` | `primary` — основной, `alias` — дополнительный, `tech` — технический     |
+| `isRedirectToPrimary`          | `boolean`                        | Алиас открывает основной домен                                           |
+| `status.code`                  | `string`                         | Код состояния, например `expired`                                        |
+| `registration.regId`           | `number`                         | Id регистрации Flexbe. `0`, если домен сторонний                         |
+| `registration.isFree`          | `boolean`                        | Регистрация бесплатная                                                   |
+| `registration.expireTimestamp` | `number \| null`                 | Окончание регистрации, unix-время                                        |
+| `registration.expireAt`        | `string \| null`                 | Окончание регистрации строкой                                            |
+| `ssl.enabled`                  | `boolean`                        | Для домена включён HTTPS                                                 |
+| `ssl.active`                   | `boolean`                        | Редирект на HTTPS включён. Сертификат при этом уже есть                  |
 
 ### `list`
+
+Возвращает список доменов сайта.
 
 `GET /sites/{siteId}/domains`
 
 ```typescript
-list(params?: GetSiteDomainsParams): Promise<SiteDomainListResponse>
+const domains = await site.domains.list({ offset: 0, limit: 20 });
 ```
 
-`offset` и `limit` необязательны. Возвращает `{ list, pagination }`.
+**Вход**
+
+| Поле     | Тип      | Описание                                      |
+| -------- | -------- | --------------------------------------------- |
+| `offset` | `number` | Сколько записей пропустить. Необязательно     |
+| `limit`  | `number` | Сколько записей вернуть. Необязательно        |
+
+**Ответ**
+
+| Поле                 | Тип            | Описание                         |
+| -------------------- | -------------- | -------------------------------- |
+| `list`               | `SiteDomain[]` | Домены. Поля в таблице выше      |
+| `pagination.limit`   | `number`       | Размер страницы                  |
+| `pagination.offset`  | `number`       | Смещение                         |
+| `pagination.total`   | `number`       | Всего записей                    |
 
 ### `bind`
+
+Прикрепляет к сайту имя, которое у вас уже есть. Домен не регистрирует. Это сторонний алиас или свой домен, который ещё не стоит на сайте, в том числе при переносе между своими сайтами.
 
 `POST /sites/{siteId}/domains`
 
 ```typescript
-bind(params: BindSiteDomainParams): Promise<SiteDomain>
+const domain = await site.domains.bind({ name: "shop.example.com" });
 ```
 
-`BindSiteDomainParams` — это `{ name: string }`.
+**Вход**
 
-Используйте его для стороннего алиаса или для своего домена, который ещё не стоит на сайте, в том числе при переносе между своими сайтами.
+| Поле   | Тип      | Описание   |
+| ------ | -------- | ---------- |
+| `name` | `string` | Имя домена |
+
+**Ответ**
+
+| Поле   | Тип          | Описание                              |
+| ------ | ------------ | ------------------------------------- |
+| ответ  | `SiteDomain` | Привязанный домен. Поля в таблице выше |
 
 ### `remove`
+
+Снимает домен с сайта.
 
 `DELETE /sites/{siteId}/domains/{domainId}`
 
 ```typescript
-remove(domainId: number): Promise<Record<string, never>>
+await site.domains.remove(domainId);
 ```
 
-Вызов не возвращает содержимого. Домен, зарегистрированный через Flexbe, остаётся на аккаунте и только теряет привязку к сайту. Сторонний домен удаляется.
+**Вход**
 
-## Домены аккаунта
+| Поле       | Тип      | Описание |
+| ---------- | -------- | -------- |
+| `domainId` | `number` | Id домена |
+
+**Ответ**
+
+Тела нет. Домен, зарегистрированный через Flexbe, остаётся на аккаунте и только теряет привязку к сайту. Сторонний домен удаляется.
+
+## account > Домены
 
 `AccountDomains`. Пути лежат на `/account/{accountId}/domains`.
 
 `AccountDomain`:
 
-| Поле                     | Тип                                                                                                                   |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| `regId`                  | `number`                                                                                                              |
-| `name`, `nameDecoded`    | `string`                                                                                                              |
-| `regStatus`              | `queued`, `success`, `wrongData`, `error` или `waitingPayment`                                                        |
-| `status`                 | `{ code } \| null`. `code` — текущий статус, например `expired`, `banned` или `active`. У незавершённой заявки `null` |
-| `project`                | `{ id, name, imgId, access } \| null`. `access` — `owner`, `shared` или `lost`                                        |
-| `isFree`, `allowRenewal` | `boolean`                                                                                                             |
-| `expireTimestamp`        | `number \| null`                                                                                                      |
-| `expireAt`               | `string \| null`                                                                                                      |
-| `contacts`               | email, телефон, страна, индекс, город, улица или `null`                                                               |
-| `ns`                     | `{ enabled, list }` или `null`. Хост — `{ host, ip }`                                                                 |
-
-Строка `success` — домен, который вам принадлежит. Остальные статусы — заявки, которые ещё не завершены.
+| Поле                  | Тип                                                                    | Описание                                                          |
+| --------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `regId`               | `number`                                                               | Id регистрации                                                    |
+| `name`                | `string`                                                               | Имя в ASCII, punycode                                             |
+| `nameDecoded`         | `string`                                                               | То же имя в Unicode, для показа                                   |
+| `regStatus`           | `queued`, `success`, `wrongData`, `error` или `waitingPayment`         | Статус заявки. `success` — домен уже ваш                          |
+| `status`              | `{ code } \| null`                                                     | `null`, пока заявка не завершена                                  |
+| `status.code`         | `string`                                                               | Текущий статус домена, например `expired`, `banned` или `active`  |
+| `project`             | объект или `null`                                                      | Сайт, к которому привязан домен                                   |
+| `project.id`          | `number`                                                               | Id сайта                                                          |
+| `project.name`        | `string`                                                               | Название сайта                                                    |
+| `project.imgId`       | `number \| null`                                                       | Id картинки сайта                                                 |
+| `project.access`      | `owner`, `shared` или `lost`                                           | Домен на своём сайте, на расшаренном или связь уже потеряна       |
+| `isFree`              | `boolean`                                                              | Регистрация бесплатная                                            |
+| `allowRenewal`        | `boolean`                                                              | Регистрацию можно продлить                                        |
+| `expireTimestamp`     | `number \| null`                                                       | Окончание регистрации, unix-время                                 |
+| `expireAt`            | `string \| null`                                                       | Окончание регистрации строкой                                     |
+| `contacts`            | объект или `null`                                                      | Контакты регистрации                                              |
+| `contacts.email`      | `string`                                                               | Email                                                             |
+| `contacts.phone`      | `string`                                                               | Телефон                                                           |
+| `contacts.country`    | `string`                                                               | Страна                                                            |
+| `contacts.addressZip` | `string`                                                               | Индекс                                                            |
+| `contacts.addressCity`| `string`                                                               | Город                                                             |
+| `contacts.addressStreet` | `string`                                                            | Улица                                                             |
+| `ns`                  | `{ enabled, list } \| null`                                            | Свои NS                                                           |
+| `ns.enabled`          | `boolean`                                                              | Свои NS включены                                                  |
+| `ns.list`             | `{ host, ip }[]`                                                       | Серверы                                                           |
+| `ns.list[].host`      | `string`                                                               | Хост                                                              |
+| `ns.list[].ip`        | `string \| null`                                                       | IP хоста                                                          |
 
 ### `list`
+
+Возвращает зарегистрированные домены и незавершённые заявки аккаунта. Отменённые регистрации не входят.
 
 `GET /account/{accountId}/domains`
 
 ```typescript
-list(params?: GetAccountDomainsParams): Promise<AccountDomainListResponse>
+const domains = await client.account(accountId).domains.list({
+  status: "registered",
+  offset: 0,
+  limit: 20,
+});
 ```
 
-Возвращает зарегистрированные домены и незавершённые заявки как `{ list, pagination }`. Отменённые регистрации не входят.
+**Вход**
 
-| `status`       | Что придёт                                       |
-| -------------- | ------------------------------------------------ |
-| не передан     | Зарегистрированные домены и незавершённые заявки |
-| `'registered'` | Только зарегистрированные                        |
-| `'pending'`    | `queued`, `wrongData`, `error`, `waitingPayment` |
+| Поле     | Тип                            | Описание                                                                                          |
+| -------- | ------------------------------ | ------------------------------------------------------------------------------------------------- |
+| `status` | `'registered' \| 'pending'`    | Необязательно. Не передан: зарегистрированные и незавершённые заявки. `registered`: только свои. `pending`: `queued`, `wrongData`, `error`, `waitingPayment` |
+| `offset` | `number`                       | Сколько записей пропустить. Необязательно                                                         |
+| `limit`  | `number`                       | Сколько записей вернуть. Необязательно                                                            |
 
-`offset` и `limit` необязательны.
+**Ответ**
+
+| Поле                | Тип               | Описание                    |
+| ------------------- | ----------------- | --------------------------- |
+| `list`              | `AccountDomain[]` | Домены и заявки. Поля выше  |
+| `pagination.limit`  | `number`          | Размер страницы             |
+| `pagination.offset` | `number`          | Смещение                    |
+| `pagination.total`  | `number`          | Всего записей               |
 
 ### `get`
+
+Возвращает один зарегистрированный домен. Незавершённый или отменённый id отвечает 404.
 
 `GET /account/{accountId}/domains/{regId}`
 
 ```typescript
-get(regId: number): Promise<AccountDomain>
+const domain = await client.account(accountId).domains.get(regId);
 ```
 
-Один зарегистрированный домен. Незавершённый или отменённый id отвечает 404.
+**Вход**
+
+| Поле    | Тип      | Описание        |
+| ------- | -------- | --------------- |
+| `regId` | `number` | Id регистрации  |
+
+**Ответ**
+
+| Поле  | Тип             | Описание                   |
+| ----- | --------------- | -------------------------- |
+| ответ | `AccountDomain` | Домен. Поля в таблице выше |
 
 ### `unbindSite`
+
+Снимает домен с сайта. Регистрация остаётся на аккаунте. Зарегистрированный домен стоит не больше чем на одном сайте, поэтому хватает id регистрации.
 
 `DELETE /account/{accountId}/domains/{regId}/site`
 
 ```typescript
-unbindSite(regId: number): Promise<Record<string, never>>
+await client.account(accountId).domains.unbindSite(regId);
 ```
 
-Вызов не возвращает содержимого. Он снимает домен с сайта. Регистрация остаётся на аккаунте. Зарегистрированный домен стоит не больше чем на одном сайте, поэтому вызову достаточно id регистрации.
+**Вход**
+
+| Поле    | Тип      | Описание       |
+| ------- | -------- | -------------- |
+| `regId` | `number` | Id регистрации |
+
+**Ответ**
+
+Тела нет.

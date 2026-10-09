@@ -31,21 +31,19 @@ Replace `123` with your site id. `getPages` returns `{ list, pagination }`. Inst
 ## Documentation
 
 1. [Get started](docs/en/getting-started.md) — install the package, create a client, open a site or an account
-2. [Authentication](docs/en/authentication.md) — API key and browser bearer tokens
-3. [Requests and errors](docs/en/requests.md) — headers, query strings, status codes, timeouts
-4. [Sites](docs/en/sites.md) — list and create projects, read and update one site, build HTML
-5. [Pages](docs/en/pages.md) — pages, folders, versions
-6. [Page data](docs/en/page-data.md) — version JSON: layout, entities, codes, animations
-7. [Leads](docs/en/leads.md) — lead cards, order lines, shipping, reservations
-8. [Ecommerce](docs/en/ecommerce.md) — products, categories, promotions
-9. [Images](docs/en/images.md)
-10. [Files](docs/en/files.md)
-11. [Domains](docs/en/domains.md) — domains on a site and on an account
-12. [Redirects](docs/en/redirects.md)
-13. [Settings](docs/en/settings.md)
-14. [Sandbox](docs/en/sandbox.md)
-15. [Statistics](docs/en/statistics.md) — A/B tests
-16. [Catalogs](docs/en/catalogs.md) — languages and currencies
+2. [Requests and errors](docs/en/requests.md) — headers, query strings, status codes, timeouts
+3. [Sites](docs/en/sites.md) — list and create projects, read and update one site, build HTML
+4. [Pages](docs/en/pages.md) — pages, folders, versions
+5. [Page data](docs/en/page-data.md) — version JSON: layout, entities, codes, animations
+6. [Leads](docs/en/leads.md) — lead cards, order lines, shipping, reservations
+7. [Ecommerce](docs/en/ecommerce.md) — products, categories, promotions
+8. [Images](docs/en/images.md)
+9. [Files](docs/en/files.md)
+10. [Domains](docs/en/domains.md) — domains on a site and on an account
+11. [Redirects](docs/en/redirects.md)
+12. [Settings](docs/en/settings.md)
+13. [Statistics](docs/en/statistics.md) — A/B tests
+14. [Catalogs](docs/en/catalogs.md) — languages and currencies
 
 ## Development
 

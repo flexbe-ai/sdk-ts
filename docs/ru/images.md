@@ -1,4 +1,4 @@
-# Изображения
+# site > Изображения
 
 `site.images` загружает и читает изображения одного сайта. Пути лежат на `/sites/{siteId}/images`.
 
@@ -10,52 +10,98 @@ const image = await site.images.upload(bytes, "cover.png", "image/png");
 
 ## `upload`
 
+Загружает файл картинки и возвращает запись `Image`.
+
 `POST /sites/{siteId}/images`
 
 ```typescript
-upload(
-    file: UploadBinary,
-    filename?: string,
-    contentType?: string
-): Promise<Image>
+const image = await site.images.upload(bytes, "cover.png", "image/png");
 ```
 
-`filename` по умолчанию `'image.bin'`. `contentType` необязателен.
+**Вход**
 
-`UploadBinary` — это `Blob | File | Buffer | ArrayBuffer | Uint8Array`. Файл уходит как multipart-поле `file`. Значение вне этого объединения бросает `TypeError` с текстом `Unsupported upload binary type`.
+| Поле          | Тип            | Описание                                                                 |
+| ------------- | -------------- | ------------------------------------------------------------------------ |
+| `file`        | `UploadBinary` | `Blob`, `File`, `Buffer`, `ArrayBuffer` или `Uint8Array`. Уходит как multipart-поле `file` |
+| `filename`    | `string`       | Имя файла. По умолчанию `image.bin`                                      |
+| `contentType` | `string`       | MIME-тип. Необязательно                                                  |
+
+Значение вне `UploadBinary` бросает `TypeError` с текстом `Unsupported upload binary type`.
+
+**Ответ** `Image`. Поля в абзаце выше.
 
 ## `uploadFromUrl`
+
+Скачивает картинку по URL и возвращает запись `Image`.
 
 `POST /sites/{siteId}/images/from-url`
 
 ```typescript
-uploadFromUrl(params: UploadFromUrlParams): Promise<Image>
+const image = await site.images.uploadFromUrl({ url: "https://example.com/cover.png" });
 ```
 
-`UploadFromUrlParams` — это `{ url: string }`. Тело — JSON.
+**Вход**
+
+| Поле  | Тип      | Описание |
+| ----- | -------- | -------- |
+| `url` | `string` | Адрес картинки. Тело — JSON |
+
+**Ответ** `Image`. Поля в абзаце выше.
 
 ## `claim`
+
+Привязывает к сайту id картинок, которые уже есть, в том числе картинки другого аккаунта.
 
 `POST /sites/{siteId}/images/claim`
 
 ```typescript
-claim(params: ClaimImagesParams): Promise<void>
+await site.images.claim({ imageIds: [1, 2] });
 ```
 
-`ClaimImagesParams` — это `{ imageIds: number[] }`. Привязывает id картинок, которые уже есть, в том числе картинки другого аккаунта.
+**Вход**
+
+| Поле       | Тип        | Описание        |
+| ---------- | ---------- | --------------- |
+| `imageIds` | `number[]` | Id картинок     |
+
+**Ответ**
+
+Тела нет.
 
 ## `get`
+
+Возвращает одну картинку сайта.
 
 `GET /sites/{siteId}/images/{imageId}`
 
 ```typescript
-get(imageId: number): Promise<Image>
+const image = await site.images.get(imageId);
 ```
 
+**Вход**
+
+| Поле      | Тип      | Описание    |
+| --------- | -------- | ----------- |
+| `imageId` | `number` | Id картинки |
+
+**Ответ** `Image`. Поля в абзаце выше.
+
 ## `remove`
+
+Удаляет картинку сайта.
 
 `DELETE /sites/{siteId}/images/{imageId}`
 
 ```typescript
-remove(imageId: number): Promise<void>
+await site.images.remove(imageId);
 ```
+
+**Вход**
+
+| Поле      | Тип      | Описание    |
+| --------- | -------- | ----------- |
+| `imageId` | `number` | Id картинки |
+
+**Ответ**
+
+Тела нет.
