@@ -1,5 +1,11 @@
 # @flexbe/sdk
 
+## 0.11.0
+
+### Minor Changes
+
+- eaecd65: Add `description`, `createdAt`, and `payLink` on `LeadPayment`, `custom` on `Lead`, and `payment.description` on `UpdateLeadParams`.
+
 ## 0.10.0
 
 ### Minor Changes
