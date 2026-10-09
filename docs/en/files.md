@@ -1,6 +1,6 @@
 # Site → Files
 
-`site.files` uploads files for one site.
+`site.files` uploads files for the site.
 
 ```typescript
 const file = await site.files.upload(bytes, "price.pdf", "application/pdf");
@@ -8,29 +8,31 @@ const file = await site.files.upload(bytes, "price.pdf", "application/pdf");
 
 `upload` returns the file record. Keep that object.
 
-## `FileAsset`
+### `FileAsset`
 
 An uploaded site file.
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `id` | `number` | File id |
-| `name` | `string` | Name |
+| Field          | Type             | Description             |
+| -------------- | ---------------- | ----------------------- |
+| `id`           | `number`         | File id                 |
+| `name`         | `string`         | Name                    |
 | `originalName` | `string \| null` | Original name. Optional |
-| `ext` | `string` | Extension |
-| `url` | `string` | Public path |
+| `ext`          | `string`         | Extension               |
+| `url`          | `string`         | Public path             |
 
-## `UploadBinary`
+### `UploadBinary`
 
 Bytes accepted by an upload.
 
-| Type | Description |
-| --- | --- |
-| `Blob` | Browser blob |
-| `File` | Form file |
-| `Buffer` | Node.js buffer |
-| `ArrayBuffer` | Raw bytes |
-| `Uint8Array` | Bytes as a typed array |
+| Type          | Description            |
+| ------------- | ---------------------- |
+| `Blob`        | Browser blob           |
+| `File`        | Form file              |
+| `Buffer`      | Node.js buffer         |
+| `ArrayBuffer` | Raw bytes              |
+| `Uint8Array`  | Bytes as a typed array |
+
+---
 
 ## `upload`
 
@@ -44,11 +46,11 @@ const file = await site.files.upload(bytes, "price.pdf", "application/pdf");
 
 **Input**
 
-| Field         | Type           | Description                                          |
-| ------------- | -------------- | ---------------------------------------------------- |
-| `file`        | `UploadBinary` | File bytes. Sent as multipart field `file`           |
-| `filename`    | `string`       | File name. Required                                  |
-| `contentType` | `string`       | MIME type. Defaults to `application/octet-stream`    |
+| Field         | Type           | Description                                       |
+| ------------- | -------------- | ------------------------------------------------- |
+| `file`        | `UploadBinary` | File bytes. Sent as multipart field `file`        |
+| `filename`    | `string`       | File name. Required                               |
+| `contentType` | `string`       | MIME type. Defaults to `application/octet-stream` |
 
 **Response** [`FileAsset`](#fileasset).
 
@@ -59,13 +61,15 @@ Downloads a file from a URL and returns the `FileAsset` record.
 `POST /sites/{siteId}/files/from-url`
 
 ```typescript
-const file = await site.files.uploadFromUrl({ url: "https://example.com/price.pdf" });
+const file = await site.files.uploadFromUrl({
+  url: "https://example.com/price.pdf",
+});
 ```
 
 **Input**
 
-| Field | Type     | Description                   |
-| ----- | -------- | ----------------------------- |
+| Field | Type     | Description                    |
+| ----- | -------- | ------------------------------ |
 | `url` | `string` | File address. The body is JSON |
 
 **Response** [`FileAsset`](#fileasset).

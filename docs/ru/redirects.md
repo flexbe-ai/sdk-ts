@@ -1,54 +1,56 @@
 # Сайт → Редиректы
 
-`site.redirects` показывает и меняет редиректы одного сайта.
+`site.redirects` показывает и меняет редиректы сайта.
 
 ```typescript
 const redirects = await site.redirects.getRedirects({ type: "standard" });
 ```
 
-## `RedirectKind`
+### `RedirectKind`
 
-| Значение | Описание |
-| --- | --- |
-| `standard` | Обычный редирект |
-| `geo` | По стране или языку |
+| Значение   | Описание            |
+| ---------- | ------------------- |
+| `standard` | Обычный редирект    |
+| `geo`      | По стране или языку |
 
-## `RedirectTypeCode`
+### `RedirectTypeCode`
 
-| Значение | Описание |
-| --- | --- |
-| `301` | Постоянный |
-| `302` | Временный |
-| `200` | Прозрачный |
+| Значение | Описание   |
+| -------- | ---------- |
+| `301`    | Постоянный |
+| `302`    | Временный  |
+| `200`    | Прозрачный |
 
-## `RedirectCondition`
+### `RedirectCondition`
 
 Условие по стране или языку.
 
-| Поле | Тип | Описание |
-| --- | --- | --- |
-| `enabled` | `boolean` | Условие включено |
-| `exclude` | `boolean` | Исключить значения из `list` |
-| `list` | `string[]` | Страны или языки |
+| Поле      | Тип        | Описание                     |
+| --------- | ---------- | ---------------------------- |
+| `enabled` | `boolean`  | Условие включено             |
+| `exclude` | `boolean`  | Исключить значения из `list` |
+| `list`    | `string[]` | Страны или языки             |
 
-## `Redirect`
+### `Redirect`
 
 Редирект сайта.
 
-| Поле | Тип | Описание |
-| --- | --- | --- |
-| `id` | `number` | Id редиректа |
-| `type` | [`RedirectKind`](#redirectkind) | Вид |
-| `enabled` | `boolean` | Включён |
-| `fromAllPages` | `boolean` | Со всех страниц |
-| `regularFromPage` | `boolean` | `fromPage` — регулярное выражение |
-| `fromPage` | `string` | Откуда |
-| `toPage` | `string` | Куда |
-| `redirectType` | [`RedirectTypeCode`](#redirecttypecode) | Код |
-| `saveQuery` | `boolean` | Сохранять query |
-| `sortIndex` | `number` | Порядок |
-| `country` | [`RedirectCondition`](#redirectcondition) | Условие по стране. Необязательно |
-| `language` | [`RedirectCondition`](#redirectcondition) | Условие по языку. Необязательно |
+| Поле              | Тип                                       | Описание                          |
+| ----------------- | ----------------------------------------- | --------------------------------- |
+| `id`              | `number`                                  | Id редиректа                      |
+| `type`            | [`RedirectKind`](#redirectkind)           | Вид                               |
+| `enabled`         | `boolean`                                 | Включён                           |
+| `fromAllPages`    | `boolean`                                 | Со всех страниц                   |
+| `regularFromPage` | `boolean`                                 | `fromPage` — регулярное выражение |
+| `fromPage`        | `string`                                  | Откуда                            |
+| `toPage`          | `string`                                  | Куда                              |
+| `redirectType`    | [`RedirectTypeCode`](#redirecttypecode)   | Код                               |
+| `saveQuery`       | `boolean`                                 | Сохранять query                   |
+| `sortIndex`       | `number`                                  | Порядок                           |
+| `country`         | [`RedirectCondition`](#redirectcondition) | Условие по стране. Необязательно  |
+| `language`        | [`RedirectCondition`](#redirectcondition) | Условие по языку. Необязательно   |
+
+---
 
 ## `getRedirects`
 
@@ -62,14 +64,14 @@ const redirects = await site.redirects.getRedirects({ type: "standard" });
 
 **Вход**
 
-| Поле   | Тип                      | Описание                                      |
-| ------ | ------------------------ | --------------------------------------------- |
-| `type` | `'standard' \| 'geo'`    | Какие редиректы вернуть. Необязательно        |
+| Поле   | Тип                   | Описание                               |
+| ------ | --------------------- | -------------------------------------- |
+| `type` | `'standard' \| 'geo'` | Какие редиректы вернуть. Необязательно |
 
 **Ответ**
 
-| Поле   | Тип          | Описание                    |
-| ------ | ------------ | --------------------------- |
+| Поле   | Тип                       | Описание  |
+| ------ | ------------------------- | --------- |
 | `list` | [`Redirect[]`](#redirect) | Редиректы |
 
 ## `getRedirect`
@@ -84,8 +86,8 @@ const redirect = await site.redirects.getRedirect(redirectId);
 
 **Вход**
 
-| Поле         | Тип      | Описание    |
-| ------------ | -------- | ----------- |
+| Поле         | Тип      | Описание     |
+| ------------ | -------- | ------------ |
 | `redirectId` | `number` | Id редиректа |
 
 **Ответ** [`Redirect`](#redirect).
@@ -105,18 +107,18 @@ const redirect = await site.redirects.createRedirect({
 
 **Вход**
 
-| Поле              | Тип                    | Описание                                      |
-| ----------------- | ---------------------- | --------------------------------------------- |
-| `type`            | `'standard' \| 'geo'`  | Вид редиректа. Обязательно                    |
-| `toPage`          | `string`               | Куда вести. Обязательно                       |
-| `enabled`         | `boolean`              | Включён. Необязательно                        |
-| `fromAllPages`    | `boolean`              | Со всех страниц. Необязательно                |
-| `regularFromPage` | `boolean`              | `fromPage` — регулярное выражение. Необязательно |
-| `fromPage`        | `string`               | Откуда. Необязательно                         |
-| `redirectType`    | `301 \| 302 \| 200`    | Код. Необязательно                            |
-| `saveQuery`       | `boolean`              | Сохранять query. Необязательно                |
-| `country`         | [`RedirectCondition`](#redirectcondition) | Условие по стране. Необязательно |
-| `language`        | [`RedirectCondition`](#redirectcondition) | Условие по языку. Необязательно |
+| Поле              | Тип                                       | Описание                                         |
+| ----------------- | ----------------------------------------- | ------------------------------------------------ |
+| `type`            | `'standard' \| 'geo'`                     | Вид редиректа. Обязательно                       |
+| `toPage`          | `string`                                  | Куда вести. Обязательно                          |
+| `enabled`         | `boolean`                                 | Включён. Необязательно                           |
+| `fromAllPages`    | `boolean`                                 | Со всех страниц. Необязательно                   |
+| `regularFromPage` | `boolean`                                 | `fromPage` — регулярное выражение. Необязательно |
+| `fromPage`        | `string`                                  | Откуда. Необязательно                            |
+| `redirectType`    | `301 \| 302 \| 200`                       | Код. Необязательно                               |
+| `saveQuery`       | `boolean`                                 | Сохранять query. Необязательно                   |
+| `country`         | [`RedirectCondition`](#redirectcondition) | Условие по стране. Необязательно                 |
+| `language`        | [`RedirectCondition`](#redirectcondition) | Условие по языку. Необязательно                  |
 
 **Ответ** [`Redirect`](#redirect).
 
@@ -127,15 +129,17 @@ const redirect = await site.redirects.createRedirect({
 `PATCH /sites/{siteId}/redirects/{redirectId}`
 
 ```typescript
-const redirect = await site.redirects.updateRedirect(redirectId, { toPage: "/other" });
+const redirect = await site.redirects.updateRedirect(redirectId, {
+  toPage: "/other",
+});
 ```
 
 **Вход**
 
-| Поле         | Тип      | Описание                                      |
-| ------------ | -------- | --------------------------------------------- |
-| `redirectId` | `number` | Id редиректа                                  |
-| патч         | объект   | Любые поля создания, все необязательны        |
+| Поле         | Тип      | Описание                               |
+| ------------ | -------- | -------------------------------------- |
+| `redirectId` | `number` | Id редиректа                           |
+| патч         | объект   | Любые поля создания, все необязательны |
 
 **Ответ** [`Redirect`](#redirect).
 
@@ -169,13 +173,13 @@ const redirects = await site.redirects.replaceRedirects("standard", [
 
 **Вход**
 
-| Поле    | Тип                      | Описание                                      |
-| ------- | ------------------------ | --------------------------------------------- |
-| `type`  | `'standard' \| 'geo'`    | Какой список заменить                         |
-| `items` | `ReplaceRedirectItem[]`  | Редиректы, которые должны остаться |
+| Поле    | Тип                     | Описание                           |
+| ------- | ----------------------- | ---------------------------------- |
+| `type`  | `'standard' \| 'geo'`   | Какой список заменить              |
+| `items` | `ReplaceRedirectItem[]` | Редиректы, которые должны остаться |
 
 **Ответ**
 
-| Поле   | Тип          | Описание                         |
-| ------ | ------------ | -------------------------------- |
+| Поле   | Тип                       | Описание            |
+| ------ | ------------------------- | ------------------- |
 | `list` | [`Redirect[]`](#redirect) | Список после замены |

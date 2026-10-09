@@ -1,6 +1,6 @@
 # Site → Leads
 
-`site.leads` reads and updates leads for one site.
+`site.leads` reads and updates leads for the site.
 
 ```typescript
 import { LeadStatus } from "@flexbe/sdk";
@@ -9,29 +9,29 @@ const page = await site.leads.list({ limit: 20, status: LeadStatus.NEW });
 const lead = page.list[0];
 ```
 
-## `Lead`
+### `Lead`
 
-| Field            | Type                           | Description                    |
-| ---------------- | ------------------------------ | ------------------------------ |
-| `id`             | `number`                       | Lead id                        |
-| `sequence`       | `number`                       | Lead number on the site        |
-| `siteId`         | `number`                       | Site id                        |
-| `status`         | `LeadStatus`                   | Lead status                    |
-| `isRead`         | `boolean`                      | Someone has opened the lead    |
-| `formName`       | `string`                       | Form name                      |
-| `customer`       | `LeadCustomer`                 | Customer                       |
-| `formFields`     | `LeadFormField[] \| null`      | Form answers                   |
-| `orderItems`     | `LeadOrderItem[] \| null`      | Order lines                    |
-| `orderShipping`  | `LeadShipping \| null`         | Shipping                       |
-| `orderDiscounts` | `LeadOrderDiscount[] \| null`  | Discount snapshots             |
-| `payment`        | `LeadPayment \| null`          | Payment                        |
-| `taxSnapshot`    | object or `null`               | Tax at the time of the lead    |
-| `notes`          | `string \| null`               | Note                           |
-| `custom`         | object or `null`               | Custom data                    |
-| `tracking`       | `LeadTracking \| null`         | Where the lead came from       |
-| `trackingExtra`  | object or `null`               | Extra visit tags               |
-| `createdAt`      | `string`                       | When it was created            |
-| `updatedAt`      | `string`                       | When it was changed. Optional  |
+| Field            | Type                          | Description                   |
+| ---------------- | ----------------------------- | ----------------------------- |
+| `id`             | `number`                      | Lead id                       |
+| `sequence`       | `number`                      | Lead number on the site       |
+| `siteId`         | `number`                      | Site id                       |
+| `status`         | `LeadStatus`                  | Lead status                   |
+| `isRead`         | `boolean`                     | Someone has opened the lead   |
+| `formName`       | `string`                      | Form name                     |
+| `customer`       | `LeadCustomer`                | Customer                      |
+| `formFields`     | `LeadFormField[] \| null`     | Form answers                  |
+| `orderItems`     | `LeadOrderItem[] \| null`     | Order lines                   |
+| `orderShipping`  | `LeadShipping \| null`        | Shipping                      |
+| `orderDiscounts` | `LeadOrderDiscount[] \| null` | Discount snapshots            |
+| `payment`        | `LeadPayment \| null`         | Payment                       |
+| `taxSnapshot`    | object or `null`              | Tax at the time of the lead   |
+| `notes`          | `string \| null`              | Note                          |
+| `custom`         | object or `null`              | Custom data                   |
+| `tracking`       | `LeadTracking \| null`        | Where the lead came from      |
+| `trackingExtra`  | object or `null`              | Extra visit tags              |
+| `createdAt`      | `string`                      | When it was created           |
+| `updatedAt`      | `string`                      | When it was changed. Optional |
 
 ### `LeadStatus`
 
@@ -79,17 +79,17 @@ const lead = page.list[0];
 
 ### `LeadOrderItem`
 
-| Field         | Type                       | Description                    |
-| ------------- | -------------------------- | ------------------------------ |
-| `id`          | `string`                   | Line id                        |
-| `productId`   | `number`                   | Product id                     |
-| `variantId`   | `number`                   | Variant id                     |
-| `name`        | `string`                   | Name at order time             |
-| `quantity`    | `number`                   | Quantity                       |
-| `price`       | `LeadMoney`                | Unit price                     |
-| `rowTotal`    | `LeadMoney`                | Line total                     |
-| `image`       | `{ id, ext }`              | Line image                     |
-| `reservation` | `{ id, quantity } \| null` | Line reservation. Optional     |
+| Field         | Type                       | Description                |
+| ------------- | -------------------------- | -------------------------- |
+| `id`          | `string`                   | Line id                    |
+| `productId`   | `number`                   | Product id                 |
+| `variantId`   | `number`                   | Variant id                 |
+| `name`        | `string`                   | Name at order time         |
+| `quantity`    | `number`                   | Quantity                   |
+| `price`       | `LeadMoney`                | Unit price                 |
+| `rowTotal`    | `LeadMoney`                | Line total                 |
+| `image`       | `{ id, ext }`              | Line image                 |
+| `reservation` | `{ id, quantity } \| null` | Line reservation. Optional |
 
 ### `image`
 
@@ -100,22 +100,22 @@ const lead = page.list[0];
 
 ### `reservation`
 
-| Field      | Type     | Description        |
-| ---------- | -------- | ------------------ |
-| `id`       | `number` | Reservation id     |
-| `quantity` | `number` | Reserved quantity  |
+| Field      | Type     | Description       |
+| ---------- | -------- | ----------------- |
+| `id`       | `number` | Reservation id    |
+| `quantity` | `number` | Reserved quantity |
 
 ### `LeadShipping`
 
-| Field           | Type        | Description              |
-| --------------- | ----------- | ------------------------ |
-| `id`            | `string`    | Shipping method id       |
-| `name`          | `string`    | Name                     |
-| `price`         | `LeadMoney` | Price                    |
-| `isCustomQuote` | `boolean`   | Custom price             |
-| `type`          | `string`    | Shipping type            |
-| `fields`        | `unknown[]` | Shipping method fields   |
-| `address`       | `address`   | Address                  |
+| Field           | Type        | Description            |
+| --------------- | ----------- | ---------------------- |
+| `id`            | `string`    | Shipping method id     |
+| `name`          | `string`    | Name                   |
+| `price`         | `LeadMoney` | Price                  |
+| `isCustomQuote` | `boolean`   | Custom price           |
+| `type`          | `string`    | Shipping type          |
+| `fields`        | `unknown[]` | Shipping method fields |
+| `address`       | `address`   | Address                |
 
 ### `address`
 
@@ -129,14 +129,14 @@ const lead = page.list[0];
 
 ### `LeadOrderDiscount`
 
-| Field            | Type                        | Description      |
-| ---------------- | --------------------------- | ---------------- |
-| `id`             | `number`                    | Discount id      |
-| `type`           | `'discount' \| 'promocode'` | Discount kind    |
+| Field            | Type                        | Description       |
+| ---------------- | --------------------------- | ----------------- |
+| `id`             | `number`                    | Discount id       |
+| `type`           | `'discount' \| 'promocode'` | Discount kind     |
 | `discountType`   | `'percent' \| 'money'`      | How it is counted |
-| `discountAmount` | `string`                    | Discount amount  |
-| `deliveryFree`   | `boolean \| null`           | Free delivery    |
-| `code`           | `string \| null`            | Promo code       |
+| `discountAmount` | `string`                    | Discount amount   |
+| `deliveryFree`   | `boolean \| null`           | Free delivery     |
+| `code`           | `string \| null`            | Promo code        |
 
 ### `LeadPayment`
 
@@ -162,6 +162,8 @@ const lead = page.list[0];
 | `visitorId`  | `string` | Visitor id                   |
 | `pageId`     | `number` | Page that submitted the form |
 
+---
+
 ## `list`
 
 Returns the leads of the site. Deleted leads stay out of the list unless you set `showDeleted`.
@@ -174,33 +176,33 @@ const leads = await site.leads.list({ page: 1, limit: 20 });
 
 **Input**
 
-| Field           | Type                | Description                                                                       |
-| --------------- | ------------------- | --------------------------------------------------------------------------------- |
-| `page`          | `number`            | List page number. Optional                                                        |
-| `limit`         | `number`            | How many leads per page. Optional                                                 |
-| `showDeleted`   | `boolean`           | Include leads with status `deleted`. Optional                                     |
-| `status`        | `LeadStatus`        | Status. Optional                                                                  |
-| `paymentStatus` | `LeadPaymentStatus` | Payment status. Optional                                                          |
-| `isRead`        | `boolean`           | Read or not. Optional                                                             |
-| `clientName`    | `string`            | Name search, substring. Optional                                                  |
-| `clientEmail`   | `string`            | Email search, substring. Optional                                                 |
-| `clientPhone`   | `string`            | Phone search, substring. Optional                                                 |
-| `dateFrom`      | `string`            | Leads on or after this date. Optional                                             |
-| `dateTo`        | `string`            | Leads on or before this date. Optional                                            |
-| `numberMin`     | `number`            | Lead number from. Optional                                                        |
-| `numberMax`     | `number`            | Lead number to. Optional                                                          |
-| `amountMin`     | `number`            | Amount from. Optional                                                             |
-| `amountMax`     | `number`            | Amount to. Optional                                                               |
-| `sorting`       | `string`            | `field:direction`, for example `date:desc`. A missing direction is descending    |
+| Field           | Type                | Description                                                                   |
+| --------------- | ------------------- | ----------------------------------------------------------------------------- |
+| `page`          | `number`            | List page number. Optional                                                    |
+| `limit`         | `number`            | How many leads per page. Optional                                             |
+| `showDeleted`   | `boolean`           | Include leads with status `deleted`. Optional                                 |
+| `status`        | `LeadStatus`        | Status. Optional                                                              |
+| `paymentStatus` | `LeadPaymentStatus` | Payment status. Optional                                                      |
+| `isRead`        | `boolean`           | Read or not. Optional                                                         |
+| `clientName`    | `string`            | Name search, substring. Optional                                              |
+| `clientEmail`   | `string`            | Email search, substring. Optional                                             |
+| `clientPhone`   | `string`            | Phone search, substring. Optional                                             |
+| `dateFrom`      | `string`            | Leads on or after this date. Optional                                         |
+| `dateTo`        | `string`            | Leads on or before this date. Optional                                        |
+| `numberMin`     | `number`            | Lead number from. Optional                                                    |
+| `numberMax`     | `number`            | Lead number to. Optional                                                      |
+| `amountMin`     | `number`            | Amount from. Optional                                                         |
+| `amountMax`     | `number`            | Amount to. Optional                                                           |
+| `sorting`       | `string`            | `field:direction`, for example `date:desc`. A missing direction is descending |
 
 **Response**
 
-| Field               | Type     | Description                    |
-| ------------------- | -------- | ------------------------------ |
+| Field               | Type     | Description     |
+| ------------------- | -------- | --------------- |
 | `list`              | `Lead[]` | [`Lead`](#lead) |
-| `pagination.limit`  | `number` | Page size                      |
-| `pagination.offset` | `number` | Offset                         |
-| `pagination.total`  | `number` | Total rows                     |
+| `pagination.limit`  | `number` | Page size       |
+| `pagination.offset` | `number` | Offset          |
+| `pagination.total`  | `number` | Total rows      |
 
 ## `get`
 
@@ -227,22 +229,25 @@ Changes status, the read flag, the note, contacts, and payment status. Products,
 `PATCH /sites/{siteId}/leads/{leadId}`
 
 ```typescript
-const lead = await site.leads.update(leadId, { status: "completed", isRead: true });
+const lead = await site.leads.update(leadId, {
+  status: "completed",
+  isRead: true,
+});
 ```
 
 **Input**
 
-| Field                 | Type                | Description                    |
-| --------------------- | ------------------- | ------------------------------ |
-| `leadId`              | `number`            | Lead id                        |
-| `status`              | `LeadStatus`        | New status                     |
-| `isRead`              | `boolean`           | Read                           |
-| `notes`               | `string \| null`    | Note                           |
-| `customer.name`       | `string`            | Name. Optional                 |
-| `customer.phone`      | `string`            | Phone. Optional                |
-| `customer.email`      | `string \| null`    | Email. Optional                |
-| `payment.status`      | `LeadPaymentStatus` | Payment status                 |
-| `payment.description` | `string \| null`    | Payment note. Optional         |
+| Field                 | Type                | Description            |
+| --------------------- | ------------------- | ---------------------- |
+| `leadId`              | `number`            | Lead id                |
+| `status`              | `LeadStatus`        | New status             |
+| `isRead`              | `boolean`           | Read                   |
+| `notes`               | `string \| null`    | Note                   |
+| `customer.name`       | `string`            | Name. Optional         |
+| `customer.phone`      | `string`            | Phone. Optional        |
+| `customer.email`      | `string \| null`    | Email. Optional        |
+| `payment.status`      | `LeadPaymentStatus` | Payment status         |
+| `payment.description` | `string \| null`    | Payment note. Optional |
 
 **Response** [`Lead`](#lead).
 
@@ -258,9 +263,9 @@ const leads = await site.leads.updateMany([leadId], { isRead: true });
 
 **Input**
 
-| Field | Type       | Description                              |
-| ----- | ---------- | ---------------------------------------- |
-| `ids` | `number[]` | Lead ids                                 |
+| Field | Type       | Description                               |
+| ----- | ---------- | ----------------------------------------- |
+| `ids` | `number[]` | Lead ids                                  |
 | patch | object     | The same fields as `update`, all optional |
 
 **Response** the same as `list`: `list` and `pagination`.
@@ -297,15 +302,15 @@ const lead = await site.leads.replaceProducts(leadId, {
 
 **Input**
 
-| Field                | Type     | Description |
-| -------------------- | -------- | ----------- |
-| `leadId`             | `number` | Lead id     |
-| `items`              | array    | New lines   |
-| `items[].productId`  | `number` | Product id  |
-| `items[].variantId`  | `number` | Variant id  |
-| `items[].name`       | `string` | Name        |
-| `items[].quantity`   | `number` | Quantity    |
-| `items[].price`      | `number` | Price       |
+| Field               | Type     | Description |
+| ------------------- | -------- | ----------- |
+| `leadId`            | `number` | Lead id     |
+| `items`             | array    | New lines   |
+| `items[].productId` | `number` | Product id  |
+| `items[].variantId` | `number` | Variant id  |
+| `items[].name`      | `string` | Name        |
+| `items[].quantity`  | `number` | Quantity    |
+| `items[].price`     | `number` | Price       |
 
 **Response** [`Lead`](#lead).
 
@@ -321,10 +326,10 @@ const lead = await site.leads.applyPromotion(leadId, { id: promotionId });
 
 **Input**
 
-| Field    | Type     | Description    |
-| -------- | -------- | -------------- |
-| `leadId` | `number` | Lead id        |
-| `id`     | `number` | Promotion id   |
+| Field    | Type     | Description  |
+| -------- | -------- | ------------ |
+| `leadId` | `number` | Lead id      |
+| `id`     | `number` | Promotion id |
 
 **Response** [`Lead`](#lead).
 
@@ -340,10 +345,10 @@ const lead = await site.leads.removePromotion(leadId, "promocode");
 
 **Input**
 
-| Field    | Type                         | Description |
-| -------- | ---------------------------- | ----------- |
-| `leadId` | `number`                     | Lead id     |
-| `type`   | `'discount' \| 'promocode'`  | What to remove |
+| Field    | Type                        | Description    |
+| -------- | --------------------------- | -------------- |
+| `leadId` | `number`                    | Lead id        |
+| `type`   | `'discount' \| 'promocode'` | What to remove |
 
 **Response** [`Lead`](#lead).
 
@@ -383,7 +388,7 @@ const lead = await site.leads.setShipping(leadId, {
 
 ## Reservations
 
-### `createReservations`
+## `createReservations`
 
 Reserves every product line. A later call returns the reservations that already exist.
 
@@ -401,15 +406,15 @@ const reservations = await site.leads.createReservations(leadId);
 
 **Response**
 
-| Field              | Type     | Description        |
-| ------------------ | -------- | ------------------ |
-| `list`             | array    | Reservation rows   |
-| `list[].id`        | `number` | Reservation id     |
-| `list[].leadId`    | `number` | Lead id            |
-| `list[].variantId` | `number` | Variant id         |
-| `list[].quantity`  | `number` | Quantity           |
+| Field              | Type     | Description      |
+| ------------------ | -------- | ---------------- |
+| `list`             | array    | Reservation rows |
+| `list[].id`        | `number` | Reservation id   |
+| `list[].leadId`    | `number` | Lead id          |
+| `list[].variantId` | `number` | Variant id       |
+| `list[].quantity`  | `number` | Quantity         |
 
-### `removeReservations`
+## `removeReservations`
 
 Releases every reservation on the lead and returns the pieces to stock.
 
@@ -427,7 +432,7 @@ const reservations = await site.leads.removeReservations(leadId);
 
 **Response** the same `{ list }` as `createReservations`.
 
-### `refillReservation`
+## `refillReservation`
 
 Tops the reservation up to the quantities stored on the lead. Pass the reservation id from a reservation row.
 

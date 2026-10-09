@@ -9,7 +9,7 @@ const pages = await site.pages.getPages({ limit: 10, offset: 0 });
 
 The layout is not on this object. It arrives as `PageVersionDataResponse.data`.
 
-## `Page`
+### `Page`
 
 | Field              | Type                 | Description                                                 |
 | ------------------ | -------------------- | ----------------------------------------------------------- |
@@ -29,7 +29,7 @@ The layout is not on this object. It arrives as `PageVersionDataResponse.data`.
 | `screenshot`       | `Screenshot \| null` | Preview. [`Screenshot`](#screenshot)                                       |
 | `meta`             | `PageMeta \| null`   | Page SEO. [`PageMeta`](#pagemeta)                                      |
 
-## `Screenshot`
+### `Screenshot`
 
 | Field | Type             | Description      |
 | ----- | ---------------- | ---------------- |
@@ -37,7 +37,7 @@ The layout is not on this object. It arrives as `PageVersionDataResponse.data`.
 | `ext` | `string`         | Extension        |
 | `url` | `string \| null` | Preview URL      |
 
-## `PageType`
+### `PageType`
 
 | Value                  | Description       |
 | ---------------------- | ----------------- |
@@ -49,7 +49,7 @@ The layout is not on this object. It arrives as `PageVersionDataResponse.data`.
 | `ecommerce_product`    | Product page      |
 | `ecommerce_category`   | Category page     |
 
-## `PageStatus`
+### `PageStatus`
 
 | Value       | Description                                      |
 | ----------- | ------------------------------------------------ |
@@ -58,7 +58,7 @@ The layout is not on this object. It arrives as `PageVersionDataResponse.data`.
 | `removed`   | The user removed the page                        |
 | `deleted`   | The user deleted the page from the removed list  |
 
-## `PageMeta`
+### `PageMeta`
 
 | Field            | Type                         | Description                    |
 | ---------------- | ---------------------------- | ------------------------------ |
@@ -71,13 +71,15 @@ The layout is not on this object. It arrives as `PageVersionDataResponse.data`.
 | `noindex`        | `boolean`                    | Keep the page out of the index |
 | `schemaMarkup`   | `PageSchemaMarkup \| null`   | schema.org markup. Optional    |
 
-## `PageSchemaMarkup`
+### `PageSchemaMarkup`
 
 | Field         | Type             | Description                              |
 | ------------- | ---------------- | ---------------------------------------- |
 | `data`        | `unknown`        | Markup body                              |
 | `updatedAt`   | `string \| null` | When the markup was updated              |
 | `genProducts` | `boolean`        | Generate product markup. Optional        |
+
+---
 
 ## `getPages`
 
@@ -311,7 +313,7 @@ const result = await site.pages.bulkDeletePages([pageId]);
 
 A folder is `{ id, name, sortIndex }`.
 
-### `getFolders`
+## `getFolders`
 
 Returns the site folders.
 
@@ -331,7 +333,7 @@ No parameters.
 | ------ | -------------- | ---------------------------------------- |
 | `list` | `PageFolder[]` | Folders. A folder has `id`, `name`, `sortIndex` |
 
-### `getFolder`
+## `getFolder`
 
 Returns one folder.
 
@@ -349,7 +351,7 @@ const folder = await site.pages.getFolder(folderId);
 
 **Response** `PageFolder`: `id`, `name`, `sortIndex`.
 
-### `createFolder`
+## `createFolder`
 
 Creates a folder.
 
@@ -368,7 +370,7 @@ const folder = await site.pages.createFolder({ name: "Services" });
 
 **Response** `PageFolder`: `id`, `name`, `sortIndex`.
 
-### `updateFolder`
+## `updateFolder`
 
 Updates a folder. `name` and `sortIndex` are both optional.
 
@@ -388,7 +390,7 @@ const folder = await site.pages.updateFolder(folderId, { name: "New name" });
 
 **Response** `PageFolder`: `id`, `name`, `sortIndex`.
 
-### `deleteFolder`
+## `deleteFolder`
 
 Deletes the folder and the items in it.
 
@@ -404,7 +406,7 @@ await site.pages.deleteFolder(folderId);
 | ----- | -------- | ----------- |
 | `id`  | `number` | Folder id   |
 
-### `bulkUpdateFolders`
+## `bulkUpdateFolders`
 
 Updates several folders. If every folder fails, the API responds with 400.
 

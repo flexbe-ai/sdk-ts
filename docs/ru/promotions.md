@@ -2,7 +2,7 @@
 
 Методы вызываются через `site.ecommerce`.
 
-## `Promotion`
+### `Promotion`
 
 Акция каталога.
 
@@ -21,6 +21,8 @@
 | `usageWithAnyDiscount` | `boolean \| null` | Вместе с другими скидками |
 | `active` | `boolean` | Включена |
 | `deletedAt` | `string \| null` | Когда удалили |
+
+---
 
 ## `listPromotions`
 
@@ -42,7 +44,7 @@ const promotions = await site.ecommerce.listPromotions();
 | ------ | ------------- | ------------------------- |
 | `list` | [`Promotion[]`](#promotion) | Акции |
 
-## `PromotionWriteParams`
+### `PromotionWriteParams`
 
 Поля создания и изменения акции.
 

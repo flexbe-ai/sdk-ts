@@ -6,7 +6,7 @@
 const settings = await site.settings.getSettings();
 ```
 
-## `SiteSettings`
+### `SiteSettings`
 
 Настройки сайта.
 
@@ -22,7 +22,7 @@ const settings = await site.settings.getSettings();
 | `notifications` | [`NotificationsSettings`](#notificationssettings) | Уведомления |
 | `platform` | [`PlatformSettings`](#platformsettings) | Платформа |
 
-## `LocaleSettings`
+### `LocaleSettings`
 
 Язык и регион.
 
@@ -33,7 +33,7 @@ const settings = await site.settings.getSettings();
 | `timezone` | `string` | Часовой пояс |
 | `currency` | [`CurrencySettings`](#currencysettings) | Валюта |
 
-## `CurrencySettings`
+### `CurrencySettings`
 
 Валюта.
 
@@ -44,7 +44,7 @@ const settings = await site.settings.getSettings();
 | `data` | [`CurrencyDataSettings`](#currencydatasettings) | Данные валюты |
 | `format` | [`CurrencyFormatSettings`](#currencyformatsettings) | Формат |
 
-## `CurrencyDataSettings`
+### `CurrencyDataSettings`
 
 Данные валюты.
 
@@ -54,7 +54,7 @@ const settings = await site.settings.getSettings();
 | `symbol` | `string` | Символ |
 | `decimals` | `number` | Знаков после запятой |
 
-## `CurrencyFormatSettings`
+### `CurrencyFormatSettings`
 
 Формат валюты.
 
@@ -64,7 +64,7 @@ const settings = await site.settings.getSettings();
 | `t` | `string` | Разделитель тысяч |
 | `d` | `string` | Десятичный разделитель |
 
-## `BrandingSettings`
+### `BrandingSettings`
 
 Оформление.
 
@@ -78,7 +78,7 @@ const settings = await site.settings.getSettings();
 | `smoothingScroll` | [`smoothingScroll`](#smoothingscroll) | Плавная прокрутка |
 | `adaptiveView` | `number \| boolean` | Адаптивный вид |
 
-## `FontsSettings`
+### `FontsSettings`
 
 Шрифты.
 
@@ -87,7 +87,7 @@ const settings = await site.settings.getSettings();
 | `myFonts` | массив | Свои шрифты |
 | `set` | массив | Набор шрифтов |
 
-## `myColors`
+### `myColors`
 
 Свои цвета.
 
@@ -96,7 +96,7 @@ const settings = await site.settings.getSettings();
 | `colors` | массив | Цвета |
 | `gradients` | массив | Градиенты |
 
-## `blockAnimation`
+### `blockAnimation`
 
 Анимация блоков.
 
@@ -105,7 +105,7 @@ const settings = await site.settings.getSettings();
 | `show` | `number \| null` | Показ |
 | `style` | `string \| null` | Стиль |
 
-## `smoothingScroll`
+### `smoothingScroll`
 
 Плавная прокрутка.
 
@@ -113,7 +113,7 @@ const settings = await site.settings.getSettings();
 | --- | --- | --- |
 | `enabled` | `number` | Включена |
 
-## `SeoSettings`
+### `SeoSettings`
 
 SEO.
 
@@ -124,7 +124,7 @@ SEO.
 | `canonical` | `number` | Канонический адрес |
 | `trailingSlash` | `string` | Завершающий слэш |
 
-## `PrivacySettings`
+### `PrivacySettings`
 
 Конфиденциальность.
 
@@ -133,7 +133,7 @@ SEO.
 | `cookiesWarning` | объект | Предупреждение о cookies |
 | `policyPersonalData` | [`policyPersonalData`](#policypersonaldata) | Политика персональных данных |
 
-## `policyPersonalData`
+### `policyPersonalData`
 
 Политика персональных данных.
 
@@ -142,7 +142,7 @@ SEO.
 | `show` | `number` | Показывать |
 | `file` | `string` | Файл |
 
-## `PerformanceSettings`
+### `PerformanceSettings`
 
 Производительность.
 
@@ -152,7 +152,7 @@ SEO.
 | `optimization` | объект | Оптимизация |
 | `injectCode` | [`injectCode`](#injectcode) | Вставка кода |
 
-## `injectCode`
+### `injectCode`
 
 Код в head и body.
 
@@ -161,7 +161,7 @@ SEO.
 | `head` | `string` | Код в head |
 | `body` | `string` | Код в body |
 
-## `EcommerceSettings`
+### `EcommerceSettings`
 
 Настройки магазина.
 
@@ -179,7 +179,7 @@ SEO.
 | `inStockStatus` | `string` | Статус «в наличии» |
 | `zeroPrice` | `string` | Как показывать нулевую цену |
 
-## `GlobalCartSettings`
+### `GlobalCartSettings`
 
 Общая корзина.
 
@@ -188,7 +188,7 @@ SEO.
 | `enabled` | `boolean` | Включена |
 | `data` | объект | Снимок настроек корзины. API его не меняет |
 
-## `SecuritySettings`
+### `SecuritySettings`
 
 Безопасность.
 
@@ -198,7 +198,7 @@ SEO.
 | `googleMapsApiKey` | `string` | Ключ Google Maps |
 | `yandexMapsApiKey` | `string` | Ключ Яндекс Карт |
 
-## `NotificationsSettings`
+### `NotificationsSettings`
 
 Уведомления.
 
@@ -213,7 +213,7 @@ SEO.
 | `sms` | массив | Устарело. Поле осталось в данных |
 | `smsLight` | `boolean` | Устарело. Поле осталось в данных |
 
-## `email`
+### `email`
 
 Адрес уведомления.
 
@@ -222,7 +222,7 @@ SEO.
 | `id` | `string` | Id адреса |
 | `email` | `string` | Адрес |
 
-## `PlatformSettings`
+### `PlatformSettings`
 
 Платформа.
 
@@ -231,6 +231,8 @@ SEO.
 | `ai` | объект | AI |
 | `api` | объект | API |
 | `pays` | объект | Платёжные провайдеры. Ключ — id провайдера, например `tinkoff` или `cash` |
+
+---
 
 ## `getSettings`
 
