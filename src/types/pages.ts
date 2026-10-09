@@ -343,6 +343,11 @@ export type HtmlBuildMessage = {
     text: string;
 };
 
+export type HtmlBuildChunk = {
+    specifier: string;
+    code: string;
+};
+
 export type BuildHtmlParams = {
     sources: {
         html?: string;
@@ -352,6 +357,7 @@ export type BuildHtmlParams = {
     };
     scopeCss?: boolean;
     external?: string[];
+    dependencies?: Record<string, string>;
 };
 
 export type BuildHtmlResult = {
@@ -359,6 +365,7 @@ export type BuildHtmlResult = {
     js: string;
     css: string;
     utilities: string;
+    chunks: HtmlBuildChunk[];
     errors: HtmlBuildMessage[];
     warnings: HtmlBuildMessage[];
 };

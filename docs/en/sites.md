@@ -141,29 +141,39 @@ const built = await site.buildHtml({
 
 **Input**
 
-| Field             | Type               | Description                                   |
-| ----------------- | ------------------ | --------------------------------------------- |
-| `sources.html`    | `string`           | Block HTML. Optional                          |
-| `sources.js`      | `string`           | Script. Optional                              |
-| `sources.css`     | `string`           | Styles. Optional                              |
-| `sources.modules` | `PageCodeModule[]` | Modules `{ id, path, content }`. Optional     |
-| `scopeCss`        | `boolean`          | Wrap CSS in `:scope`. On by default           |
-| `external`        | `string[]`         | Modules to leave external instead of bundling |
+| Field             | Type                     | Description                                                        |
+| ----------------- | ------------------------ | ------------------------------------------------------------------ |
+| `sources.html`    | `string`                 | Block HTML. Optional                                               |
+| `sources.js`      | `string`                 | Script. Optional                                                   |
+| `sources.css`     | `string`                 | Styles. Optional                                                   |
+| `sources.modules` | `PageCodeModule[]`       | Modules `{ id, path, content }`. Optional                          |
+| `scopeCss`        | `boolean`                | Wrap CSS in `:scope`. On by default                                |
+| `dependencies`    | `Record<string, string>` | Package name to version. Optional. Overrides the built-in pins     |
+| `external`        | `string[]`               | Accepted and ignored. A bare package import is returned as a chunk |
 
 `PageCodeModule` is `{ id, path, content }`, all strings.
 
 **Response**
 
-| Field       | Type                 | Description     |
-| ----------- | -------------------- | --------------- |
-| `html`      | `string`             | Compiled HTML   |
-| `js`        | `string`             | Compiled script |
-| `css`       | `string`             | Compiled styles |
-| `utilities` | `string`             | Utility CSS     |
-| `errors`    | `{ text: string }[]` | Build errors    |
-| `warnings`  | `{ text: string }[]` | Build warnings  |
+| Field       | Type                                    | Description                          |
+| ----------- | --------------------------------------- | ------------------------------------ |
+| `html`      | `string`                                | Compiled HTML                        |
+| `js`        | `string`                                | Compiled island script               |
+| `css`       | `string`                                | Compiled styles                      |
+| `utilities` | `string`                                | Utility CSS                          |
+| `chunks`    | `{ specifier: string, code: string }[]` | One compiled file per package module |
+| `errors`    | `{ text: string }[]`                    | Build errors                         |
+| `warnings`  | `{ text: string }[]`                    | Build warnings                       |
 
-Saved element code on a page version is `PageCode`, which can also carry `utilities`. That shape is in [Page data](page-data.md).
+A bare import such as `react` or `left-pad` stays out of `js`. The build downloads the package from the CDN and returns each of its files as a chunk. `js` imports that chunk by `specifier`. The specifier is the CDN path without the query, so the built-in React pin produces `react@19.3.0/jsx-runtime`.
+
+`dependencies` replaces the pin for the packages it names. `{ react: "18.2.0" }` downloads React 18.2.0. A package missing from `dependencies` keeps its built-in pin: `react`, `react-dom`, and `react-is` at `19.3.0`, `preact` at `10.29.8`, `lodash` and `lodash-es` at `4.18.1`.
+
+Files from `sources.modules` stay inside `js`. An `https://` import and a site path (`/img`, `/_s`, `/files`) stay as written and are not downloaded.
+
+The same `dependencies` map can sit on the island, in `data.data.dependencies`. The page compile reads it from there. `buildHtml` takes the map in the request body.
+
+Saved element code on a page version is `PageCode`, which can also carry `utilities`. Chunks are not stored on `PageCode` yet. That shape is in [Page data](page-data.md).
 
 ## Account
 
