@@ -1,0 +1,6 @@
+{
+  "name": "flexbe",
+  "version": "0.1.0",
+  "description": "Flexbe MCP for sites, pages, catalog, media, and layout.",
+  "mcpServers": "./.mcp.json"
+}

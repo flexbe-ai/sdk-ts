@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "flexbe": {
+      "type": "http",
+      "url": "https://api.flexbe.com/mcp"
+    }
+  }
+}
