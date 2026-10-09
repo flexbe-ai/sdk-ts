@@ -1,4 +1,4 @@
-# Статистика
+# site > Статистика
 
 `site.stat` читает один A/B-тест и создаёт один.
 
@@ -11,18 +11,36 @@ const again = await site.stat.getAbTest(test.id);
 
 ## `getAbTest`
 
+Возвращает один A/B-тест.
+
 `GET /sites/{siteId}/stat-abtests/{testId}`
 
 ```typescript
-getAbTest(testId: number): Promise<AbTest>
+const test = await site.stat.getAbTest(testId);
 ```
 
+**Вход**
+
+| Поле     | Тип      | Описание |
+| -------- | -------- | -------- |
+| `testId` | `number` | Id теста |
+
+**Ответ** `AbTest`. Поля в абзаце выше.
+
 ## `createAbTest`
+
+Создаёт A/B-тест для страницы и возвращает его.
 
 `POST /sites/{siteId}/stat-abtests`
 
 ```typescript
-createAbTest(pageId: number): Promise<AbTest>
+const test = await site.stat.createAbTest(pageId);
 ```
 
-Тело — `{ pageId }`.
+**Вход**
+
+| Поле     | Тип      | Описание   |
+| -------- | -------- | ---------- |
+| `pageId` | `number` | Id страницы. Тело — `{ pageId }` |
+
+**Ответ** `AbTest`. Поля в абзаце выше.

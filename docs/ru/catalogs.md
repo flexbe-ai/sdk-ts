@@ -1,4 +1,4 @@
-# Справочники
+# client > Meta
 
 `client.meta` отдаёт три справочника: языки сайта, языки интерфейса и валюты. Списки общие. Id сайта и id аккаунта им не нужны.
 
@@ -9,30 +9,62 @@ const currencies = await client.meta.getSiteCurrencies();
 
 ## `getSiteLanguages`
 
+Возвращает языки, которые можно поставить сайту.
+
 `GET /meta/site-languages`
 
 ```typescript
-getSiteLanguages(): Promise<SiteLanguage[]>
+const languages = await client.meta.getSiteLanguages();
 ```
 
-`SiteLanguage` — это `{ code, nameEn, nameNative }`.
+**Вход**
+
+Параметров нет.
+
+**Ответ** `SiteLanguage[]`
+
+| Поле         | Тип      | Описание                |
+| ------------ | -------- | ----------------------- |
+| `code`       | `string` | Код языка               |
+| `nameEn`     | `string` | Название по-английски   |
+| `nameNative` | `string` | Название на этом языке  |
 
 ## `getUserLanguages`
+
+Возвращает языки интерфейса.
 
 `GET /meta/user-languages`
 
 ```typescript
-getUserLanguages(): Promise<UserLanguage[]>
+const languages = await client.meta.getUserLanguages();
 ```
 
-У `UserLanguage` те же три поля.
+**Вход**
+
+Параметров нет.
+
+**Ответ** `UserLanguage[]`. Те же три поля, что у языка сайта: `code`, `nameEn`, `nameNative`.
 
 ## `getSiteCurrencies`
+
+Возвращает валюты сайта.
 
 `GET /meta/site-currencies`
 
 ```typescript
-getSiteCurrencies(): Promise<SiteCurrency[]>
+const currencies = await client.meta.getSiteCurrencies();
 ```
 
-`SiteCurrency` — это `{ code, name, symbol, symbolVariants?, decimals }`. `symbolVariants` — необязательный массив строк.
+**Вход**
+
+Параметров нет.
+
+**Ответ** `SiteCurrency[]`
+
+| Поле              | Тип        | Описание                          |
+| ----------------- | ---------- | --------------------------------- |
+| `code`            | `string`   | Код валюты                        |
+| `name`            | `string`   | Название                          |
+| `symbol`          | `string`   | Символ                            |
+| `symbolVariants`  | `string[]` | Другие написания символа. Необязательно |
+| `decimals`        | `number`   | Знаков после запятой              |

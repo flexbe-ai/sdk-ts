@@ -1,4 +1,4 @@
-# Магазин
+# site > Магазин
 
 `site.ecommerce` — каталог одного сайта: товары, категории и акции. Каждый путь начинается с `/sites/{siteId}/ecommerce`.
 
@@ -22,116 +22,265 @@ const products = await catalog.listProducts({
 
 ### `listProducts`
 
+Возвращает товары сайта.
+
 `GET /sites/{siteId}/ecommerce/products`
 
 ```typescript
-listProducts(params?: ListProductsParams): Promise<ProductListResponse>
+const products = await site.ecommerce.listProducts({ limit: 20, status: "visible" });
 ```
 
-Возвращает `{ list, pagination }` с `{ limit, offset, total }`.
+**Вход**
 
-| Поле                   | Примечание                              |
-| ---------------------- | --------------------------------------- |
-| `page`, `limit`        | Уходят этими ключами query              |
-| `categoryId`           |                                         |
-| `search`               |                                         |
-| `productIds`           | `number[]`, одной строкой через запятую |
-| `status`               | `visible`, `hidden` или `removed`       |
-| `priceMin`, `priceMax` |                                         |
+| Поле         | Тип                                      | Описание                                      |
+| ------------ | ---------------------------------------- | --------------------------------------------- |
+| `page`       | `number`                                 | Номер страницы списка. Необязательно          |
+| `limit`      | `number`                                 | Сколько товаров на страницу. Необязательно    |
+| `categoryId` | `number`                                 | Только товары этой категории. Необязательно   |
+| `search`     | `string`                                 | Поиск по названию. Необязательно              |
+| `productIds` | `number[]`                               | Одной строкой через запятую. Необязательно    |
+| `status`     | `'visible' \| 'hidden' \| 'removed'`     | Какие товары вернуть. Необязательно           |
+| `priceMin`   | `number`                                 | Цена от. Необязательно                        |
+| `priceMax`   | `number`                                 | Цена до. Необязательно                        |
+
+**Ответ**
+
+| Поле                | Тип         | Описание                    |
+| ------------------- | ----------- | --------------------------- |
+| `list`              | `Product[]` | Товары. Поля в абзаце выше  |
+| `pagination.limit`  | `number`    | Размер страницы             |
+| `pagination.offset` | `number`    | Смещение                    |
+| `pagination.total`  | `number`    | Всего записей               |
 
 ### `getProduct`
+
+Возвращает товар. Удалённый товар не возвращается.
 
 `GET /sites/{siteId}/ecommerce/products/{productId}`
 
 ```typescript
-getProduct(productId: number): Promise<Product>
+const product = await site.ecommerce.getProduct(productId);
 ```
 
-Возвращает товар. Удалённый товар не возвращается.
+**Вход**
+
+| Поле        | Тип      | Описание  |
+| ----------- | -------- | --------- |
+| `productId` | `number` | Id товара |
+
+**Ответ** `Product`. Поля в абзаце выше.
 
 ### `createProduct`
+
+Создаёт товар. Опции и варианты передаются в этом теле.
 
 `POST /sites/{siteId}/ecommerce/products`
 
 ```typescript
-createProduct(data: ProductWriteParams): Promise<Product>
+const product = await site.ecommerce.createProduct({ name: "Кружка" });
 ```
 
-`name` обязателен. Необязательные поля: `description`, `visible`, `taxable`, `images`, `categoryIds`, `usePriceOld`, `displayImage`, `settings`, `options`, `variants`. Опции и варианты передаются в этом теле.
+**Вход**
 
-Опция — `{ id?, name, data?, values }`. Значение — `{ id?, name, data? }`. У варианта можно задать `id`, `optionValues` (`optionId` и `valueId` числом или строкой), `vendorCode`, `quantity`, `price`, `priceOld`, `images`, `defaultImageId`, `visible`, `isDefault` и `notLimited`.
+| Поле                         | Тип              | Описание                                              |
+| ---------------------------- | ---------------- | ----------------------------------------------------- |
+| `name`                       | `string`         | Название. Обязательно                                 |
+| `description`                | `string`         | Описание. Необязательно                               |
+| `visible`                    | `number`         | `0` или `1`. Необязательно                            |
+| `taxable`                    | `boolean`        | Облагается налогом. Необязательно                     |
+| `images`                     | массив           | Картинки. Необязательно                               |
+| `categoryIds`                | `number[]`       | Категории. Необязательно                              |
+| `usePriceOld`                | `number`         | `0` или `1`. Необязательно                            |
+| `displayImage`               | `string`         | Какую картинку показывать. Необязательно              |
+| `settings`                   | объект           | Настройки товара. Необязательно                       |
+| `options`                    | массив           | Опции. Необязательно                                  |
+| `options[].id`               | `number \| string` | Id опции, если она уже есть. Необязательно          |
+| `options[].name`             | `string`         | Название опции                                        |
+| `options[].data`             | объект           | Доп. данные. Необязательно                            |
+| `options[].values`           | массив           | Значения опции                                        |
+| `options[].values[].id`      | `number \| string` | Id значения. Необязательно                          |
+| `options[].values[].name`    | `string`         | Название значения                                     |
+| `options[].values[].data`    | значение         | Доп. данные значения. Необязательно                   |
+| `variants`                   | массив           | Варианты. Необязательно                               |
+| `variants[].id`              | `number \| string` | Id варианта. Необязательно                          |
+| `variants[].optionValues`    | массив           | `{ optionId, valueId }`, число или строка             |
+| `variants[].vendorCode`      | `string`         | Артикул. Необязательно                                |
+| `variants[].quantity`        | `number \| null` | Остаток. Необязательно                                |
+| `variants[].price`           | `number \| null` | Цена. Необязательно                                   |
+| `variants[].priceOld`        | `number \| null` | Старая цена. Необязательно                            |
+| `variants[].images`          | массив           | Картинки варианта. Необязательно                      |
+| `variants[].defaultImageId`  | `string \| null` | Картинка по умолчанию. Необязательно                  |
+| `variants[].visible`         | `number`         | `0` или `1`. Необязательно                            |
+| `variants[].isDefault`       | `number`         | `0` или `1`. Необязательно                            |
+| `variants[].notLimited`      | `number`         | `0` или `1`. Необязательно                            |
+
+**Ответ** `Product`. Поля в абзаце выше.
 
 ### `updateProduct`
+
+Меняет товар. Тело то же, что у создания, `name` обязателен. Товар другого сайта остаётся как был.
 
 `PATCH /sites/{siteId}/ecommerce/products/{productId}`
 
 ```typescript
-updateProduct(productId: number, data: ProductWriteParams): Promise<Product>
+const product = await site.ecommerce.updateProduct(productId, { name: "Новое имя" });
 ```
 
-Тело то же, что у создания. `name` обязателен. Товар другого сайта остаётся как был.
+**Вход**
+
+| Поле        | Тип      | Описание                                      |
+| ----------- | -------- | --------------------------------------------- |
+| `productId` | `number` | Id товара                                     |
+| тело        | объект   | Те же поля, что у `createProduct`             |
+
+**Ответ** `Product`. Поля в абзаце выше.
 
 ### `upsertProducts`
+
+Создаёт и обновляет товары пачкой. Тело — `{ items }`. API принимает до 50 элементов. Элемент без `id` создаётся. Элемент с `id` этого сайта обновляется. Ошибка одного элемента не останавливает остальные.
 
 `POST /sites/{siteId}/ecommerce/products/batch`
 
 ```typescript
-upsertProducts(items: ProductUpsertItem[]): Promise<ProductUpsertResult>
+const result = await site.ecommerce.upsertProducts([{ name: "Кружка" }, { id: productId, name: "Новое имя" }]);
 ```
 
-Отправляет `{ items }`. API принимает до 50 элементов. Элемент без `id` создаётся. Элемент с `id` этого сайта обновляется. Ошибка одного элемента не останавливает остальные.
+**Вход**
 
-Результат — `{ created, updated, errors }`. Успех — `{ index, product }`. Ошибка — `{ index, message }`.
+| Поле    | Тип                  | Описание                                      |
+| ------- | -------------------- | --------------------------------------------- |
+| `items` | `ProductUpsertItem[]`| До 50 элементов. Поля как у `createProduct`, плюс необязательный `id` |
+
+**Ответ**
+
+| Поле               | Тип      | Описание                         |
+| ------------------ | -------- | -------------------------------- |
+| `created`          | массив   | Что создалось                    |
+| `created[].index`  | `number` | Индекс элемента во входе         |
+| `created[].product`| `Product`| Созданный товар                  |
+| `updated`          | массив   | Что обновилось                   |
+| `updated[].index`  | `number` | Индекс элемента во входе         |
+| `updated[].product`| `Product`| Обновлённый товар                |
+| `errors`           | массив   | Что не прошло                    |
+| `errors[].index`   | `number` | Индекс элемента во входе         |
+| `errors[].message` | `string` | Текст ошибки                     |
 
 ### `bulkProducts`
+
+Прячет, показывает, удаляет, восстанавливает или стирает товары. Товар другого сайта остаётся как был.
 
 `POST /sites/{siteId}/ecommerce/products/bulk`
 
 ```typescript
-bulkProducts(data: BulkProductsParams): Promise<BulkProductsResult>
+const result = await site.ecommerce.bulkProducts({ action: "hide", ids: [productId] });
 ```
 
-`action` — `hide`, `show`, `remove`, `restore` или `purge`. `ids` — `number[]`. Возвращает `{ results: { id, result: true }[] }`. Товар другого сайта остаётся как был.
+**Вход**
+
+| Поле     | Тип                                              | Описание |
+| -------- | ------------------------------------------------ | -------- |
+| `action` | `'hide' \| 'show' \| 'remove' \| 'restore' \| 'purge'` | Что сделать |
+| `ids`    | `number[]`                                       | Id товаров |
+
+**Ответ**
+
+| Поле             | Тип      | Описание        |
+| ---------------- | -------- | --------------- |
+| `results`        | массив   | По каждому id   |
+| `results[].id`   | `number` | Id товара       |
+| `results[].result` | `true` | Операция прошла |
 
 ### `moveProduct`
+
+Меняет порядок товара. Передайте `categoryId`, чтобы переставить его внутри категории. Без него меняется порядок в списке сайта.
 
 `PUT /sites/{siteId}/ecommerce/products/{productId}/position`
 
 ```typescript
-moveProduct(productId: number, data: MoveProductParams): Promise<MoveProductResult>
+const moved = await site.ecommerce.moveProduct(productId, { afterId: 10 });
 ```
 
-`MoveProductParams` — это `{ categoryId?, beforeId?, afterId? }`. Передайте `categoryId`, чтобы переставить товар внутри категории. Без него меняется порядок в списке сайта. Возвращает `{ result: true }`.
+**Вход**
+
+| Поле         | Тип      | Описание                              |
+| ------------ | -------- | ------------------------------------- |
+| `productId`  | `number` | Id товара                             |
+| `categoryId` | `number` | Внутри этой категории. Необязательно  |
+| `beforeId`   | `number` | Поставить перед этим id. Необязательно |
+| `afterId`    | `number` | Поставить после этого id. Необязательно |
+
+**Ответ**
+
+| Поле     | Тип    | Описание        |
+| -------- | ------ | --------------- |
+| `result` | `true` | Порядок изменён |
 
 ### `bindProductCategories`
+
+Привязывает товары к категориям. Отсутствующий товар или категория пропускаются.
 
 `POST /sites/{siteId}/ecommerce/products/categories/bind`
 
 ```typescript
-bindProductCategories(data: ChangeProductCategoriesParams): Promise<BulkProductsResult>
+const result = await site.ecommerce.bindProductCategories({
+  productIds: [productId],
+  categoryIds: [categoryId],
+});
 ```
 
-`ChangeProductCategoriesParams` — это `{ productIds, categoryIds }`. Отсутствующий товар или категория пропускаются.
+**Вход**
+
+| Поле          | Тип        | Описание    |
+| ------------- | ---------- | ----------- |
+| `productIds`  | `number[]` | Id товаров  |
+| `categoryIds` | `number[]` | Id категорий |
+
+**Ответ** тот же `results`, что у `bulkProducts`.
 
 ### `unbindProductCategories`
+
+Отвязывает товары от категорий. Тело то же, что у bind.
 
 `POST /sites/{siteId}/ecommerce/products/categories/unbind`
 
 ```typescript
-unbindProductCategories(data: ChangeProductCategoriesParams): Promise<BulkProductsResult>
+const result = await site.ecommerce.unbindProductCategories({
+  productIds: [productId],
+  categoryIds: [categoryId],
+});
 ```
 
-Тело то же, что у bind.
+**Вход** тот же, что у `bindProductCategories`.
+
+**Ответ** тот же `results`, что у `bulkProducts`.
 
 ### `queryVariants`
+
+Ищет варианты по id. Тело — `{ ids }`. Id другого сайта в результат не попадают.
 
 `POST /sites/{siteId}/ecommerce/variants/query`
 
 ```typescript
-queryVariants(ids: number[]): Promise<VariantLookup[]>
+const found = await site.ecommerce.queryVariants([variantId]);
 ```
 
-Отправляет `{ ids }`. Каждый найденный элемент — `{ product, variant }`. Срез товара — `{ id, name, options, images, displayImage }`. Id другого сайта в результат не попадают.
+**Вход**
+
+| Поле  | Тип        | Описание     |
+| ----- | ---------- | ------------ |
+| `ids` | `number[]` | Id вариантов |
+
+**Ответ** `VariantLookup[]`
+
+| Поле                    | Тип      | Описание                                      |
+| ----------------------- | -------- | --------------------------------------------- |
+| `product`               | объект   | Срез товара                                   |
+| `product.id`            | `number` | Id товара                                     |
+| `product.name`          | `string` | Название                                      |
+| `product.options`       | массив   | Опции                                         |
+| `product.images`        | массив   | Картинки                                      |
+| `product.displayImage`  | `string` | Какую картинку показывать                     |
+| `variant`               | объект   | Вариант. Поля в абзаце выше                   |
 
 ## Категории
 
@@ -139,53 +288,109 @@ queryVariants(ids: number[]): Promise<VariantLookup[]>
 
 ### `listCategories`
 
+Возвращает категории. Скрытые входят в список, пока вы не передадите `includeHidden: false`.
+
 `GET /sites/{siteId}/ecommerce/categories`
 
 ```typescript
-listCategories(params?: ListCategoriesParams): Promise<CategoryListResponse>
+const categories = await site.ecommerce.listCategories();
 ```
 
-Скрытые категории входят в список, пока вы не передадите `includeHidden: false`.
+**Вход**
+
+| Поле            | Тип       | Описание                                      |
+| --------------- | --------- | --------------------------------------------- |
+| `includeHidden` | `boolean` | `false` убирает скрытые. Необязательно        |
+
+**Ответ**
+
+| Поле                  | Тип          | Описание                         |
+| --------------------- | ------------ | -------------------------------- |
+| `list`                | `Category[]` | Категории. Поля в абзаце выше    |
+| `total`               | `number`     | Сколько категорий в каталоге     |
+| `productCount`        | `number`     | Товаров в каталоге               |
+| `removedProductCount` | `number`     | Удалённых товаров в каталоге     |
 
 ### `createCategory`
+
+Создаёт категорию. Если `visible` не передать, категория создаётся видимой (`1`).
 
 `POST /sites/{siteId}/ecommerce/categories`
 
 ```typescript
-createCategory(data: CreateCategoryParams): Promise<Category>
+const category = await site.ecommerce.createCategory({ name: "Посуда" });
 ```
 
-`name` обязателен. `visible` — необязательные `0` или `1`. Если не передать, категория создаётся видимой (`1`).
+**Вход**
+
+| Поле      | Тип      | Описание                         |
+| --------- | -------- | -------------------------------- |
+| `name`    | `string` | Название. Обязательно            |
+| `visible` | `number` | `0` или `1`. Необязательно       |
+
+**Ответ** `Category`. Поля в абзаце выше.
 
 ### `updateCategory`
+
+Меняет категорию. Категория другого сайта остаётся как была.
 
 `PATCH /sites/{siteId}/ecommerce/categories/{categoryId}`
 
 ```typescript
-updateCategory(categoryId: number, data: UpdateCategoryParams): Promise<Category>
+const category = await site.ecommerce.updateCategory(categoryId, { name: "Новое имя" });
 ```
 
-`name` и `visible` оба необязательны. Категория другого сайта остаётся как была.
+**Вход**
+
+| Поле         | Тип      | Описание                  |
+| ------------ | -------- | ------------------------- |
+| `categoryId` | `number` | Id категории              |
+| `name`       | `string` | Название. Необязательно   |
+| `visible`    | `number` | `0` или `1`. Необязательно |
+
+**Ответ** `Category`. Поля в абзаце выше.
 
 ### `sortCategories`
+
+Меняет порядок категорий. `afterId` ставит категорию после этого id. Без `afterId` она уходит в начало.
 
 `PUT /sites/{siteId}/ecommerce/categories/sort`
 
 ```typescript
-sortCategories(data: SortCategoriesParams): Promise<Category[]>
+const categories = await site.ecommerce.sortCategories({ categoryId, afterId: 3 });
 ```
 
-`categoryId` обязателен. `afterId` ставит категорию после этого id. Без `afterId` она уходит в начало. Возвращает категории в новом порядке.
+**Вход**
+
+| Поле         | Тип      | Описание                              |
+| ------------ | -------- | ------------------------------------- |
+| `categoryId` | `number` | Какую категорию двигать. Обязательно  |
+| `afterId`    | `number` | Поставить после этого id. Необязательно |
+
+**Ответ** `Category[]` в новом порядке.
 
 ### `deleteCategory`
+
+Удаляет категорию. `deleteProducts: true` ещё и мягко удаляет товары этой категории. Флаг уходит query-параметром.
 
 `DELETE /sites/{siteId}/ecommerce/categories/{categoryId}`
 
 ```typescript
-deleteCategory(categoryId: number, params?: DeleteCategoryParams): Promise<DeleteCategoryResult>
+const deleted = await site.ecommerce.deleteCategory(categoryId, { deleteProducts: true });
 ```
 
-`deleteProducts: true` ещё и мягко удаляет товары этой категории. Флаг уходит query-параметром. Возвращает `{ result: true }`.
+**Вход**
+
+| Поле             | Тип       | Описание                                      |
+| ---------------- | --------- | --------------------------------------------- |
+| `categoryId`     | `number`  | Id категории                                  |
+| `deleteProducts` | `boolean` | Мягко удалить товары категории. Необязательно |
+
+**Ответ**
+
+| Поле     | Тип    | Описание          |
+| -------- | ------ | ----------------- |
+| `result` | `true` | Категория удалена |
 
 ## Акции
 
@@ -195,48 +400,116 @@ deleteCategory(categoryId: number, params?: DeleteCategoryParams): Promise<Delet
 
 ### `listPromotions`
 
+Возвращает акции каталога. Мягко удалённые строки не входят.
+
 `GET /sites/{siteId}/ecommerce/promotions`
 
 ```typescript
-listPromotions(): Promise<PromotionListResponse>
+const promotions = await site.ecommerce.listPromotions();
 ```
 
-Возвращает `{ list }`. Мягко удалённые строки не входят.
+**Вход**
+
+Параметров нет.
+
+**Ответ**
+
+| Поле   | Тип           | Описание                  |
+| ------ | ------------- | ------------------------- |
+| `list` | `Promotion[]` | Акции. Поля в абзаце выше |
 
 ### `createPromotion`
+
+Создаёт акцию.
 
 `POST /sites/{siteId}/ecommerce/promotions`
 
 ```typescript
-createPromotion(data: PromotionWriteParams): Promise<Promotion>
+const promotion = await site.ecommerce.createPromotion({
+  type: "promocode",
+  discountType: "percent",
+  discountAmount: "10",
+  active: true,
+  code: "SUMMER",
+});
 ```
 
+**Вход**
+
+| Поле                   | Тип                                      | Описание                                      |
+| ---------------------- | ---------------------------------------- | --------------------------------------------- |
+| `type`                 | `'discount' \| 'promocode'`              | Вид акции. Обязательно                        |
+| `discountType`         | `'money' \| 'percent' \| 'delivery'`     | Как считать скидку. Обязательно               |
+| `discountAmount`       | `string`                                 | Размер скидки. Обязательно                    |
+| `active`               | `boolean \| number`                      | Включена. Обязательно                         |
+| `code`                 | `string \| null`                         | Код. Необязательно                            |
+| `deliveryFree`         | `boolean \| number \| null`              | Бесплатная доставка. Необязательно            |
+| `activeFrom`           | `string \| null`                         | С какого момента действует. Необязательно     |
+| `dateFrom`             | `string \| null`                         | Дата начала. Необязательно                    |
+| `dateTo`               | `string \| null`                         | Дата конца. Необязательно                     |
+| `availableCount`       | `number \| null`                         | Сколько раз можно применить. Необязательно    |
+| `usageWithAnyDiscount` | `boolean \| number \| null`              | Вместе с другими скидками. Необязательно      |
+
+**Ответ** `Promotion`. Поля в абзаце выше.
+
 ### `updatePromotion`
+
+Меняет акцию. Акция другого сайта остаётся как была.
 
 `PATCH /sites/{siteId}/ecommerce/promotions/{promotionId}`
 
 ```typescript
-updatePromotion(promotionId: number, data: PromotionWriteParams): Promise<Promotion>
+const promotion = await site.ecommerce.updatePromotion(promotionId, {
+  type: "promocode",
+  discountType: "percent",
+  discountAmount: "15",
+  active: true,
+});
 ```
 
-Акция другого сайта остаётся как была.
+**Вход**
+
+| Поле          | Тип      | Описание                          |
+| ------------- | -------- | --------------------------------- |
+| `promotionId` | `number` | Id акции                          |
+| тело          | объект   | Те же поля, что у `createPromotion` |
+
+**Ответ** `Promotion`. Поля в абзаце выше.
 
 ### `deletePromotion`
+
+Мягко удаляет акцию.
 
 `DELETE /sites/{siteId}/ecommerce/promotions/{promotionId}`
 
 ```typescript
-deletePromotion(promotionId: number): Promise<void>
+await site.ecommerce.deletePromotion(promotionId);
 ```
 
-Мягкое удаление.
+**Вход**
+
+| Поле          | Тип      | Описание |
+| ------------- | -------- | -------- |
+| `promotionId` | `number` | Id акции |
+
+**Ответ**
+
+Тела нет.
 
 ### `getPromotionByCode`
+
+Ищет акцию, которая ещё в каталоге. Передайте код текстом, например `SUMMER`. Клиент сам закодирует его в пути.
 
 `GET /sites/{siteId}/ecommerce/promotions/code/{code}`
 
 ```typescript
-getPromotionByCode(code: string): Promise<Promotion>
+const promotion = await site.ecommerce.getPromotionByCode("SUMMER");
 ```
 
-Ищет акцию, которая ещё в каталоге. Передайте код текстом, например `SUMMER`. Клиент сам закодирует его в пути.
+**Вход**
+
+| Поле   | Тип      | Описание |
+| ------ | -------- | -------- |
+| `code` | `string` | Код акции |
+
+**Ответ** `Promotion`. Поля в абзаце выше.

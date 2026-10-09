@@ -1,4 +1,4 @@
-# Sites
+# client > Sites
 
 A site is a project. `client.sites` lists and creates projects. `client.getSiteApi(siteId)` opens one project and exposes its resources. Creating the client is in [Get started](getting-started.md).
 
@@ -12,100 +12,158 @@ const site = client.getSiteApi(sites.list[0].id);
 
 ### `list`
 
+Returns the projects this key can see.
+
 `GET /sites`
 
 ```typescript
-list(params?: GetSitesParams): Promise<SiteListResponse>
+const sites = await client.sites.list({ offset: 0, limit: 20 });
 ```
 
-| Field       | Type      | Sent as                                 |
-| ----------- | --------- | --------------------------------------- |
-| `offset`    | `number`  | query `offset`                          |
-| `limit`     | `number`  | query `limit`                           |
-| `accountId` | `number`  | query `accountId`                       |
-| `isDraft`   | `boolean` | query `isDraft` (`"true"` or `"false"`) |
+**Input**
 
-Returns `{ list: Site[], pagination }`. `pagination` is `{ limit, offset, total }`.
+| Field       | Type      | Description                                      |
+| ----------- | --------- | ------------------------------------------------ |
+| `offset`    | `number`  | How many projects to skip. Optional              |
+| `limit`     | `number`  | How many projects to return. Optional            |
+| `accountId` | `number`  | Only projects of this account. Optional          |
+| `isDraft`   | `boolean` | Draft or not. The query is `"true"` or `"false"`. Optional |
+
+**Response**
+
+| Field               | Type     | Description                      |
+| ------------------- | -------- | -------------------------------- |
+| `list`              | `Site[]` | Projects. Fields in the table below |
+| `pagination.limit`  | `number` | Page size                        |
+| `pagination.offset` | `number` | Offset                           |
+| `pagination.total`  | `number` | Total rows                       |
 
 ### `create`
+
+Creates an empty project on the caller's account. If the account is already at its plan limit, the API responds with 409.
 
 `POST /sites`
 
 ```typescript
-create(params?: CreateSiteParams): Promise<Site>
+const created = await client.sites.create({ name: "Shop", isDraft: true });
 ```
 
-Creates an empty project on the caller's account. `name` and `isDraft` are optional. If the account is already at its plan limit, the API responds with 409.
+**Input**
+
+| Field     | Type      | Description                    |
+| --------- | --------- | ------------------------------ |
+| `name`    | `string`  | Name. Optional                 |
+| `isDraft` | `boolean` | Create as a draft. Optional    |
+
+**Response** `Site`. Fields in the table below.
 
 ### `getApi`
 
+Returns the `site` object for one project. This call does not hit the network. `client.getSiteApi(siteId)` is the same method.
+
 ```typescript
-getApi(siteId: number): SiteApi
+const site = client.sites.getApi(siteId);
 ```
 
-Returns a new `SiteApi`. This call does not hit the network. `client.getSiteApi` is this method.
+**Input**
+
+| Field    | Type     | Description |
+| -------- | -------- | ----------- |
+| `siteId` | `number` | Project id  |
+
+**Response** `SiteApi`. The object that holds the site resources: pages, domains, leads, and the other sections.
 
 ## `Site`
 
-| Field          | Type                                                  |
-| -------------- | ----------------------------------------------------- |
-| `id`           | `number`                                              |
-| `accountId`    | `number`                                              |
-| `name`         | `string \| null`                                      |
-| `isDraft`      | `boolean`                                             |
-| `createdAt`    | `string`                                              |
-| `role`         | `'owner' \| 'admin' \| 'editor' \| 'manager' \| null` |
-| `access`       | `'owner' \| 'share'`                                  |
-| `domainUrl`    | `string \| null`                                      |
-| `domainTitle`  | `string \| null`                                      |
-| `domainIsTech` | `boolean \| null`                                     |
+| Field          | Type                                                  | Description                                |
+| -------------- | ----------------------------------------------------- | ------------------------------------------ |
+| `id`           | `number`                                              | Project id                                 |
+| `accountId`    | `number`                                              | Owner account                              |
+| `name`         | `string \| null`                                      | Name                                       |
+| `isDraft`      | `boolean`                                             | Draft                                      |
+| `createdAt`    | `string`                                              | When it was created                        |
+| `role`         | `'owner' \| 'admin' \| 'editor' \| 'manager' \| null` | Current user's role on the site            |
+| `access`       | `'owner' \| 'share'`                                  | Your site, or access through a share       |
+| `domainUrl`    | `string \| null`                                      | Primary domain URL                         |
+| `domainTitle`  | `string \| null`                                      | Primary domain name for display            |
+| `domainIsTech` | `boolean \| null`                                     | The primary domain is a technical host     |
 
-## `SiteApi`
+## site
 
 ### `get`
+
+Returns this project.
 
 `GET /sites/{siteId}`
 
 ```typescript
-get(): Promise<Site>
+const project = await site.get();
 ```
 
+**Input**
+
+No parameters.
+
+**Response** `Site`. Fields in the table above.
+
 ### `update`
+
+Changes the name or the draft flag.
 
 `PATCH /sites/{siteId}`
 
 ```typescript
-update(patch: UpdateSiteParams): Promise<Site>
+const project = await site.update({ name: "New name" });
 ```
 
-`UpdateSiteParams` is `{ name?: string; isDraft?: boolean }`.
+**Input**
+
+| Field     | Type      | Description          |
+| --------- | --------- | -------------------- |
+| `name`    | `string`  | Name. Optional       |
+| `isDraft` | `boolean` | Draft. Optional      |
+
+**Response** `Site`. Fields in the table above.
 
 ### `buildHtml`
 
-`POST /sites/{siteId}/html/build`
-
 Compiles one HTML block.
 
+`POST /sites/{siteId}/html/build`
+
 ```typescript
-buildHtml(body: BuildHtmlParams): Promise<BuildHtmlResult>
+const built = await site.buildHtml({
+  sources: { html: "<div></div>", css: "div { color: red }" },
+});
 ```
 
-| Field             | Type                         |
-| ----------------- | ---------------------------- |
-| `sources.html`    | `string`, optional           |
-| `sources.js`      | `string`, optional           |
-| `sources.css`     | `string`, optional           |
-| `sources.modules` | `PageCodeModule[]`, optional |
-| `scopeCss`        | `boolean`, optional          |
-| `external`        | `string[]`, optional         |
+**Input**
+
+| Field             | Type               | Description                                         |
+| ----------------- | ------------------ | --------------------------------------------------- |
+| `sources.html`    | `string`           | Block HTML. Optional                                |
+| `sources.js`      | `string`           | Script. Optional                                    |
+| `sources.css`     | `string`           | Styles. Optional                                    |
+| `sources.modules` | `PageCodeModule[]` | Modules `{ id, path, content }`. Optional           |
+| `scopeCss`        | `boolean`          | Wrap CSS in `:scope`. On by default                 |
+| `external`        | `string[]`         | Modules to leave external instead of bundling       |
 
 `PageCodeModule` is `{ id, path, content }`, all strings.
 
-The result is `{ html, js, css, utilities, errors, warnings }`. `utilities` is a string. `errors` and `warnings` are `{ text: string }[]`.
+**Response**
+
+| Field       | Type                 | Description        |
+| ----------- | -------------------- | ------------------ |
+| `html`      | `string`             | Compiled HTML      |
+| `js`        | `string`             | Compiled script    |
+| `css`       | `string`             | Compiled styles    |
+| `utilities` | `string`             | Utility CSS        |
+| `errors`    | `{ text: string }[]` | Build errors       |
+| `warnings`  | `{ text: string }[]` | Build warnings     |
 
 Saved element code on a page version is `PageCode`, which can also carry `utilities`. That shape is in [Page data](page-data.md).
 
-## Account
+## account
 
 ```typescript
 const account = client.account(accountId);

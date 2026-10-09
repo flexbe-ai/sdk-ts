@@ -1,4 +1,4 @@
-# Statistics
+# site > Statistics
 
 `site.stat` reads one A/B test and creates one.
 
@@ -11,18 +11,36 @@ const again = await site.stat.getAbTest(test.id);
 
 ## `getAbTest`
 
+Returns one A/B test.
+
 `GET /sites/{siteId}/stat-abtests/{testId}`
 
 ```typescript
-getAbTest(testId: number): Promise<AbTest>
+const test = await site.stat.getAbTest(testId);
 ```
 
+**Input**
+
+| Field    | Type     | Description |
+| -------- | -------- | ----------- |
+| `testId` | `number` | Test id     |
+
+**Response** `AbTest`. Fields in the paragraph above.
+
 ## `createAbTest`
+
+Creates an A/B test for a page and returns it.
 
 `POST /sites/{siteId}/stat-abtests`
 
 ```typescript
-createAbTest(pageId: number): Promise<AbTest>
+const test = await site.stat.createAbTest(pageId);
 ```
 
-The body is `{ pageId }`.
+**Input**
+
+| Field    | Type     | Description                    |
+| -------- | -------- | ------------------------------ |
+| `pageId` | `number` | Page id. The body is `{ pageId }` |
+
+**Response** `AbTest`. Fields in the paragraph above.

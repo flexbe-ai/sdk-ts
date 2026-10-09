@@ -1,8 +1,6 @@
 # Get started
 
-Install the SDK, create a client with an API key, and open a site or an account. When this works, `site.pages.getPages()` returns `{ list, pagination }`.
-
-You need Node.js 20 or newer, or a browser with `fetch`.
+Install the SDK and create a client with an API key. The first call is `client.getMe()`: it shows who the key belongs to. Then open a site or an account.
 
 ## Install
 
@@ -13,18 +11,48 @@ npm install @flexbe/sdk
 ## Create a client
 
 ```typescript
-import { FlexbeClient } from "@flexbe/sdk";
+import { FlexbeAuthType, FlexbeClient } from "@flexbe/sdk";
 
 const client = new FlexbeClient({
   apiKey: "your-api-key",
+  baseUrl: "https://api.flexbe.com",
+  authType: FlexbeAuthType.API_KEY,
 });
 ```
 
-In Node.js you can omit `apiKey` and `baseUrl`. The constructor then reads `FLEXBE_API_KEY` and `FLEXBE_API_URL`. The default base URL is `https://api.flexbe.com`. The default timeout is `30000` milliseconds. The default auth mode is an API key.
+`apiKey` and `baseUrl` default to `FLEXBE_API_KEY` and `FLEXBE_API_URL`. If `FLEXBE_API_URL` is unset, the base URL is `https://api.flexbe.com`. The default timeout is `30000` milliseconds. The default auth mode is an API key.
 
-In the browser, pass `apiKey` and `baseUrl` in the config.
+## Browser
 
-If the mode is an API key and the key is missing, the constructor throws before any request.
+Use bearer mode in the browser, on a page that already has a Flexbe session. In Node.js, use an API key.
+
+```typescript
+const client = new FlexbeClient({
+  authType: FlexbeAuthType.BEARER,
+  baseUrl: "https://api.flexbe.com",
+});
+```
+
+An API key is not required in this mode. Set `authType` and let the client take the token from the session.
+
+The client asks the page for an access token with `POST /oauth/token` and the session cookie, then sends that token to `baseUrl` as `Authorization: Bearer`. The token request uses the page origin. API calls use `baseUrl`.
+
+The client refreshes the token before it expires.
+
+`client.revokeToken()` revokes the browser token with `POST /oauth/revoke` on the page origin and then drops it. If that call fails, the local token is still dropped. In API key mode, `revokeToken()` returns without a request.
+
+```typescript
+const client = new FlexbeClient({
+  apiKey: "your-api-key",
+  hooks: {
+    onUnauthorized() {
+      // The request already failed with 401.
+    },
+  },
+});
+```
+
+`hooks.onUnauthorized` runs after a request fails with 401, including when the token refresh for that request fails.
 
 ## See who the key belongs to
 
@@ -51,7 +79,7 @@ const current = await site.get();
 
 `getSiteApi(siteId)` is `client.sites.getApi(siteId)`. The site object holds:
 
-`pages`, `leads`, `ecommerce`, `images`, `files`, `domains`, `redirects`, `settings`, `sandbox`, `stat`.
+`pages`, `leads`, `ecommerce`, `images`, `files`, `domains`, `redirects`, `settings`, `stat`.
 
 `site.get()` is `GET /sites/123`. `site.update({ name, isDraft })` is `PATCH` on the same path. Listing and creating projects is on [Sites](sites.md).
 
@@ -66,6 +94,5 @@ The account object exposes `domains`. Domain methods are on [Domains](domains.md
 
 ## Next
 
-- [Authentication](authentication.md) when you are in the browser and already have a Flexbe session
-- [Pages](pages.md) for the list call above
+- [Pages](pages.md) to list the pages of a site
 - [Requests and errors](requests.md) before you write a `catch`
