@@ -10,6 +10,7 @@ export * from './domains';
 export * from './auth';
 export * from './media';
 export * from './ecommerce';
+export * from './leads';
 
 export enum FlexbeAuthType {
     API_KEY = 'apiKey',

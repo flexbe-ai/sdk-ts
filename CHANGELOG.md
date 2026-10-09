@@ -1,5 +1,18 @@
 # @flexbe/sdk
 
+## 0.8.0
+
+### Minor Changes
+
+- ad1c0c0: Add `SiteApi.buildHtml` for compiling HTML element sources.
+- 243acea: Add `SiteApi.leads` for the lead list, card, field patch, order, and reservations.
+
+## 0.7.0
+
+### Minor Changes
+
+- 4f7b221: Add `ecommerce.globalCart` (`enabled` + opaque `data`) to site settings types.
+
 ## 0.6.0
 
 ### Minor Changes

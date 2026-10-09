@@ -42,8 +42,8 @@ export interface ProductVariant {
 }
 
 export interface ProductPrice {
-    min: number;
-    max: number;
+    min: number | null;
+    max: number | null;
 }
 
 export interface Product {

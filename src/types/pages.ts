@@ -340,6 +340,29 @@ export type PageCodeSources = {
     modules: PageCodeModule[];
 };
 
+export type HtmlBuildMessage = {
+    text: string;
+};
+
+export type BuildHtmlParams = {
+    sources: {
+        html?: string;
+        js?: string;
+        css?: string;
+        modules?: PageCodeModule[];
+    };
+    scopeCss?: boolean;
+    external?: string[];
+};
+
+export type BuildHtmlResult = {
+    html: string;
+    js: string;
+    css: string;
+    errors: HtmlBuildMessage[];
+    warnings: HtmlBuildMessage[];
+};
+
 export type PageCodeAsset = PageCodeImage | PageCodeFile;
 
 export interface PageCodeMeta {
