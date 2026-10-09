@@ -169,4 +169,6 @@ const built = await site.buildHtml({
 const account = client.account(accountId);
 ```
 
-`account.domains` — список доменов аккаунта. См. [Домены](domains.md).
+| Поле      | Описание                      |
+| --------- | ----------------------------- |
+| `domains` | [Домены](domains.md) аккаунта |

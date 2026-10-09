@@ -169,4 +169,6 @@ Saved element code on a page version is `PageCode`, which can also carry `utilit
 const account = client.account(accountId);
 ```
 
-`account.domains` is the account domain list. See [Domains](domains.md).
+| Field     | Description                       |
+| --------- | --------------------------------- |
+| `domains` | [Domains](domains.md) of the account |

@@ -26,13 +26,13 @@
 
 Неуспешный ответ разбирается как JSON. Если тело не JSON, `message` и `error` берутся из status text.
 
-| HTTP-статус        | Что бросается                                         |
-| ------------------ | ----------------------------------------------------- |
-| 400                | `BadRequestException`                                 |
-| 401                | `UnauthorizedException`, затем `hooks.onUnauthorized` |
-| 403                | `ForbiddenException`                                  |
-| 404                | `NotFoundException`                                   |
-| 500, 502, 503, 504 | `ServerException` (`statusCode` — статус ответа)      |
+| HTTP-статус        | Что бросается                                    |
+| ------------------ | ------------------------------------------------ |
+| 400                | `BadRequestException`                            |
+| 401                | `UnauthorizedException`                          |
+| 403                | `ForbiddenException`                             |
+| 404                | `NotFoundException`                              |
+| 500, 502, 503, 504 | `ServerException` (`statusCode` — статус ответа) |
 
 Эти классы наследуют `Error`. У каждого есть `statusCode`, `error` (строковый код), `message` и необязательный `errors`. `message` — строка. Если API прислал массив сообщений, клиент склеивает их через запятую.
 
