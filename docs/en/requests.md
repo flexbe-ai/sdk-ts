@@ -2,6 +2,15 @@
 
 Resource methods return the JSON body.
 
+## Plain HTTP
+
+The line under a method is the request. The host is `https://api.flexbe.com`. The key goes in the `x-api-key` header. `POST`, `PUT`, and `PATCH` send `Content-Type: application/json`.
+
+```bash
+curl "https://api.flexbe.com/sites/123/pages?limit=10" \
+  -H "x-api-key: your-api-key"
+```
+
 ## Query
 
 `null` and `undefined` query values are omitted. Every other value is sent as a string.
