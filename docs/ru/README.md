@@ -1,0 +1,75 @@
+# С чего начать
+
+## Установка
+
+```bash
+npm install @flexbe/sdk
+```
+
+## Клиент
+
+```typescript
+import { FlexbeAuthType, FlexbeClient } from "@flexbe/sdk";
+
+const client = new FlexbeClient({
+  apiKey: "your-api-key",
+  baseUrl: "https://api.flexbe.ru",
+  authType: FlexbeAuthType.API_KEY,
+});
+```
+
+`apiKey` и `baseUrl` по умолчанию берутся из `FLEXBE_API_KEY` и `FLEXBE_API_URL`. Для России базовый URL — `https://api.flexbe.ru`. Таймаут по умолчанию — `30000` миллисекунд. Режим аутентификации по умолчанию — API-ключ.
+
+## Проверка ключа
+
+Чтобы проверить подключение, выполните этот запрос. Он покажет, к чему у ключа есть доступ.
+
+```typescript
+const me = await client.getMe();
+```
+
+`GET /auth/me` возвращает `AuthMe`:
+
+| `authType` | `scope`     | Id в объекте                                          |
+| ---------- | ----------- | ----------------------------------------------------- |
+| `'apiKey'` | `'site'`    | `siteId`, `accountId` (`accountId` может быть `null`) |
+| `'apiKey'` | `'account'` | `accountId`                                           |
+
+У ключа сайта уже есть id, который вы передаёте в `getSiteApi`. У ключа аккаунта — id для `account`.
+
+## Сайт
+
+```typescript
+const site = client.getSiteApi(123);
+```
+
+`123` — id сайта.
+
+| Поле         | Описание                                    |
+| ------------ | ------------------------------------------- |
+| `pages`      | [Страницы](pages.md)                        |
+| `leads`      | [Заявки](leads.md)                          |
+| `ecommerce`  | [Магазин](ecommerce.md): товары и категории |
+| `promotions` | [Акции](promotions.md)                      |
+| `images`     | [Изображения](images.md)                    |
+| `files`      | [Файлы](files.md)                           |
+| `domains`    | [Домены](domains.md) сайта                  |
+| `redirects`  | [Редиректы](redirects.md)                   |
+| `settings`   | [Настройки](settings.md)                    |
+| `stat`       | [Статистика](statistics.md)                 |
+
+## Аккаунт
+
+```typescript
+const account = client.account(456);
+```
+
+`456` — id аккаунта.
+
+| Поле      | Описание                      |
+| --------- | ----------------------------- |
+| `domains` | [Домены](domains.md) аккаунта |
+
+## Ошибки
+
+Коды ответа, таймаут и те же пути прямым HTTP описаны в разделе [Запросы и ошибки](requests.md).

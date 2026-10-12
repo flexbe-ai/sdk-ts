@@ -1,0 +1,5 @@
+[mcp_servers.flexbe]
+url = "https://api.flexbe.com/mcp"
+
+[plugins."flexbe@flexbe"]
+enabled = true

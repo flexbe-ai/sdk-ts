@@ -57,12 +57,22 @@ export type PerformanceSettings = {
     injectCode: { head: string; body: string };
 };
 
+/**
+ * Site-wide unified cart: toggle + id of the project's `type=cart` page.
+ * Cart window/form live on that page layout, not in settings.
+ */
+export type GlobalCartSettings = {
+    enabled: boolean;
+    pageId: number | null;
+};
+
 export type EcommerceSettings = {
     delivery: unknown[];
     pickups: unknown[];
     tax: Record<string, unknown>;
     reserve: Record<string, unknown>;
     cart: Record<string, unknown>;
+    globalCart: GlobalCartSettings;
     pricelessRule: Record<string, unknown>;
     outOfStockAction: string;
     outOfStockStatus: string;

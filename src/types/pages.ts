@@ -33,7 +33,8 @@ export enum PageType {
     AI = 'ai',
     CMS = 'cms',
     ECOMMERCE_PRODUCT = 'ecommerce_product',
-    ECOMMERCE_CATEGORY = 'ecommerce_category'
+    ECOMMERCE_CATEGORY = 'ecommerce_category',
+    CART = 'cart'
 }
 
 export enum PageStatus {
@@ -339,6 +340,37 @@ export type PageCodeSources = {
     modules: PageCodeModule[];
 };
 
+export type HtmlBuildMessage = {
+    text: string;
+};
+
+export type HtmlBuildChunk = {
+    specifier: string;
+    code: string;
+};
+
+export type BuildHtmlParams = {
+    sources: {
+        html?: string;
+        js?: string;
+        css?: string;
+        modules?: PageCodeModule[];
+    };
+    scopeCss?: boolean;
+    external?: string[];
+    dependencies?: Record<string, string>;
+};
+
+export type BuildHtmlResult = {
+    html: string;
+    js: string;
+    css: string;
+    utilities: string;
+    chunks: HtmlBuildChunk[];
+    errors: HtmlBuildMessage[];
+    warnings: HtmlBuildMessage[];
+};
+
 export type PageCodeAsset = PageCodeImage | PageCodeFile;
 
 export interface PageCodeMeta {
@@ -352,6 +384,7 @@ export type PageCode = {
     html: string;
     js: string;
     css: string;
+    utilities?: string;
     files: PageCodeAsset[];
     sources: PageCodeSources;
 };

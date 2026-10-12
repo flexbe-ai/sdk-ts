@@ -1,84 +1,68 @@
+**English** · [Русский](README.ru.md)
+
 # Flexbe TypeScript SDK
 
-A TypeScript SDK for interacting with the Flexbe API. Works in both Node.js and browser environments.
-
-## Installation
+TypeScript client for the Flexbe API.
 
 ```bash
 npm install @flexbe/sdk
 ```
 
-## Usage
-
 ```typescript
-import { FlexbeClient } from '@flexbe/sdk';
+import { FlexbeClient } from "@flexbe/sdk";
 
-// Initialize the client with API Key authentication
 const client = new FlexbeClient({
-    apiKey: 'your-api-key',
-    baseUrl: 'https://api.flexbe.com', // optional
-    timeout: 30000, // optional, defaults to 30 seconds
+  apiKey: "your-api-key",
 });
-const siteApi = client.getSiteApi(SITE_ID);
 
-// Using the Pages API for a specific site
-try {
-    // Get list of pages for site
-    const pages = await siteApi.pages.getPages({
-        limit: 10,
-        offset: 0,
-        type: 'page',
-        status: 'published',
-    });
-    console.log(pages.pages);
+const site = client.getSiteApi(123);
+const pages = await site.pages.getPages({
+  limit: 10,
+  offset: 0,
+  type: "page",
+  status: "published",
+});
 
-    // Get a single page from site
-    const page = await siteApi.pages.getPage(123);
-    console.log(page);
-}
-catch (error) {
-    console.error(error.message);
-}
-
+console.log(pages.list);
 ```
 
-## Features
+## Documentation
 
-- TypeScript support with full type definitions
-- Multiple authentication methods:
-  - API Key authentication
-  - JWT Bearer token authentication with automatic token refresh (uses cookie-based authentication)
-- Automatic error handling
-- Configurable timeout and base URL
-- Native fetch API support (works in both Node.js and browser)
-- Multi-site support with site-specific API instances
-- Query parameter handling
-- Request timeout handling
-- Token sharing between browser tabs (for JWT authentication)
+1. [Get started](docs/en/README.md) — install the package, create a client, work with a site or an account
+2. [Requests and errors](docs/en/requests.md) — headers, query strings, status codes, timeouts, plain HTTP
+3. [Sites](docs/en/sites.md) — list and create projects, read and update the site, build HTML
+4. [Pages](docs/en/pages.md) — pages and folders
+5. [Page versions](docs/en/page-versions.md) — read and save versions
+6. [Page data](docs/en/page-data.md) — version JSON: layout, entities, codes, animations
+7. [Leads](docs/en/leads.md) — lead cards, order lines, shipping, reservations
+8. [Ecommerce](docs/en/ecommerce.md) — products and categories
+9. [Promotions](docs/en/promotions.md)
+10. [Images](docs/en/images.md)
+11. [Files](docs/en/files.md)
+12. [Domains](docs/en/domains.md) — domains on a site and on an account
+13. [Redirects](docs/en/redirects.md)
+14. [Settings](docs/en/settings.md)
+15. [Statistics](docs/en/statistics.md)
+16. [Catalogs](docs/en/catalogs.md) — languages and currencies
+17. [MCP](docs/en/mcp.md) — connect the MCP server
 
-## Environment Variables
+## MCP
 
-The SDK supports the following environment variables:
+The server is `https://api.flexbe.com/mcp`. Transport is Streamable HTTP.
 
-- `FLEXBE_API_KEY`: Your API key (required for API Key authentication)
-- `FLEXBE_API_URL`: Base URL (defaults to 'https://api.flexbe.com')
+Authorization is OAuth.
 
-## Development
-
-```bash
-# Install dependencies
-npm install
-
-# Build the SDK
-npm run build
-
-# Run tests
-npm test
-
-# Lint code
-npm run lint
+```json
+{
+  "mcpServers": {
+    "flexbe": {
+      "type": "http",
+      "url": "https://api.flexbe.com/mcp"
+    }
+  }
+}
 ```
 
-## License
+[Add to Cursor](https://cursor.com/en/install-mcp?name=flexbe&config=eyJ0eXBlIjoiaHR0cCIsInVybCI6Imh0dHBzOi8vYXBpLmZsZXhiZS5jb20vbWNwIn0=) · [Add to VS Code](https://vscode.dev/redirect/mcp/install?name=flexbe&config=%7B%22name%22%3A%22flexbe%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fapi.flexbe.com%2Fmcp%22%7D) · [Add to Claude Code](docs/en/mcp.md#claude-code) · [Add to Codex](docs/en/mcp.md#codex)
 
-MIT
+Claude Code, Codex, Cursor, and VS Code configs, and the plugins in this repo: [MCP](docs/en/mcp.md).

@@ -3,12 +3,13 @@ export * from './animations';
 export * from './pages';
 export * from './redirects';
 export * from './stat';
-export * from './sandbox';
 export * from './site-settings';
 export * from './sites';
 export * from './domains';
 export * from './auth';
 export * from './media';
+export * from './ecommerce';
+export * from './leads';
 
 export enum FlexbeAuthType {
     API_KEY = 'apiKey',

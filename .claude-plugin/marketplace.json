@@ -1,0 +1,15 @@
+{
+  "name": "flexbe",
+  "owner": {
+    "name": "Flexbe",
+    "url": "https://github.com/flexbe-ai"
+  },
+  "plugins": [
+    {
+      "name": "flexbe",
+      "source": "./",
+      "description": "Flexbe MCP for sites, pages, catalog, media, and layout.",
+      "version": "0.1.0"
+    }
+  ]
+}
