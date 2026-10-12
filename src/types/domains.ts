@@ -47,6 +47,18 @@ export type AccountDomainStatus = {
     code: AccountDomainAlarmCode;
 };
 
+/** Retail zone price (PHP PriceFormatter::toJson, camelCase). */
+export type AccountDomainPrice = {
+    status: number;
+    isFree: boolean;
+    regText: string;
+    renewText: string;
+    reg: number;
+    renew: number;
+    currency: string;
+    ltd: string | null;
+};
+
 /**
  * Light list item: GET /account/:accountId/domains
  * No contacts/ns — those are on get(regId).
@@ -63,6 +75,8 @@ export type AccountDomainListItem = {
     allowRenewal: boolean;
     expireTimestamp: number | null;
     expireAt: string | null;
+    /** Null when zone has no retail price row for account currency */
+    price: AccountDomainPrice | null;
 };
 
 /**
