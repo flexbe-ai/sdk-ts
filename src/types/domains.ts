@@ -16,7 +16,10 @@ export type AccountDomainContacts = {
     country: string;
     addressZip: string;
     addressCity: string;
+    /** Street only; house/apartment are separate (joined in reg_address_full). */
     addressStreet: string;
+    addressHouse: string;
+    addressApartment: string;
 };
 
 export type AccountDomainNsHost = {
