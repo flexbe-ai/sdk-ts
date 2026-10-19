@@ -30,6 +30,7 @@ export enum PageType {
     PAGE = 'page',
     FILE = 'file',
     GLOBAL = 'global',
+    CART = 'cart',
     AI = 'ai',
     CMS = 'cms',
     ECOMMERCE_PRODUCT = 'ecommerce_product',
