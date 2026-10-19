@@ -24,6 +24,24 @@ export interface VariantOptionValueRef {
     valueId: number;
 }
 
+export interface ProductImage {
+    id: number;
+    ext: string;
+    unq_id?: string;
+    name?: string;
+    alt?: string;
+    width?: number;
+    height?: number;
+    proportion?: number;
+    average?: string;
+    border?: string | null;
+    preview?: string;
+    animated?: boolean;
+    transparent?: boolean | number;
+    url?: string;
+    previewUrl?: string | null;
+}
+
 export interface ProductVariant {
     id: number;
     productId: number;
@@ -33,7 +51,7 @@ export interface ProductVariant {
     quantity: number | null;
     price: number | null;
     priceOld: number | null;
-    images: unknown[];
+    images: ProductImage[];
     defaultImageId: string | null;
     visible: boolean;
     isDefault: boolean;
@@ -53,7 +71,7 @@ export interface Product {
     visible: boolean;
     taxable: boolean;
     available: boolean;
-    images: unknown[];
+    images: ProductImage[];
     categoryIds: number[];
     options: ProductOption[];
     variants: ProductVariant[];
@@ -151,7 +169,7 @@ export interface ProductVariantInput {
     quantity?: number | null;
     price?: number | null;
     priceOld?: number | null;
-    images?: unknown[];
+    images?: ProductImage[];
     defaultImageId?: string | null;
     visible?: boolean;
     isDefault?: boolean;
@@ -163,7 +181,7 @@ export interface ProductWriteParams {
     description?: string;
     visible?: boolean;
     taxable?: boolean;
-    images?: unknown[];
+    images?: ProductImage[];
     categoryIds?: number[];
     usePriceOld?: boolean;
     displayImage?: string;
@@ -227,7 +245,7 @@ export interface VariantProduct {
     id: number;
     name: string;
     options: ProductOption[];
-    images: unknown[];
+    images: ProductImage[];
     displayImage: string;
 }
 

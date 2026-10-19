@@ -23,7 +23,7 @@ A product card.
 | `visible`          | `boolean`                             | Shown                                      |
 | `taxable`          | `boolean`                             | Tax applies                                |
 | `available`        | `boolean`                             | Can be bought                              |
-| `images`           | array                                 | Images                                     |
+| `images`           | [`ProductImage[]`](#productimage)     | Image objects `{ id, ext }`, not ids       |
 | `categoryIds`      | `number[]`                            | Categories                                 |
 | `options`          | [`ProductOption[]`](#productoption)   | Options                                    |
 | `variants`         | [`ProductVariant[]`](#productvariant) | Variants                                   |
@@ -36,6 +36,21 @@ A product card.
 | `sortIndex`        | `number`                              | Order                                      |
 | `isDemo`           | `boolean`                             | Demo product                               |
 | `deletedAt`        | `string \| null`                      | When it was deleted                        |
+
+### `ProductImage`
+
+One catalog picture. `id` and `ext` build `/img/{id}.{ext}`. A bare media id is not an image.
+
+| Field        | Type                  | Description                          |
+| ------------ | --------------------- | ------------------------------------ |
+| `id`         | `number`              | Image id                             |
+| `ext`        | `string`              | File extension, for example `jpg`    |
+| `unq_id`     | `string`              | Editor key. Optional                 |
+| `name`       | `string`              | File name. Optional                  |
+| `width`      | `number`              | Width. Optional                      |
+| `height`     | `number`              | Height. Optional                     |
+| `proportion` | `number`              | Width / height. Optional             |
+| `url`        | `string`              | Public path from upload. Optional    |
 
 ### `ProductOption`
 
@@ -74,7 +89,7 @@ A product variant.
 | `quantity`       | `number \| null`                                    | Stock                  |
 | `price`          | `number \| null`                                    | Price                  |
 | `priceOld`       | `number \| null`                                    | Previous price         |
-| `images`         | array                                               | Images                 |
+| `images`         | [`ProductImage[]`](#productimage)                   | Image objects `{ id, ext }` |
 | `defaultImageId` | `string \| null`                                    | Default image          |
 | `visible`        | `boolean`                                           | Shown                  |
 | `isDefault`      | `boolean`                                           | Default variant        |
@@ -123,7 +138,7 @@ A variant in the request body.
 | `quantity`       | `number \| null`                  | Stock. Optional                |
 | `price`          | `number \| null`                  | Price. Optional                |
 | `priceOld`       | `number \| null`                  | Previous price. Optional       |
-| `images`         | array                             | Images. Optional               |
+| `images`         | [`ProductImage[]`](#productimage) | Image objects `{ id, ext }`. Optional |
 | `defaultImageId` | `string \| null`                  | Default image. Optional        |
 | `visible`        | `boolean`                         | Shown. Optional                |
 | `isDefault`      | `boolean`                         | Default variant. Optional      |
@@ -212,7 +227,7 @@ Fields for creating and updating a product.
 | `description`  | `string`                                        | Description. Optional             |
 | `visible`      | `boolean`                                       | Shown. Optional                   |
 | `taxable`      | `boolean`                                       | Tax applies. Optional             |
-| `images`       | array                                           | Images. Optional                  |
+| `images`       | [`ProductImage[]`](#productimage)               | Image objects `{ id, ext }`. Optional |
 | `categoryIds`  | `number[]`                                      | Categories. Optional              |
 | `usePriceOld`  | `boolean`                                       | Show the previous price. Optional |
 | `displayImage` | `string`                                        | Which image to show. Optional     |
@@ -287,7 +302,7 @@ One batch item. Without `id` the product is created. With an `id` of the site it
 | `description`  | `string`                                        | Description. Optional             |
 | `visible`      | `boolean`                                       | Shown. Optional                   |
 | `taxable`      | `boolean`                                       | Tax applies. Optional             |
-| `images`       | array                                           | Images. Optional                  |
+| `images`       | [`ProductImage[]`](#productimage)               | Image objects `{ id, ext }`. Optional |
 | `categoryIds`  | `number[]`                                      | Categories. Optional              |
 | `usePriceOld`  | `boolean`                                       | Show the previous price. Optional |
 | `displayImage` | `string`                                        | Which image to show. Optional     |
@@ -454,7 +469,7 @@ const found = await site.ecommerce.queryVariants([variantId]);
 | `id`           | `number`                            | Product id          |
 | `name`         | `string`                            | Name                |
 | `options`      | [`ProductOption[]`](#productoption) | Options             |
-| `images`       | array                               | Images              |
+| `images`       | [`ProductImage[]`](#productimage)   | Image objects `{ id, ext }` |
 | `displayImage` | `string`                            | Which image to show |
 
 ## Categories
