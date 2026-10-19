@@ -58,12 +58,12 @@ export type PerformanceSettings = {
 };
 
 /**
- * Site-wide unified cart (admin toggle + opaque editor snapshot).
- * `data` keys are stored as sent — the API does not normalize them.
+ * Site-wide unified cart: toggle + id of the project's `type=cart` page.
+ * Cart window/form live on that page layout, not in settings.
  */
 export type GlobalCartSettings = {
     enabled: boolean;
-    data: unknown;
+    pageId: number | null;
 };
 
 export type EcommerceSettings = {
