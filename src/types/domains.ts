@@ -148,3 +148,63 @@ export type SiteDomainListResponse = {
 export type BindSiteDomainParams = {
     name: string;
 };
+
+/** Nest RegFormContacts — application form / create / patch. */
+export type AccountDomainRegFormContacts = {
+    type: number;
+    firstName?: string;
+    lastName?: string;
+    middleName?: string;
+    firstNameEn?: string;
+    lastNameEn?: string;
+    middleNameEn?: string;
+    birthday?: string;
+    passportNumber?: string;
+    passportDate?: string;
+    passportIssued?: string;
+    country: string;
+    addressCity: string;
+    addressZip: string;
+    addressStreet: string;
+    addressHouse?: string;
+    addressApartment?: string;
+    email: string;
+    phone: string;
+    companyNameRu?: string;
+    companyNameEn?: string;
+    companyInn?: string;
+    companyKpp?: string;
+};
+
+export type AccountDomainRegFormResponse = {
+    contacts: AccountDomainRegFormContacts;
+    domain: {
+        fullName: string;
+        zoneName: string;
+        price: AccountDomainPrice | null;
+        isFree: boolean;
+    };
+    countries: Array<{ title: string; value: string }>;
+    regId: number | null;
+    isPaid: boolean;
+    errors: unknown[];
+};
+
+export type CreateAccountDomainRegParams = {
+    name: string;
+    projectId?: number | null;
+    contacts: AccountDomainRegFormContacts;
+};
+
+export type PatchAccountDomainRegParams = {
+    contacts: AccountDomainRegFormContacts;
+};
+
+export type AccountDomainRegMutationResponse = {
+    regId: number;
+    name: string;
+    nameDecoded: string;
+    regStatus: AccountDomainRegStatus;
+    isFree: boolean;
+    projectId: number | null;
+};
