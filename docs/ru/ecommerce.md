@@ -23,7 +23,7 @@ const products = await site.ecommerce.listProducts({
 | `visible`          | `boolean`                             | Показывать                                  |
 | `taxable`          | `boolean`                             | Облагается налогом                          |
 | `available`        | `boolean`                             | Можно купить                                |
-| `images`           | массив                                | Картинки                                    |
+| `images`           | [`ProductImage[]`](#productimage)     | Объекты картинок `{ id, ext }`, не id       |
 | `categoryIds`      | `number[]`                            | Категории                                   |
 | `options`          | [`ProductOption[]`](#productoption)   | Опции                                       |
 | `variants`         | [`ProductVariant[]`](#productvariant) | Варианты                                    |
@@ -36,6 +36,21 @@ const products = await site.ecommerce.listProducts({
 | `sortIndex`        | `number`                              | Порядок                                     |
 | `isDemo`           | `boolean`                             | Демо-товар                                  |
 | `deletedAt`        | `string \| null`                      | Когда удалили                               |
+
+### `ProductImage`
+
+Картинка каталога. Из `id` и `ext` собирается `/img/{id}.{ext}`. Голый id медиафайла картинкой не является.
+
+| Поле         | Тип                   | Описание                              |
+| ------------ | --------------------- | ------------------------------------- |
+| `id`         | `number`              | Id картинки                           |
+| `ext`        | `string`              | Расширение, например `jpg`            |
+| `unq_id`     | `string`              | Ключ редактора. Необязательно         |
+| `name`       | `string`              | Имя файла. Необязательно              |
+| `width`      | `number`              | Ширина. Необязательно                 |
+| `height`     | `number`              | Высота. Необязательно                 |
+| `proportion` | `number`              | Ширина / высота. Необязательно        |
+| `url`        | `string`              | Публичный путь из загрузки. Необязательно |
 
 ### `ProductOption`
 
@@ -74,7 +89,7 @@ const products = await site.ecommerce.listProducts({
 | `quantity`       | `number \| null`                                    | Остаток                   |
 | `price`          | `number \| null`                                    | Цена                      |
 | `priceOld`       | `number \| null`                                    | Старая цена               |
-| `images`         | массив                                              | Картинки                  |
+| `images`         | [`ProductImage[]`](#productimage)                   | Объекты картинок `{ id, ext }` |
 | `defaultImageId` | `string \| null`                                    | Картинка по умолчанию     |
 | `visible`        | `boolean`                                           | Показывать                |
 | `isDefault`      | `boolean`                                           | Вариант по умолчанию      |
@@ -123,7 +138,7 @@ const products = await site.ecommerce.listProducts({
 | `quantity`       | `number \| null`                  | Остаток. Необязательно                 |
 | `price`          | `number \| null`                  | Цена. Необязательно                    |
 | `priceOld`       | `number \| null`                  | Старая цена. Необязательно             |
-| `images`         | массив                            | Картинки. Необязательно                |
+| `images`         | [`ProductImage[]`](#productimage) | Объекты картинок `{ id, ext }`. Необязательно |
 | `defaultImageId` | `string \| null`                  | Картинка по умолчанию. Необязательно   |
 | `visible`        | `boolean`                         | Показывать. Необязательно              |
 | `isDefault`      | `boolean`                         | Вариант по умолчанию. Необязательно    |
@@ -212,7 +227,7 @@ const product = await site.ecommerce.getProduct(productId);
 | `description`  | `string`                                        | Описание. Необязательно                  |
 | `visible`      | `boolean`                                       | Показывать. Необязательно                |
 | `taxable`      | `boolean`                                       | Облагается налогом. Необязательно        |
-| `images`       | массив                                          | Картинки. Необязательно                  |
+| `images`       | [`ProductImage[]`](#productimage)               | Объекты картинок `{ id, ext }`. Необязательно |
 | `categoryIds`  | `number[]`                                      | Категории. Необязательно                 |
 | `usePriceOld`  | `boolean`                                       | Показывать старую цену. Необязательно    |
 | `displayImage` | `string`                                        | Какую картинку показывать. Необязательно |
@@ -287,7 +302,7 @@ const result = await site.ecommerce.upsertProducts([
 | `description`  | `string`                                        | Описание. Необязательно                  |
 | `visible`      | `boolean`                                       | Показывать. Необязательно                |
 | `taxable`      | `boolean`                                       | Облагается налогом. Необязательно        |
-| `images`       | массив                                          | Картинки. Необязательно                  |
+| `images`       | [`ProductImage[]`](#productimage)               | Объекты картинок `{ id, ext }`. Необязательно |
 | `categoryIds`  | `number[]`                                      | Категории. Необязательно                 |
 | `usePriceOld`  | `boolean`                                       | Показывать старую цену. Необязательно    |
 | `displayImage` | `string`                                        | Какую картинку показывать. Необязательно |
@@ -454,7 +469,7 @@ const found = await site.ecommerce.queryVariants([variantId]);
 | `id`           | `number`                            | Id товара                 |
 | `name`         | `string`                            | Название                  |
 | `options`      | [`ProductOption[]`](#productoption) | Опции                     |
-| `images`       | массив                              | Картинки                  |
+| `images`       | [`ProductImage[]`](#productimage)   | Объекты картинок `{ id, ext }` |
 | `displayImage` | `string`                            | Какую картинку показывать |
 
 ## Категории
