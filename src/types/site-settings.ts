@@ -35,7 +35,11 @@ export type BrandingSettings = {
     myColors: { colors: unknown[]; gradients: unknown[] };
     copyright: string;
     blockAnimation: { show: number | null; style: string | null };
-    smoothingScroll: { enabled: number };
+    smoothingScroll: {
+        enabled: number;
+        duration: number;
+        inertia: number;
+    };
     adaptiveView: number | boolean;
 };
 

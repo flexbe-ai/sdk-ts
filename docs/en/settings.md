@@ -112,6 +112,8 @@ Smooth scroll.
 | Field | Type | Description |
 | --- | --- | --- |
 | `enabled` | `number` | On |
+| `duration` | `number` | Duration (0.4–2.5, default 1.2) |
+| `inertia` | `number` | Inertia (0–100, default 0) |
 
 ### `SeoSettings`
 
