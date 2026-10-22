@@ -112,6 +112,8 @@ const settings = await site.settings.getSettings();
 | Поле | Тип | Описание |
 | --- | --- | --- |
 | `enabled` | `number` | Включена |
+| `duration` | `number` | Длительность (0.4–2.5, по умолчанию 1.2) |
+| `inertia` | `number` | Инерция (0–100, по умолчанию 0) |
 
 ### `SeoSettings`
 
