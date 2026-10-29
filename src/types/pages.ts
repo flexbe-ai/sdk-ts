@@ -58,6 +58,7 @@ export interface Page {
     sortIndex: number;
     themeId: number;
     updatedAt: string;
+    publishedAt: string | null;
     deletedAt: string | null;
     screenshot: Screenshot | null;
     meta: PageMeta | null;
