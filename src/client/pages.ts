@@ -12,12 +12,14 @@ import {
     CreatePageFromAiParams,
     CreatePageParams,
     CreatePageVersionParams,
+    UpdatePageVersionParams,
     GetPagesParams,
     Page,
     PageFolder,
     PageFolderListResponse,
     PageListResponse,
     PageVersionDataResponse,
+    PageVersionItem,
     PageVersionListResponse,
     UpdateFolderParams,
     UpdatePageParams,
@@ -376,5 +378,22 @@ export class Pages {
         );
 
         return response.data;
+    }
+
+    async updateVersion(
+        pageId: number,
+        versionId: number,
+        data: UpdatePageVersionParams
+    ): Promise<PageVersionItem> {
+        const response = await this.api.patch<PageVersionItem>(
+            `/sites/${ this.siteId }/pages/${ pageId }/versions/${ versionId }`,
+            data
+        );
+
+        return response.data;
+    }
+
+    async deleteVersion(pageId: number, versionId: number): Promise<void> {
+        await this.api.delete(`/sites/${ this.siteId }/pages/${ pageId }/versions/${ versionId }`);
     }
 }
