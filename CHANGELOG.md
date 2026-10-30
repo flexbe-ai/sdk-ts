@@ -1,5 +1,11 @@
 # @flexbe/sdk
 
+## 0.14.0
+
+### Minor Changes
+
+- f51e849: Add optional `name` on page versions, plus `pages.updateVersion` and `pages.deleteVersion`.
+
 ## 0.13.0
 
 ### Minor Changes

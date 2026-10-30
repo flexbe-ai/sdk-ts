@@ -12,7 +12,6 @@ import {
     CreatePageFromAiParams,
     CreatePageParams,
     CreatePageVersionParams,
-    UpdatePageVersionParams,
     GetPagesParams,
     Page,
     PageFolder,
@@ -23,6 +22,7 @@ import {
     PageVersionListResponse,
     UpdateFolderParams,
     UpdatePageParams,
+    UpdatePageVersionParams,
 } from '../types/pages';
 
 export class Pages {
