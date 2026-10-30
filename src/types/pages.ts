@@ -58,6 +58,7 @@ export interface Page {
     sortIndex: number;
     themeId: number;
     updatedAt: string;
+    publishedAt: string | null;
     deletedAt: string | null;
     screenshot: Screenshot | null;
     meta: PageMeta | null;
@@ -156,6 +157,11 @@ export interface CreatePageVersionParams {
         screenshot?: number | null;
     };
     publish?: boolean;
+    name?: string | null;
+}
+
+export interface UpdatePageVersionParams {
+    name: string | null;
 }
 
 export interface BulkUpdatePageItem extends UpdatePageParams {
@@ -491,6 +497,7 @@ export interface PageVersionItem {
     createdAt: string;
     /** True if this version has never been published */
     isDraft: boolean;
+    name: string | null;
 }
 
 export interface PageVersionListResponse {

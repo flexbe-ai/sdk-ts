@@ -18,6 +18,7 @@ describe('pages create/copy client', () => {
         sortIndex: 10,
         themeId: 4,
         updatedAt: new Date().toISOString(),
+        publishedAt: new Date().toISOString(),
         deletedAt: null,
         screenshot: null,
         meta: null,
